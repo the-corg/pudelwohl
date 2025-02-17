@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush Color="#704513" x:Key="DogBrown"/>
+    <SolidColorBrush Color="#997a56" x:Key="DogMedium"/>
+    <SolidColorBrush Color="#ad9578" x:Key="DogMediumLight"/>
+    <SolidColorBrush Color="#c2af9a" x:Key="DogBeigeDark"/>
+    <SolidColorBrush Color="#d6cabc" x:Key="DogBeige"/>
+    <SolidColorBrush Color="#ebe4dd" x:Key="DogLight"/>
+    <SolidColorBrush Color="#301e08" x:Key="DogDark"/>
+
+    <SolidColorBrush Color="#EE4B2B" x:Key="NiceRed"/>
+    <SolidColorBrush Color="#FDDA0D" x:Key="NiceYellow"/>
+    <SolidColorBrush Color="#4CBB17" x:Key="NiceGreen"/>
+
+    <!-- Not used
+    <SolidColorBrush Color="#137013" x:Key="DogBrown"/>
+    <SolidColorBrush Color="#569956" x:Key="DogMedium"/>
+    <SolidColorBrush Color="#78ad78" x:Key="DogMediumLight"/>
+    <SolidColorBrush Color="#9ac29a" x:Key="DogBeigeDark"/>
+    <SolidColorBrush Color="#bcd6bc" x:Key="DogBeige"/>
+    <SolidColorBrush Color="#ddebdd" x:Key="DogLight"/>
+    <SolidColorBrush Color="#083008" x:Key="DogDark"/>
+
+    <SolidColorBrush Color="#116011" x:Key="DogBrown"/>
+    <SolidColorBrush Color="#339933" x:Key="DogMedium"/>
+    <SolidColorBrush Color="#99d699" x:Key="DogBeige"/>
+    <SolidColorBrush Color="#003000" x:Key="DogDark"/>
+    -->
+</ResourceDictionary>

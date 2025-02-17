@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Converters">
+    <BooleanToVisibilityConverter x:Key = "BooleanToVisibilityConverter" />
+    <converters:RoomIdNameConverter x:Key="RoomIdNameConverter" />
+    <converters:ServiceIdNameConverter x:Key="ServiceIdNameConverter" />
+    <converters:MenuOptionConverter x:Key="MenuOptionConverter" />
+    
+</ResourceDictionary>

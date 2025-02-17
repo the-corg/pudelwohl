@@ -1,0 +1,26 @@
+ID|Name|Breakfast|Lunch|Snack|Dinner
+1|Deluxe Bone with Peas and Carrots|TRUE|TRUE|TRUE|FALSE
+2|Chicken Bites with Potatoes|FALSE|TRUE|FALSE|TRUE
+3|Ground Beef with Season Vegetables|FALSE|TRUE|FALSE|TRUE
+4|Roasted Turkey with Sweet Potatoes|TRUE|TRUE|FALSE|TRUE
+5|Cottage Cheese|TRUE|FALSE|TRUE|FALSE
+6|Chicken Breast with Broccoli|TRUE|TRUE|FALSE|TRUE
+7|Ground Turkey with Quinoa and Carrots|FALSE|TRUE|FALSE|TRUE
+8|Chicken Nuggets with Carrots and Pumpkin|FALSE|TRUE|TRUE|TRUE
+9|Salmon with Green Peas and Rice|FALSE|TRUE|FALSE|TRUE
+10|Beef Liver with Season Vegetables and Rice|FALSE|FALSE|FALSE|TRUE
+12|Quinoa with Yoghurt|TRUE|FALSE|TRUE|FALSE
+13|Royal Porridge|TRUE|FALSE|TRUE|FALSE
+14|Ground Chicken with Lentils and Carrots|TRUE|TRUE|FALSE|TRUE
+15|Sardines with Rice and Pumpkin|FALSE|TRUE|FALSE|TRUE
+16|Ground Chicken with Rice and Cheese|FALSE|TRUE|FALSE|TRUE
+17|Cottage Cheese with Quinoa and Cream|TRUE|TRUE|FALSE|FALSE
+19|Puppuccino|FALSE|FALSE|TRUE|FALSE
+20|Pumpkin Pie|FALSE|FALSE|TRUE|FALSE
+21|Joghurt with Cornflakes|FALSE|FALSE|TRUE|FALSE
+22|Oatmeal Cookies|FALSE|FALSE|TRUE|FALSE
+23|Watermelon Bowl|TRUE|FALSE|TRUE|FALSE
+24|Celery and Carrot Sticks|FALSE|FALSE|TRUE|FALSE
+25|French Buns with Peanut Butter|TRUE|FALSE|TRUE|FALSE
+26|Apple Pie with Greek Yoghurt|TRUE|FALSE|TRUE|FALSE
+27|Eggs with Ground Beef and Mixed Vegetables|TRUE|TRUE|FALSE|TRUE
