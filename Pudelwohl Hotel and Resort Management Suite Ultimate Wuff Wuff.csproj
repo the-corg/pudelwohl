@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\icon.png" />
     <None Remove="Data\Bookings.csv" />
     <None Remove="Data\Daily Menus and Food IDs.csv" />
     <None Remove="Data\Dogs and Menu Options.csv" />
@@ -45,6 +46,10 @@
     <Content Include="Data\Services.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\icon.png" />
   </ItemGroup>
 
 </Project>

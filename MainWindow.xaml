@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         SizeChanged="Window_SizeChanged" WindowStyle="SingleBorderWindow"
-        Title="MainWindow" Height="640" Width="1024">
+        Title="MainWindow" Icon="Assets/icon.png"
+        Height="640" Width="1024">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" />
     </WindowChrome.WindowChrome>
