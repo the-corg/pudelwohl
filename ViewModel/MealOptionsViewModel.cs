@@ -7,18 +7,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 {
     public class MealOptionsViewModel : ViewModelBase
     {
-        private readonly IMealOptionDataProvider _mealOptionDataProvider;
         private MealOptionViewModel? _selectedMealOption;
 
-        public MealOptionsViewModel(IMealOptionDataProvider mealOptionDataProvider)
+        public MealOptionsViewModel(ObservableCollection<MealOptionViewModel> mealOptions)
         {
-            _mealOptionDataProvider = mealOptionDataProvider;
+            MealOptions = mealOptions;
             AddCommand = new DelegateCommand(Add);
             EditCommand = new DelegateCommand(Edit, CanEdit);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
         }
 
-        public ObservableCollection<MealOptionViewModel> MealOptions { get; } = new();
+        public ObservableCollection<MealOptionViewModel> MealOptions { get; }
 
         public MealOptionViewModel? SelectedMealOption
         {
@@ -30,30 +29,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 RemoveCommand.OnCanExecuteChanged();
                 EditCommand.OnCanExecuteChanged();
             }
-
         }
-
 
         public DelegateCommand AddCommand { get; }
-
         public DelegateCommand EditCommand { get; }
-
         public DelegateCommand RemoveCommand { get; }
 
-        public async Task LoadAsync()
-        {
-            if (MealOptions.Count > 0) 
-                return;
-
-            var mealOptions = await _mealOptionDataProvider.GetAllAsync();
-            if (mealOptions is not null)
-            {
-                foreach (var mealOption in mealOptions)
-                {
-                    MealOptions.Add(new MealOptionViewModel(mealOption));
-                }
-            }
-        }
 
         private void Add(object? parameter)
         {

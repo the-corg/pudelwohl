@@ -11,9 +11,6 @@
         public string? FavoriteToy { get; set; }
         public EarFloppiness EarFloppiness { get; set; }
         public string? SpecialRequests { get; set; }
-        public List<Booking>? Bookings { get; set; }
-        public List<Service>? Services { get; set; }
-        public List<GuestMenu>? GuestMenus { get; set; }
         public bool IsArchived { get; set; }
 
     }

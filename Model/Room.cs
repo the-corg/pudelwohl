@@ -7,7 +7,6 @@
         public string Type { get; set; }
         public string Description { get; set; }
         public int MaxGuests { get; set; }
-        public List<Booking>? Bookings { get; set; }
 
     }
 
