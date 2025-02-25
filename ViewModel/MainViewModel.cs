@@ -11,6 +11,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IRoomDataProvider _roomDataProvider;
         private readonly IServiceDataProvider _serviceDataProvider;
         private readonly IMealOptionDataProvider _mealOptionDataProvider;
+        private readonly IBookingDataProvider _bookingDataProvider;
+        private readonly IServiceBookingDataProvider _serviceBookingDataProvider;
+        private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
         public ObservableCollection<GuestViewModel> Guests { get; } = new();
         public ObservableCollection<RoomViewModel> Rooms { get; } = new();
@@ -19,7 +22,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ObservableCollection<Booking> Bookings { get; } = new();
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
         public ObservableCollection<GuestMenu> GuestMenus { get; } = new();
-
 
 
         public void BookingsChanged()
@@ -32,8 +34,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             StaticPropertyChanged?.Invoke(null, FreeRoomsTodayPropertyEventArgs);
         }
 
+        public async Task LoadEverythingAsync()
+        {
+            await LoadGuestsAsync();
+            await LoadRoomsAsync();
+            await LoadServicesAsync();
+            await LoadMealOptionsAsync();
+            await LoadBookingsAsync();
+            await LoadServiceBookingsAsync();
+            await LoadGuestMenusAsync();
+        }
 
-        public async Task LoadAsync()
+        private async Task LoadGuestsAsync()
         {
             if (Guests.Count > 0)
                 return;
@@ -46,44 +58,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     Guests.Add(new GuestViewModel(guest, this));
                 }
             }
-
-            var bookings = await BookingDataProvider.GetAllAsync();
-            if (bookings is not null)
-            {
-                foreach (var booking in bookings)
-                {
-                    Bookings.Add(booking);
-                    Guests.First(x => x.Id == booking.GuestId).Bookings.Add(booking);
-                }
-            }
-
-            foreach (var guest in Guests)
-            {
-                GuestsViewModel.SortBookings(guest.Bookings);
-            }
-
-            var serviceBookings = await ServiceBookingDataProvider.GetAllAsync();
-            if (serviceBookings is not null)
-            {
-                foreach (var serviceBooking in serviceBookings)
-                {
-                    ServiceBookings.Add(serviceBooking);
-                    Guests.First(x => x.Id == serviceBooking.GuestId).ServiceBookings.Add(serviceBooking);
-                }
-            }
-
-            var guestMenus = await GuestMenuDataProvider.GetAllAsync();
-            if (guestMenus is not null)
-            {
-                foreach (var guestMenu in guestMenus)
-                {
-                    GuestMenus.Add(guestMenu);
-                    Guests.First(x => x.Id == guestMenu.GuestId).GuestMenus.Add(guestMenu);
-                }
-            }
         }
 
-        public async Task LoadAsync()
+        private async Task LoadRoomsAsync()
         {
             if (Rooms.Count > 0)
                 return;
@@ -96,18 +73,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     Rooms.Add(new RoomViewModel(room, this));
                 }
             }
-
-            var bookings = await BookingDataProvider.GetAllAsync();
-            if (bookings is not null)
-            {
-                foreach (var booking in bookings)
-                {
-                    Rooms.First(x => x.Id == booking.RoomId).Bookings.Add(booking);
-                }
-            }
-            RoomsViewModel.BookingsChanged();
         }
-        public async Task LoadAsync()
+
+        private async Task LoadServicesAsync()
         {
             if (Services.Count > 0)
                 return;
@@ -122,7 +90,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public async Task LoadAsync()
+        private async Task LoadMealOptionsAsync()
         {
             if (MealOptions.Count > 0)
                 return;
@@ -133,6 +101,45 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 foreach (var mealOption in mealOptions)
                 {
                     MealOptions.Add(new MealOptionViewModel(mealOption));
+                }
+            }
+        }
+
+        private async Task LoadBookingsAsync()
+        {
+            var bookings = await _bookingDataProvider.GetAllAsync();
+            if (bookings is not null)
+            {
+                foreach (var booking in bookings)
+                {
+                    Bookings.Add(booking);
+                    Guests.First(x => x.Id == booking.GuestId).Bookings.Add(booking);
+                }
+            }
+        }
+
+        private async Task LoadServiceBookingsAsync()
+        {
+            var serviceBookings = await _serviceBookingDataProvider.GetAllAsync();
+            if (serviceBookings is not null)
+            {
+                foreach (var serviceBooking in serviceBookings)
+                {
+                    ServiceBookings.Add(serviceBooking);
+                    Guests.First(x => x.Id == serviceBooking.GuestId).ServiceBookings.Add(serviceBooking);
+                }
+            }
+        }
+
+        private async Task LoadGuestMenusAsync()
+        {
+            var guestMenus = await _guestMenuDataProvider.GetAllAsync();
+            if (guestMenus is not null)
+            {
+                foreach (var guestMenu in guestMenus)
+                {
+                    GuestMenus.Add(guestMenu);
+                    Guests.First(x => x.Id == guestMenu.GuestId).GuestMenus.Add(guestMenu);
                 }
             }
         }
