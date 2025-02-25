@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StatusBar Grid.Row="2" Background="{StaticResource DogMedium}" Foreground="White" >
+    <StatusBar Background="{StaticResource DogMedium}" Foreground="White" >
         <StatusBar.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid>

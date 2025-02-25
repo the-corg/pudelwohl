@@ -43,7 +43,7 @@
             </TabItem>
         </TabControl>
 
-        <view:StatusBarView />
+        <view:StatusBarView Grid.Row="2" />
 
     </Grid>
 </Window>
