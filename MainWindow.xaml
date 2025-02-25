@@ -10,6 +10,8 @@
         SizeChanged="Window_SizeChanged" WindowStyle="SingleBorderWindow"
         Title="MainWindow" Icon="Assets/icon.png"
         Height="640" Width="1024">
+
+    <!-- Remove the default window title bar -->
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" />
     </WindowChrome.WindowChrome>
@@ -20,7 +22,8 @@
             <RowDefinition/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
-
+        
+        <!-- Custom title bar -->
         <DockPanel HorizontalAlignment="Stretch" Background="{StaticResource DogBrown}">
             <Button x:Name="btnClose" Style="{StaticResource HeaderButton}" Content="❌" DockPanel.Dock="Right" Click="btnClose_Click" />
             <Button x:Name="btnMaximize" Style="{StaticResource HeaderButton}" Content="🗖" DockPanel.Dock="Right" Click="btnMaximize_Click"/>
@@ -28,6 +31,7 @@
             <TextBlock Text="Pudelwohl Hotel and Resort Management Suite Ultimate Wuff Wuff" Foreground="White" FontSize="22" DockPanel.Dock="Left" Margin="10 0 0 0"/>
         </DockPanel>
 
+        <!-- Each of the four tabs is a separate User Control -->
         <TabControl Grid.Row="1">
             <TabItem Header="Guests" >
                 <view:GuestsView />
@@ -42,7 +46,8 @@
                 <view:CuisineView />
             </TabItem>
         </TabControl>
-
+        
+        <!-- Status Bar -->
         <StatusBar Grid.Row="2" Background="{StaticResource DogMedium}" Foreground="White" >
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>

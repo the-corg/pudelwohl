@@ -17,6 +17,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
         }
         public void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // Increase the window border thickness for the maximized state,
+            // otherwise the window would extend beyond the screen edges for some reason
             BorderThickness = WindowState == WindowState.Maximized ? new Thickness(8) : new Thickness(0);
         }
 
