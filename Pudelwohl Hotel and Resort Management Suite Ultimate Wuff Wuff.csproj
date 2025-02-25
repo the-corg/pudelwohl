@@ -22,28 +22,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\Bookings.csv">
+    <Content Include="Data\DataFiles\Bookings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Daily Menus and Food IDs.csv">
+    <Content Include="Data\DataFiles\Daily Menus and Food IDs.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Dogs and Menu Options.csv">
+    <Content Include="Data\DataFiles\Dogs and Menu Options.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Dogs and Services.csv">
+    <Content Include="Data\DataFiles\Dogs and Services.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Dogs.csv">
+    <Content Include="Data\DataFiles\Dogs.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Meal Options.csv">
+    <Content Include="Data\DataFiles\Meal Options.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Rooms.csv">
+    <Content Include="Data\DataFiles\Rooms.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Services.csv">
+    <Content Include="Data\DataFiles\Services.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
