@@ -14,20 +14,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IServiceBookingDataProvider _serviceBookingDataProvider;
         private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
-        // TODO!
-        public MainViewModel(/*GuestsViewModel guestsViewModel, RoomsViewModel roomsViewModel,
-            ServicesViewModel servicesViewModel, MealOptionsViewModel mealOptionsViewModel,*/
-            IGuestDataProvider guestDataProvider, IRoomDataProvider roomDataProvider,
+        public MainViewModel(IGuestDataProvider guestDataProvider, IRoomDataProvider roomDataProvider,
             IServiceDataProvider serviceDataProvider, IMealOptionDataProvider mealOptionDataProvider,
             IBookingDataProvider bookingDataProvider, IServiceBookingDataProvider serviceBookingDataProvider,
             IGuestMenuDataProvider guestMenuDataProvider)
         {
-            // TODO!
-            /*
-            GuestsViewModel = guestsViewModel;
-            RoomsViewModel = roomsViewModel;
-            ServicesViewModel = servicesViewModel;
-            MealOptionsViewModel = mealOptionsViewModel;*/
             _guestDataProvider = guestDataProvider;
             _roomDataProvider = roomDataProvider;
             _serviceDataProvider = serviceDataProvider;
@@ -35,10 +26,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _bookingDataProvider = bookingDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
             _guestMenuDataProvider = guestMenuDataProvider;
-            GuestsViewModel = new GuestsViewModel(Guests, Bookings, ServiceBookings, GuestMenus);
+            GuestsViewModel = new GuestsViewModel(Guests, Bookings, ServiceBookings, GuestMenus, this);
             RoomsViewModel = new RoomsViewModel(Rooms);
-            ServicesViewModel = new ServicesViewModel(Services);
-            MealOptionsViewModel = new MealOptionsViewModel(MealOptions);
+            ServicesViewModel = new ServicesViewModel(Services, this);
+            MealOptionsViewModel = new MealOptionsViewModel(MealOptions, this);
         }
 
         public GuestsViewModel GuestsViewModel { get; }
@@ -84,12 +75,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public async Task LoadAsync()
         {
             LoadCollectionVMAsync<GuestViewModel, Guest>(Guests, await _guestDataProvider.GetAllAsync());
-            // TODO!
-            //LoadCollectionVMAsync<RoomViewModel, Room>(Rooms, await _roomDataProvider.GetAllAsync());
-            //LoadCollectionVMAsync<ServiceViewModel, Service>(Services, await _serviceDataProvider.GetAllAsync());
-            //LoadCollectionVMAsync<MealOptionViewModel, MealOption>(MealOptions, await _mealOptionDataProvider.GetAllAsync());
-            //LoadCollectionAsync<Booking>(Bookings, await _bookingDataProvider.GetAllAsync());
-            //LoadCollectionAsync<ServiceBooking>(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<RoomViewModel, Room>(Rooms, await _roomDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<ServiceViewModel, Service>(Services, await _serviceDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<MealOptionViewModel, MealOption>(MealOptions, await _mealOptionDataProvider.GetAllAsync());
+            LoadCollectionAsync<Booking>(Bookings, await _bookingDataProvider.GetAllAsync());
+            LoadCollectionAsync<ServiceBooking>(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
             //LoadCollectionAsync<GuestMenu>(GuestMenus, await _guestMenuDataProvider.GetAllAsync());
         }
 

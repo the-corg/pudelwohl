@@ -16,6 +16,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private bool _isArchiveHidden = true;
         private DateTime _selectedMenuDate;
+        private readonly MainViewModel _mainViewModel;
 
         private Window? _mainWindow;
         // Lazy loading the main window reference (because null when the constructor is called)
@@ -25,7 +26,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ObservableCollection<GuestViewModel> guests,
             ObservableCollection<Booking> bookings,
             ObservableCollection<ServiceBooking> serviceBookings,
-            ObservableCollection<GuestMenu> guestMenus)
+            ObservableCollection<GuestMenu> guestMenus,
+            MainViewModel mainViewModel)
         {
             Guests = guests;
             Bookings = bookings;
@@ -39,6 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditBookingCommand = new DelegateCommand(EditBooking, CanEditBooking);
             RemoveBookingCommand = new DelegateCommand(RemoveBooking, CanRemoveBooking);
             _selectedMenuDate = DateTime.Today;
+            _mainViewModel = mainViewModel;
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; }
@@ -232,13 +235,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void Add(object? parameter)
         {
-            // TODO!
-            /*
             var guest = new Guest { Name = "NEW GUEST" };
-            var viewModel = new GuestViewModel(guest, this);
+            var viewModel = new GuestViewModel(guest, _mainViewModel);
             Guests.Add(viewModel);
             SelectedGuest = viewModel;
-            IsArchiveHidden = true;*/
+            IsArchiveHidden = true;
         }
 
         private bool CanRemove(object? parameter) => SelectedGuest is not null;

@@ -10,7 +10,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
             int id = (int)value;
             //return ServicesViewModel.Services.First(x => x.Id == id).Name;
             // TODO!
-            return "";
+            return "X";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

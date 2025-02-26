@@ -32,15 +32,15 @@
             <TabItem Header="Guests" >
                 <view:GuestsView DataContext="{Binding GuestsViewModel}" />
             </TabItem>
-            <!--<TabItem Header="Rooms" >
+            <TabItem Header="Rooms" >
                 <view:RoomsView DataContext="{Binding RoomsViewModel}" />
             </TabItem>
             <TabItem Header="Services" >
                 <view:ServicesView DataContext="{Binding ServicesViewModel}" />
             </TabItem>
             <TabItem Header="Cuisine" >
-                <view:CuisineView />
-            </TabItem>-->
+                <view:CuisineView DataContext="{Binding MealOptionsViewModel}" />
+            </TabItem>
         </TabControl>
 
         <StatusBar Grid.Row="2" Background="{StaticResource DogMedium}" Foreground="White" >

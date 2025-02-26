@@ -7,12 +7,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServicesViewModel : ViewModelBase
     {
         private ServiceViewModel? _selectedService;
+        private readonly MainViewModel _mainViewModel;
 
-        public ServicesViewModel(ObservableCollection<ServiceViewModel> services)
+        public ServicesViewModel(ObservableCollection<ServiceViewModel> services, MainViewModel mainViewModel)
         {
             Services = services;
             AddCommand = new DelegateCommand(Add);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
+            _mainViewModel = mainViewModel;
         }
 
         public ObservableCollection<ServiceViewModel> Services { get; }
@@ -39,7 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private void Add(object? parameter)
         {
             var service = new Service { Name = "NEW SERVICE" };
-            var viewModel = new ServiceViewModel(service);
+            var viewModel = new ServiceViewModel(service, _mainViewModel);
             Services.Add(viewModel);
             SelectedService = viewModel;
         }

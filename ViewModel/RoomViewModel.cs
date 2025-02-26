@@ -7,12 +7,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class RoomViewModel : ViewModelBase
     {
         private readonly Room _model;
-        private readonly RoomsViewModel _parentViewModel;
+        private readonly MainViewModel _mainViewModel;
 
-        public RoomViewModel(Room model, RoomsViewModel parentViewModel)
+        public RoomViewModel(Room model, MainViewModel mainViewModel)
         {
             _model = model;
-            _parentViewModel = parentViewModel;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -37,7 +37,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 foreach (Booking booking in Bookings)
                 {
-                    if (booking.CheckInDate <= _parentViewModel.OccupancyDate && booking.CheckOutDate >= _parentViewModel.OccupancyDate)
+                    if (booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
                         occupants++;
                 }
 
@@ -56,7 +56,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     return true;
                 foreach (Booking booking in Bookings)
                 {
-                    if (booking.CheckInDate <= _parentViewModel.OccupancyDate && booking.CheckOutDate >= _parentViewModel.OccupancyDate)
+                    if (booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
                         return false;
                 }
                 return true;

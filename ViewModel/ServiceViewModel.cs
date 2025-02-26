@@ -7,10 +7,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServiceViewModel : ViewModelBase
     {
         private readonly Service _model;
+        private readonly MainViewModel _mainViewModel;
 
-        public ServiceViewModel(Service model)
+        public ServiceViewModel(Service model, MainViewModel mainViewModel)
         {
             _model = model;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;

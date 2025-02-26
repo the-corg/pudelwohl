@@ -7,13 +7,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class MealOptionsViewModel : ViewModelBase
     {
         private MealOptionViewModel? _selectedMealOption;
+        private readonly MainViewModel _mainViewModel;
 
-        public MealOptionsViewModel(ObservableCollection<MealOptionViewModel> mealOptions)
+        public MealOptionsViewModel(ObservableCollection<MealOptionViewModel> mealOptions, MainViewModel mainViewModel)
         {
             MealOptions = mealOptions;
             AddCommand = new DelegateCommand(Add);
             EditCommand = new DelegateCommand(Edit, CanEdit);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
+            _mainViewModel = mainViewModel;
         }
 
         public ObservableCollection<MealOptionViewModel> MealOptions { get; }
@@ -38,7 +40,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private void Add(object? parameter)
         {
             var mealOption = new MealOption { Name = "NEW MEAL OPTION" };
-            var viewModel = new MealOptionViewModel(mealOption);
+            var viewModel = new MealOptionViewModel(mealOption, _mainViewModel);
             MealOptions.Add(viewModel);
             SelectedMealOption = viewModel;
         }
