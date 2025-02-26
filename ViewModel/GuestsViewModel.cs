@@ -36,6 +36,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             Bookings = bookings;
             ServiceBookings = serviceBookings;
             GuestMenus = guestMenus;
+            _mainViewModel = mainViewModel;
             AddCommand = new DelegateCommand(Add);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
             ArchiveCommand = new DelegateCommand(Archive, CanArchive);
@@ -44,15 +45,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditBookingCommand = new DelegateCommand(EditBooking, CanEditBooking);
             RemoveBookingCommand = new DelegateCommand(RemoveBooking, CanRemoveBooking);
             _selectedMenuDate = DateTime.Today;
-            _mainViewModel = mainViewModel;
 
             BookingsView = CollectionViewSource.GetDefaultView(Bookings);
             // Filter the bookings list according to the selected guest
             BookingsView.Filter = (o) => (SelectedGuest is not null) && (((Booking)o).GuestId == SelectedGuest.Id);
+            // And sort it by check-in date
+            BookingsView.SortDescriptions.Add(new SortDescription("CheckInDate", ListSortDirection.Ascending));
 
             ServiceBookingsView = CollectionViewSource.GetDefaultView(ServiceBookings);
             // Filter the service bookings list according to the selected guest
             ServiceBookingsView.Filter = (o) => (SelectedGuest is not null) && (((ServiceBooking)o).GuestId == SelectedGuest.Id);
+            // And sort it by date, then by start time
+            ServiceBookingsView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+            ServiceBookingsView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; }
@@ -213,31 +218,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-
-        // TODO: implement with CollectionViewSource and remove here
-        /*
-        // Helper method to show bookings sorted by the check-in date
-        public static ObservableCollection<Booking> SortBookings(ObservableCollection<Booking> observableCollection)
-        {
-            ObservableCollection<Booking> temp;
-            temp = new ObservableCollection<Booking>(observableCollection.OrderBy(x => x.CheckInDate));
-            observableCollection.Clear();
-            foreach (var booking in temp)
-                observableCollection.Add(booking);
-            return observableCollection;
-        }
-
-        // Helper method to show service bookings sorted by the date, then by the start time
-        public static ObservableCollection<ServiceBooking> SortServiceBookings(ObservableCollection<ServiceBooking> observableCollection)
-        {
-            ObservableCollection<ServiceBooking> temp;
-            temp = new ObservableCollection<ServiceBooking>(observableCollection.OrderBy(x => x.Date).ThenBy(x => x.StartTime));
-            observableCollection.Clear();
-            foreach (var serviceBooking in temp)
-                observableCollection.Add(serviceBooking);
-            return observableCollection;
-        }*/
-
         public DelegateCommand AddCommand { get; }
         public DelegateCommand RemoveCommand { get; }
         public DelegateCommand ArchiveCommand { get; }
@@ -253,17 +233,28 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             Guests.Add(viewModel);
             SelectedGuest = viewModel;
             IsArchiveHidden = true;
+            // TODO: ID
         }
 
         private bool CanRemove(object? parameter) => SelectedGuest is not null;
         private void Remove(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                // TODO: Remove all bookings, services, meal options for the selected guest
-                Guests.Remove(SelectedGuest);
-                SelectedGuest = null;
-            }
+            if (SelectedGuest is null)
+                return;
+
+            // Remove all bookings, service bookings, menus for the selected guest
+            for (int i = Bookings.Count - 1; i >= 0; i--)
+                if (Bookings[i].GuestId == SelectedGuest.Id)
+                    Bookings.RemoveAt(i);
+            for (int i = ServiceBookings.Count - 1; i >= 0; i--)
+                if (ServiceBookings[i].GuestId == SelectedGuest.Id)
+                    ServiceBookings.RemoveAt(i);
+            for (int i = GuestMenus.Count - 1; i >= 0; i--)
+                if (GuestMenus[i].GuestId == SelectedGuest.Id)
+                    GuestMenus.RemoveAt(i);
+            Guests.Remove(SelectedGuest);
+
+            SelectedGuest = null;
         }
 
         private bool CanArchive(object? parameter) => SelectedGuest is not null;
