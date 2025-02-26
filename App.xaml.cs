@@ -20,10 +20,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<MainViewModel>();
-            services.AddTransient<GuestsViewModel>();
-            services.AddTransient<RoomsViewModel>();
-            services.AddTransient<ServicesViewModel>();
-            services.AddTransient<MealOptionsViewModel>();
+            // TODO!
+            //services.AddTransient<GuestsViewModel>();
+            //services.AddTransient<RoomsViewModel>();
+            //services.AddTransient<ServicesViewModel>();
+            //services.AddTransient<MealOptionsViewModel>();
             services.AddTransient<IGuestDataProvider, GuestDataProvider>();
             services.AddTransient<IRoomDataProvider, RoomDataProvider>();
             services.AddTransient<IServiceDataProvider, ServiceDataProvider>();

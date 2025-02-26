@@ -63,6 +63,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        // TODO!
+        /*
         public string? BookingsString
         {
             get
@@ -89,14 +91,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 return result;
             }
-        }
+        }*/
 
         internal void BookingsChanged()
         {
             CollectionViewSource.GetDefaultView(Bookings).Refresh();
             OnPropertyChanged(nameof(IsFull));
             OnPropertyChanged(nameof(IsFree));
-            OnPropertyChanged(nameof(BookingsString));
+            //TODO!
+            //OnPropertyChanged(nameof(BookingsString));
         }
     }
 }

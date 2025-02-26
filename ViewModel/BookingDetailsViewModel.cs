@@ -38,7 +38,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ConfirmCommand = new DelegateCommand(Confirm, CanConfirm);
             InitializeRoomNames();
         }
-
         public string HeaderText
         {
             get => _headerText;
@@ -72,6 +71,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        // TODO!
+        /*
         public string? RoomName
         {
             get
@@ -89,7 +90,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     ConfirmCommand.OnCanExecuteChanged();
                 }
             }
-        }
+        }*/
 
         public ObservableCollection<string> RoomNames { get; } = new();
 
@@ -98,6 +99,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void Confirm(object? parameter)
         {
+            // TODO!
+            /*
             foreach (var booking in _guest.Bookings)
             {
                 if (booking == _booking)
@@ -133,17 +136,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _booking.CheckInDate = _checkInDate;
             _booking.CheckOutDate = _checkOutDate;
             GuestsViewModel.SortBookings(_guest.Bookings);
-            _parentWindow.Close();
+            _parentWindow.Close();*/
         }
 
-        private bool CanConfirm(object? parameter) => !(CheckOutDate < DateTime.Today || RoomName is null || CheckInDate > CheckOutDate);
+        private bool CanConfirm(object? parameter) => false; // TODO !(CheckOutDate < DateTime.Today || RoomName is null || CheckInDate > CheckOutDate);
 
         private void InitializeRoomNames()
         {
+            // TODO!
+            /*
             foreach (var room in RoomsViewModel.Rooms)
             {
                 RoomNames.Add(room.Name);
-            }
+            }*/
         }
     }
 }

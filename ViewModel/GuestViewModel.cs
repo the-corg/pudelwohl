@@ -6,12 +6,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class GuestViewModel : ViewModelBase
     {
         private readonly Guest _model;
-        private readonly GuestsViewModel _parentViewModel;
+        // TODO!
+        //private readonly GuestsViewModel _parentViewModel;
 
-        public GuestViewModel(Guest model, GuestsViewModel parentViewModel)
+        public GuestViewModel(Guest model) // TODO!, GuestsViewModel parentViewModel)
         {
             _model = model;
-            _parentViewModel = parentViewModel;
+            // TODO!
+            //_parentViewModel = parentViewModel;
         }
 
         public int Id => _model.Id;
@@ -23,7 +25,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 _model.Name = value;
                 OnPropertyChanged();
-                RoomsViewModel.BookingsChanged();
+                // TODO! RoomsViewModel.BookingsChanged();
             }
         }
 
@@ -34,7 +36,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 _model.Breed = value;
                 OnPropertyChanged();
-                RoomsViewModel.BookingsChanged();
+                // TODO! RoomsViewModel.BookingsChanged();
             }
         }
         public bool IsGenderMaleButtonChecked
@@ -130,11 +132,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        // TODO!
+        /*
         public ObservableCollection<Booking> Bookings { get; } = new();
 
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
 
-        public List<GuestMenu> GuestMenus { get; } = new();
+        public List<GuestMenu> GuestMenus { get; } = new();*/
 
         public bool IsArchived
         {
@@ -151,7 +155,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                return _parentViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
+                //TODO!
+                //return _parentViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
+                return true;
             }
         }
 

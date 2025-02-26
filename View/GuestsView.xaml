@@ -7,7 +7,6 @@
              xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:mvvm="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=viewmodel:GuestsViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
