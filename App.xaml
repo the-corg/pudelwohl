@@ -1,8 +1,7 @@
 ﻿<Application x:Class="Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

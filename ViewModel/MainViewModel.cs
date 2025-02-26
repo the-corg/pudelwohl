@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
@@ -15,6 +14,32 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IServiceBookingDataProvider _serviceBookingDataProvider;
         private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
+        public MainViewModel(GuestsViewModel guestsViewModel, RoomsViewModel roomsViewModel,
+            ServicesViewModel servicesViewModel, MealOptionsViewModel mealOptionsViewModel,
+            IGuestDataProvider guestDataProvider, IRoomDataProvider roomDataProvider,
+            IServiceDataProvider serviceDataProvider, IMealOptionDataProvider mealOptionDataProvider,
+            IBookingDataProvider bookingDataProvider, IServiceBookingDataProvider serviceBookingDataProvider,
+            IGuestMenuDataProvider guestMenuDataProvider)
+        {
+            GuestsViewModel = guestsViewModel;
+            RoomsViewModel = roomsViewModel;
+            ServicesViewModel = servicesViewModel;
+            MealOptionsViewModel = mealOptionsViewModel;
+            _guestDataProvider = guestDataProvider;
+            _roomDataProvider = roomDataProvider;
+            _serviceDataProvider = serviceDataProvider;
+            _mealOptionDataProvider = mealOptionDataProvider;
+            _bookingDataProvider = bookingDataProvider;
+            _serviceBookingDataProvider = serviceBookingDataProvider;
+            _guestMenuDataProvider = guestMenuDataProvider;
+        }
+
+        public GuestsViewModel GuestsViewModel { get; }
+        public RoomsViewModel RoomsViewModel { get; }
+        public ServicesViewModel ServicesViewModel { get; }
+        public MealOptionsViewModel MealOptionsViewModel { get; }
+
+
         public ObservableCollection<GuestViewModel> Guests { get; } = new();
         public ObservableCollection<RoomViewModel> Rooms { get; } = new();
         public ObservableCollection<ServiceViewModel> Services { get; } = new();
@@ -23,16 +48,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
         public ObservableCollection<GuestMenu> GuestMenus { get; } = new();
 
-
-        public void BookingsChanged()
-        {
-            foreach (var room in Rooms)
-            {
-                room.BookingsChanged();
-            }
-            CollectionViewSource.GetDefaultView(Rooms).Refresh();
-            StaticPropertyChanged?.Invoke(null, FreeRoomsTodayPropertyEventArgs);
-        }
 
         public async Task LoadAsync()
         {
