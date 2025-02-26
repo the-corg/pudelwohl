@@ -16,8 +16,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private bool _isArchiveHidden = true;
         private DateTime _selectedMenuDate;
-        // TODO!
-        // private Window? _mainWindow;
+
+        private Window? _mainWindow;
+        // Lazy loading the main window reference (because null when the constructor is called)
+        private Window? MainWindow => _mainWindow ??= Window.GetWindow(App.Current.MainWindow) as MainWindow;
 
         public GuestsViewModel(
             ObservableCollection<GuestViewModel> guests,
@@ -37,8 +39,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditBookingCommand = new DelegateCommand(EditBooking, CanEditBooking);
             RemoveBookingCommand = new DelegateCommand(RemoveBooking, CanRemoveBooking);
             _selectedMenuDate = DateTime.Today;
-            // TODO!
-            //_mainWindow = Window.GetWindow(App.Current.MainWindow) as MainWindow;
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; }
@@ -270,16 +270,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
-            // TODO!
-            /*
             BookingDetails bookingDetails = new BookingDetails("Edit Booking", SelectedGuest, SelectedBooking);
-
             // Dim main window before showing the modal window, then restore it back
-            if (_mainWindow is not null)
-                _mainWindow.Opacity = 0.4;
+            MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
-            if (_mainWindow is not null)
-                _mainWindow.Opacity = 1.0;*/
+            MainWindow.Opacity = 1.0;
         }
 
         private bool CanRemoveBooking(object? parameter) => SelectedBooking is not null;
@@ -294,19 +289,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void AddBooking(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                // TODO!
-                /*
-                BookingDetails bookingDetails = new BookingDetails("New Booking", SelectedGuest);
-                // Dim main window before showing the modal window, then restore it back
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 0.4;
-                bookingDetails.ShowDialog();
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 1.0;
-                */
-            }
+            if (SelectedGuest is null)
+                return;
+
+            BookingDetails bookingDetails = new BookingDetails("New Booking", SelectedGuest);
+            // Dim main window before showing the modal window, then restore it back
+            MainWindow.Opacity = 0.4;
+            bookingDetails.ShowDialog();
+            MainWindow.Opacity = 1.0;
         }
     }
 }
