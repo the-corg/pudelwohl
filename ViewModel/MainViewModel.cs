@@ -107,7 +107,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         // Loads item view models created from elements provided in data to the corresponding ObservableCollection
-        private static void LoadCollectionVMAsync<VMT, T>(ObservableCollection<VMT> collection, IEnumerable<T>? data)
+        private void LoadCollectionVMAsync<VMT, T>(ObservableCollection<VMT> collection, IEnumerable<T>? data)
             where VMT : class
             where T : class
         {
@@ -116,7 +116,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             foreach (var element in data)
             {
-                collection.Add((VMT)Activator.CreateInstance(typeof(VMT), element));
+                collection.Add((VMT)Activator.CreateInstance(typeof(VMT), element, this));
             }
         }
 

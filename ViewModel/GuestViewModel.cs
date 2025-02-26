@@ -1,19 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class GuestViewModel : ViewModelBase
     {
         private readonly Guest _model;
-        // TODO!
-        //private readonly GuestsViewModel _parentViewModel;
+        private readonly MainViewModel _mainViewModel;
 
-        public GuestViewModel(Guest model) // TODO!, GuestsViewModel parentViewModel)
+        public GuestViewModel(Guest model, MainViewModel mainViewModel)
         {
             _model = model;
-            // TODO!
-            //_parentViewModel = parentViewModel;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -151,15 +148,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public bool IsVisible
-        {
-            get
-            {
-                //TODO!
-                //return _parentViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
-                return true;
-            }
-        }
+        // ListView binds to this to show only archived/not archived guests
+        public bool IsVisible => _mainViewModel.GuestsViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
 
     }
 }

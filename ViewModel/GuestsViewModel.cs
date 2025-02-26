@@ -78,6 +78,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 _selectedServiceBooking = value;
                 OnPropertyChanged();
+                // TODO!
                 //RemoveServiceBookingCommand.OnCanExecuteChanged();
                 //EditServiceBookingCommand.OnCanExecuteChanged();
             }
@@ -196,6 +197,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+
+        // TODO: implement with CollectionViewSource and remove here
+        /*
         // Helper method to show bookings sorted by the check-in date
         public static ObservableCollection<Booking> SortBookings(ObservableCollection<Booking> observableCollection)
         {
@@ -216,7 +220,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             foreach (var serviceBooking in temp)
                 observableCollection.Add(serviceBooking);
             return observableCollection;
-        }
+        }*/
 
         public DelegateCommand AddCommand { get; }
         public DelegateCommand RemoveCommand { get; }
