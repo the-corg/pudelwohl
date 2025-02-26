@@ -99,6 +99,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 if (_model.EarFloppiness == Model.EarFloppiness.Unknown) 
                     return null;
+                // Replace _ from the Enum with spaces for the ComboBox
                 return _model.EarFloppiness.ToString().Replace('_', ' ');
             }
             set
@@ -110,6 +111,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 }
                 else
                 {
+                    // Replace space from the ComboBox item with _ to find the required Enum value
                     var newValue = value.Replace(" ", "_");
                     if (_model.EarFloppiness.ToString() != newValue)
                     {
@@ -128,14 +130,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged();
             }
         }
-
-        // TODO!
-        /*
-        public ObservableCollection<Booking> Bookings { get; } = new();
-
-        public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
-
-        public List<GuestMenu> GuestMenus { get; } = new();*/
 
         public bool IsArchived
         {

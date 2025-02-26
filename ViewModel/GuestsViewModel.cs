@@ -30,12 +30,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ObservableCollection<Booking> bookings,
             ObservableCollection<ServiceBooking> serviceBookings,
             ObservableCollection<GuestMenu> guestMenus,
+            ObservableCollection<RoomViewModel> rooms,
+            ObservableCollection<ServiceViewModel> services,
             MainViewModel mainViewModel)
         {
             Guests = guests;
             Bookings = bookings;
             ServiceBookings = serviceBookings;
             GuestMenus = guestMenus;
+            Rooms = rooms;
+            Services = services;
             _mainViewModel = mainViewModel;
             AddCommand = new DelegateCommand(Add);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
@@ -64,6 +68,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ObservableCollection<Booking> Bookings { get; }
         public ObservableCollection<ServiceBooking> ServiceBookings { get; }
         public ObservableCollection<GuestMenu> GuestMenus { get; }
+        public ObservableCollection<RoomViewModel> Rooms { get; }
+        public ObservableCollection<ServiceViewModel> Services { get; }
 
         public GuestViewModel? SelectedGuest
         {

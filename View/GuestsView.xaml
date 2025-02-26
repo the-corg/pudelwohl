@@ -179,15 +179,14 @@
                                         <TextBlock Grid.Column="1" Text="–" HorizontalAlignment="Center"/>
                                         <TextBlock Grid.Column="2" Text="{mvvm:CultureAwareBinding Path=CheckOutDate, StringFormat=d}" HorizontalAlignment="Right" />
                                     </Grid>
-                                    <!--<TextBlock>
+                                    <TextBlock>
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource RoomIdNameConverter}">
-                                                <Binding Path="RoomID"/>
+                                                <Binding Path="RoomId"/>
                                                 <Binding RelativeSource="{RelativeSource AncestorType=ListView}" Path="DataContext"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
-                                    </TextBlock>-->
-                                    <TextBlock Text="{Binding RoomId, Converter={StaticResource RoomIdNameConverter}}" />
+                                    </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -211,7 +210,15 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding ServiceId, Converter={StaticResource ServiceIdNameConverter}}" />
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource ServiceIdNameConverter}">
+                                                <Binding Path="ServiceId"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=ListView}" Path="DataContext"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <!--<TextBlock Text="{Binding ServiceId, Converter={StaticResource ServiceIdNameConverter}}" />-->
                                     <TextBlock Text=" ("/>
                                     <TextBlock Text="{mvvm:CultureAwareBinding Path=Date, StringFormat=d}" />
                                     <TextBlock Text=")"/>

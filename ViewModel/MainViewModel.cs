@@ -26,7 +26,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _bookingDataProvider = bookingDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
             _guestMenuDataProvider = guestMenuDataProvider;
-            GuestsViewModel = new GuestsViewModel(Guests, Bookings, ServiceBookings, GuestMenus, this);
+            GuestsViewModel = new GuestsViewModel(Guests, Bookings, ServiceBookings, GuestMenus, Rooms, Services, this);
             RoomsViewModel = new RoomsViewModel(Rooms);
             ServicesViewModel = new ServicesViewModel(Services, this);
             MealOptionsViewModel = new MealOptionsViewModel(MealOptions, this);
