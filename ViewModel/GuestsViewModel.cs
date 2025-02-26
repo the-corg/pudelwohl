@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
@@ -17,6 +18,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private bool _isArchiveHidden = true;
         private DateTime _selectedMenuDate;
         private readonly MainViewModel _mainViewModel;
+        private ICollectionView BookingsView { get; set; }
+        private ICollectionView ServiceBookingsView { get; set; }
 
         private Window? _mainWindow;
         // Lazy loading the main window reference (because null when the constructor is called)
@@ -42,6 +45,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             RemoveBookingCommand = new DelegateCommand(RemoveBooking, CanRemoveBooking);
             _selectedMenuDate = DateTime.Today;
             _mainViewModel = mainViewModel;
+
+            BookingsView = CollectionViewSource.GetDefaultView(Bookings);
+            // Filter the bookings list according to the selected guest
+            BookingsView.Filter = (o) => (SelectedGuest is not null) && (((Booking)o).GuestId == SelectedGuest.Id);
+
+            ServiceBookingsView = CollectionViewSource.GetDefaultView(ServiceBookings);
+            // Filter the service bookings list according to the selected guest
+            ServiceBookingsView.Filter = (o) => (SelectedGuest is not null) && (((ServiceBooking)o).GuestId == SelectedGuest.Id);
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; }
@@ -59,6 +70,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged(nameof(IsGuestSelected));
                 RemoveCommand.OnCanExecuteChanged();
                 ArchiveCommand.OnCanExecuteChanged();
+                BookingsView.Refresh();
+                ServiceBookingsView.Refresh();
             }
         }
 
@@ -303,5 +316,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             bookingDetails.ShowDialog();
             MainWindow.Opacity = 1.0;
         }
+
     }
 }
