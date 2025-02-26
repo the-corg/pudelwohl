@@ -279,7 +279,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails("Edit Booking", SelectedGuest, SelectedBooking);
+            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "Edit Booking", SelectedGuest.Id, SelectedBooking);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
@@ -301,7 +301,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails("New Booking", SelectedGuest);
+            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "New Booking", SelectedGuest.Id);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
