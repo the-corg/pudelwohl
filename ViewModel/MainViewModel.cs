@@ -36,111 +36,39 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public async Task LoadEverythingAsync()
         {
-            await LoadGuestsAsync();
-            await LoadRoomsAsync();
-            await LoadServicesAsync();
-            await LoadMealOptionsAsync();
-            await LoadBookingsAsync();
-            await LoadServiceBookingsAsync();
-            await LoadGuestMenusAsync();
+            LoadCollectionVMAsync<GuestViewModel, Guest>(Guests, await _guestDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<RoomViewModel, Room>(Rooms, await _roomDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<ServiceViewModel, Service>(Services, await _serviceDataProvider.GetAllAsync());
+            LoadCollectionVMAsync<MealOptionViewModel, MealOption>(MealOptions, await _mealOptionDataProvider.GetAllAsync());
+            LoadCollectionAsync<Booking>(Bookings, await _bookingDataProvider.GetAllAsync());
+            LoadCollectionAsync<ServiceBooking>(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
+            LoadCollectionAsync<GuestMenu>(GuestMenus, await _guestMenuDataProvider.GetAllAsync());
         }
 
-        private async Task LoadGuestsAsync()
+        // Loads elements provided in data to the corresponding ObservableCollection
+        private static void LoadCollectionAsync<T>(ObservableCollection<T> collection, IEnumerable<T>? data)
+            where T : class
         {
-            if (Guests.Count > 0)
+            if (collection.Count > 0 || data is null)
                 return;
 
-            var guests = await _guestDataProvider.GetAllAsync();
-            if (guests is not null)
+            foreach (var element in data)
             {
-                foreach (var guest in guests)
-                {
-                    Guests.Add(new GuestViewModel(guest, this));
-                }
+                collection.Add(element);
             }
         }
 
-        private async Task LoadRoomsAsync()
+        // Loads item view models created from elements provided in data to the corresponding ObservableCollection
+        private static void LoadCollectionVMAsync<VMT, T>(ObservableCollection<VMT> collection, IEnumerable<T>? data)
+            where VMT : class
+            where T : class
         {
-            if (Rooms.Count > 0)
+            if (collection.Count > 0 || data is null)
                 return;
 
-            var rooms = await _roomDataProvider.GetAllAsync();
-            if (rooms is not null)
+            foreach (var element in data)
             {
-                foreach (var room in rooms)
-                {
-                    Rooms.Add(new RoomViewModel(room, this));
-                }
-            }
-        }
-
-        private async Task LoadServicesAsync()
-        {
-            if (Services.Count > 0)
-                return;
-
-            var services = await _serviceDataProvider.GetAllAsync();
-            if (services is not null)
-            {
-                foreach (var service in services)
-                {
-                    Services.Add(new ServiceViewModel(service));
-                }
-            }
-        }
-
-        private async Task LoadMealOptionsAsync()
-        {
-            if (MealOptions.Count > 0)
-                return;
-
-            var mealOptions = await _mealOptionDataProvider.GetAllAsync();
-            if (mealOptions is not null)
-            {
-                foreach (var mealOption in mealOptions)
-                {
-                    MealOptions.Add(new MealOptionViewModel(mealOption));
-                }
-            }
-        }
-
-        private async Task LoadBookingsAsync()
-        {
-            var bookings = await _bookingDataProvider.GetAllAsync();
-            if (bookings is not null)
-            {
-                foreach (var booking in bookings)
-                {
-                    Bookings.Add(booking);
-                    Guests.First(x => x.Id == booking.GuestId).Bookings.Add(booking);
-                }
-            }
-        }
-
-        private async Task LoadServiceBookingsAsync()
-        {
-            var serviceBookings = await _serviceBookingDataProvider.GetAllAsync();
-            if (serviceBookings is not null)
-            {
-                foreach (var serviceBooking in serviceBookings)
-                {
-                    ServiceBookings.Add(serviceBooking);
-                    Guests.First(x => x.Id == serviceBooking.GuestId).ServiceBookings.Add(serviceBooking);
-                }
-            }
-        }
-
-        private async Task LoadGuestMenusAsync()
-        {
-            var guestMenus = await _guestMenuDataProvider.GetAllAsync();
-            if (guestMenus is not null)
-            {
-                foreach (var guestMenu in guestMenus)
-                {
-                    GuestMenus.Add(guestMenu);
-                    Guests.First(x => x.Id == guestMenu.GuestId).GuestMenus.Add(guestMenu);
-                }
+                collection.Add((VMT)Activator.CreateInstance(typeof(VMT), element));
             }
         }
 
