@@ -30,13 +30,13 @@
 
         <TabControl Grid.Row="1">
             <TabItem Header="Guests" >
-                <view:GuestsView />
+                <view:GuestsView DataContext="GuestsViewModel" />
             </TabItem>
             <TabItem Header="Rooms" >
-                <view:RoomsView />
+                <view:RoomsView DataContext="RoomsViewModel" />
             </TabItem>
             <TabItem Header="Services" >
-                <view:ServicesView />
+                <view:ServicesView DataContext="ServicesViewModel" />
             </TabItem>
             <TabItem Header="Cuisine" >
                 <view:CuisineView />

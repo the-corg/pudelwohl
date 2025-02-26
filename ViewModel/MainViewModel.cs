@@ -34,7 +34,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             StaticPropertyChanged?.Invoke(null, FreeRoomsTodayPropertyEventArgs);
         }
 
-        public async Task LoadEverythingAsync()
+        public async Task LoadAsync()
         {
             LoadCollectionVMAsync<GuestViewModel, Guest>(Guests, await _guestDataProvider.GetAllAsync());
             LoadCollectionVMAsync<RoomViewModel, Room>(Rooms, await _roomDataProvider.GetAllAsync());
