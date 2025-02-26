@@ -183,7 +183,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource RoomIdNameConverter}">
                                                 <Binding Path="RoomId"/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=ListView}" Path="DataContext"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
@@ -214,7 +214,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource ServiceIdNameConverter}">
                                                 <Binding Path="ServiceId"/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=ListView}" Path="DataContext"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
