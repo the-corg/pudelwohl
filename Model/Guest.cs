@@ -14,16 +14,12 @@
         public bool IsArchived { get; set; }
 
 
-        // Static field and property for automatic ID assignment
+        // Private static field and property for automatic ID assignment
         private static int _nextId = 0;
-        public static int NextId
-        { 
-            get => _nextId++;
-            private set => _nextId = value;
-        }
+        private static int NextId => _nextId++;
 
         private static bool nextIdAlreadyCalculated = false;
-        // Calculate NextId based on the maximum of all IDs.
+        // Calculate the next ID based on the maximum of all IDs.
         // Works only once, should be called after initial data loading
         public static void CalculateNextId(List<Guest> guests)
         {
@@ -31,7 +27,7 @@
                 return;
 
             nextIdAlreadyCalculated = true;
-            NextId = guests.Max(guest => guest.Id) + 1;
+            _nextId = guests.Max(guest => guest.Id) + 1;
         }
     }
 
