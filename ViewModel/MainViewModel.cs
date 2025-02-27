@@ -85,6 +85,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public void BookingsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(FreeRoomsToday));
+
+            // Update room occupancy colors on the Rooms tab
+            foreach (var room in Rooms)
+                room.BookingsChanged();
         }
 
         public async Task LoadAsync()

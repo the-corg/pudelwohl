@@ -143,7 +143,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _booking.CheckInDate = _checkInDate;
             _booking.CheckOutDate = _checkOutDate;
 
-            // TODO: Check that this will refresh the bookings view on the Rooms tab (esp on Edit)
             // Have to call these manually to make the collection react to and Edit of a booking,
             // which otherwise wouldn't produce a collection change event
             CollectionViewSource.GetDefaultView(_mainViewModel.Bookings).Refresh();

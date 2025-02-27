@@ -6,12 +6,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class RoomsViewModel : ViewModelBase
     {
         private RoomViewModel? _selectedRoom;
-        private DateTime? _occupancyDate;
+        private DateTime _occupancyDate;
 
         public RoomsViewModel(ObservableCollection<RoomViewModel> rooms)
         {
             Rooms = rooms;
-            _occupancyDate = DateTime.Now;
+            _occupancyDate = DateTime.Today;
         }
 
         public ObservableCollection<RoomViewModel> Rooms { get; }
@@ -30,7 +30,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public DateTime? OccupancyDate
+        public DateTime OccupancyDate
         {
             get => _occupancyDate;
             set
