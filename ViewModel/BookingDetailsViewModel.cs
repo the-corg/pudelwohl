@@ -52,12 +52,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _checkInDate;
             set
             {
-                if (CheckInDate is not null)
-                {
-                    _checkInDate = (DateTime)value;
-                    OnPropertyChanged();
-                    ConfirmCommand.OnCanExecuteChanged();
-                }
+                if (value is null || (DateTime)value == _checkInDate)
+                    return;
+
+                _checkInDate = (DateTime)value;
+                OnPropertyChanged();
+                ConfirmCommand.OnCanExecuteChanged();
             }
         }
 
@@ -66,12 +66,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _checkOutDate;
             set
             {
-                if (CheckOutDate is not null)
-                {
-                    _checkOutDate = (DateTime)value;
-                    OnPropertyChanged();
-                    ConfirmCommand.OnCanExecuteChanged();
-                }
+                if (value is null || (DateTime)value == _checkOutDate)
+                    return;
+
+                _checkOutDate = (DateTime)value;
+                OnPropertyChanged();
+                ConfirmCommand.OnCanExecuteChanged();
             }
         }
         public string? RoomName
@@ -84,13 +84,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
             set
             {
-                if (value is not null)
-                {
-                    // Get roomId by using the fact that room names start with RoomId
-                    _roomId = int.Parse(value.Split()[0]);
-                    OnPropertyChanged();
-                    ConfirmCommand.OnCanExecuteChanged();
-                }
+                if (value is null)
+                    return;
+
+                // Get roomId by using the fact that room names start with RoomId
+                var newRoomId = int.Parse(value.Split()[0]);
+                if (newRoomId == _roomId)
+                    return;
+
+                _roomId = newRoomId;
+                OnPropertyChanged();
+                ConfirmCommand.OnCanExecuteChanged();
             }
         }
 

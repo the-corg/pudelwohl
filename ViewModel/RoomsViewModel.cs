@@ -21,6 +21,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedRoom;
             set
             {
+                if (_selectedRoom == value)
+                    return;
+
                 _selectedRoom = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsRoomSelected));
@@ -32,6 +35,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _occupancyDate;
             set
             {
+                if (_occupancyDate == value)
+                    return;
+
                 _occupancyDate = value;
                 OnPropertyChanged();
                 CollectionViewSource.GetDefaultView(Rooms).Refresh();

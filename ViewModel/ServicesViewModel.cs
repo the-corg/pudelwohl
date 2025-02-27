@@ -24,6 +24,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedService;
             set
             {
+                if (_selectedService == value)
+                    return;
+
                 _selectedService = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsServiceSelected));
@@ -46,16 +49,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedService = viewModel;
         }
 
+        private bool CanRemove(object? parameter) => SelectedService is not null;
         private void Remove(object? parameter)
         {
-            if (SelectedService is not null)
-            {
-                Services.Remove(SelectedService);
-                SelectedService = null;
-            }
-        }
+            if (SelectedService is null)
+                return;
 
-        private bool CanRemove(object? parameter) => SelectedService is not null;
+            Services.Remove(SelectedService);
+            SelectedService = null;
+        }
 
     }
 }

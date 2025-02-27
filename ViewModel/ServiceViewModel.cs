@@ -22,6 +22,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Name;
             set
             {
+                if (_model.Name == value)
+                    return;
+
                 _model.Name = value;
                 OnPropertyChanged();
             }
@@ -32,6 +35,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Description;
             set
             {
+                if (_model.Description == value)
+                    return;
+
                 _model.Description = value;
                 OnPropertyChanged();
             }

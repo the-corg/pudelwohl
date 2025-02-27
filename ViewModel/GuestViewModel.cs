@@ -20,6 +20,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Name;
             set
             {
+                if (value == _model.Name)
+                    return;
+
                 _model.Name = value;
                 OnPropertyChanged();
                 // TODO! RoomsViewModel.BookingsChanged();
@@ -31,6 +34,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Breed;
             set
             {
+                if (value == _model.Breed)
+                    return;
+
                 _model.Breed = value;
                 OnPropertyChanged();
                 // TODO! RoomsViewModel.BookingsChanged();
@@ -41,7 +47,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Male;
             set
             {
-                if (value) _model.Gender = Model.Gender.Male;
+                if (value) 
+                    _model.Gender = Model.Gender.Male;
                 OnPropertyChanged();
             }
         }
@@ -51,7 +58,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Female;
             set
             {
-                if (value) _model.Gender = Model.Gender.Female;
+                if (value) 
+                    _model.Gender = Model.Gender.Female;
                 OnPropertyChanged();
             }
         }
@@ -61,7 +69,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Other;
             set
             {
-                if (value) _model.Gender = Model.Gender.Other;
+                if (value) 
+                    _model.Gender = Model.Gender.Other;
                 OnPropertyChanged();
             }
         }
@@ -71,6 +80,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.CoatColor;
             set
             {
+                if (_model.CoatColor == value)
+                    return;
+
                 _model.CoatColor = value;
                 OnPropertyChanged();
             }
@@ -80,6 +92,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.DateOfBirth;
             set
             {
+                if (_model.DateOfBirth == value)
+                    return;
+
                 _model.DateOfBirth = value;
                 OnPropertyChanged();
             }
@@ -89,6 +104,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.FavoriteToy;
             set
             {
+                if (_model.FavoriteToy == value)
+                    return;
+
                 _model.FavoriteToy = value;
                 OnPropertyChanged();
             }
@@ -126,6 +144,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.SpecialRequests;
             set
             {
+                if (_model.SpecialRequests == value)
+                    return;
+
                 _model.SpecialRequests = value;
                 OnPropertyChanged();
             }
@@ -136,6 +157,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.IsArchived;
             set
             {
+                if (_model.IsArchived == value)
+                    return;
+
                 _model.IsArchived = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsVisible));

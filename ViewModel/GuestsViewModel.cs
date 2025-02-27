@@ -70,6 +70,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedGuest;
             set
             {
+                if (_selectedGuest == value)
+                    return;
+
                 _selectedGuest = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsGuestSelected));
@@ -85,6 +88,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedBooking;
             set
             {
+                if (_selectedBooking == value)
+                    return;
+
                 _selectedBooking = value;
                 OnPropertyChanged();
                 RemoveBookingCommand.OnCanExecuteChanged();
@@ -97,6 +103,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedServiceBooking;
             set
             {
+                if (_selectedServiceBooking == value)
+                    return;
+
                 _selectedServiceBooking = value;
                 OnPropertyChanged();
                 // TODO!
@@ -114,6 +123,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedMenuDate;
             set
             {
+                if (_selectedMenuDate == value)
+                    return;
+
                 _selectedMenuDate = value;
                 OnPropertyChanged();
             }
@@ -142,8 +154,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
             set
             {
-                if (value is null) return;
-                if (SelectedGuest is null) return;
+                if (value is null || SelectedGuest is null)
+                    return;
+                // TODO: Add check for value == old value
                 bool dateFound = false;
                 foreach (GuestMenu guestMenu in SelectedGuest.GuestMenus)
                 {
@@ -171,6 +184,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _isArchiveHidden;
             set
             {
+                if (_isArchiveHidden == value)
+                    return;
+
                 _isArchiveHidden = value;
                 if (IsArchiveHidden)
                 {
@@ -192,6 +208,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _archiveButtonText;
             set
             {
+                if (_archiveButtonText == value)
+                    return;
+
                 _archiveButtonText = value;
                 OnPropertyChanged();
             }
@@ -202,6 +221,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _viewArchiveButtonText;
             set
             {
+                if (_viewArchiveButtonText == value)
+                    return;
+
                 _viewArchiveButtonText = value;
                 OnPropertyChanged();
             }
@@ -260,11 +282,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private bool CanArchive(object? parameter) => SelectedGuest is not null;
         private void Archive(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                SelectedGuest.IsArchived = !SelectedGuest.IsArchived;
-                SelectedGuest = null;
-            }
+            if (SelectedGuest is null)
+                return;
+
+            SelectedGuest.IsArchived = !SelectedGuest.IsArchived;
+            SelectedGuest = null;
         }
 
         private void ViewArchive(object? parameter)

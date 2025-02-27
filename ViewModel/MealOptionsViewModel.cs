@@ -25,6 +25,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedMealOption;
             set
             {
+                if (_selectedMealOption == value)
+                    return;
+
                 _selectedMealOption = value;
                 OnPropertyChanged();
                 RemoveCommand.OnCanExecuteChanged();
@@ -47,21 +50,21 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void Edit(object? parameter)
         {
-            if (SelectedMealOption is not null)
-            {
-                SelectedMealOption.Name = "!" + SelectedMealOption.Name;
-            }
+            if (SelectedMealOption is null)
+                return;
+
+            SelectedMealOption.Name = "!" + SelectedMealOption.Name;
         }
 
         private bool CanEdit(object? parameter) => SelectedMealOption is not null;
 
         private void Remove(object? parameter)
         {
-            if (SelectedMealOption is not null)
-            {
-                MealOptions.Remove(SelectedMealOption);
-                SelectedMealOption = null;
-            }
+            if (SelectedMealOption is null)
+                return;
+
+            MealOptions.Remove(SelectedMealOption);
+            SelectedMealOption = null;
         }
 
         private bool CanRemove(object? parameter) => SelectedMealOption is not null;
