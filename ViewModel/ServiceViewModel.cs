@@ -7,10 +7,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServiceViewModel : ViewModelBase
     {
         private readonly Service _model;
+        private readonly MainViewModel _mainViewModel;
 
-        public ServiceViewModel(Service model)
+        public ServiceViewModel(Service model, MainViewModel mainViewModel)
         {
             _model = model;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -20,6 +22,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Name;
             set
             {
+                if (_model.Name == value)
+                    return;
+
                 _model.Name = value;
                 OnPropertyChanged();
             }
@@ -30,6 +35,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Description;
             set
             {
+                if (_model.Description == value)
+                    return;
+
                 _model.Description = value;
                 OnPropertyChanged();
             }

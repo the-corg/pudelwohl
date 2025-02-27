@@ -6,9 +6,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly MainViewModel _viewModel;
+
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+            Loaded += MainWindow_Loaded;
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel.LoadAsync();
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

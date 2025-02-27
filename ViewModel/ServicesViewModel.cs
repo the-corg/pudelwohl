@@ -1,6 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
+﻿using System.Collections.ObjectModel;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
 
@@ -8,70 +6,58 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 {
     public class ServicesViewModel : ViewModelBase
     {
-        private readonly IServiceDataProvider _serviceDataProvider;
         private ServiceViewModel? _selectedService;
+        private readonly MainViewModel _mainViewModel;
 
-        public ServicesViewModel(IServiceDataProvider serviceDataProvider)
+        public ServicesViewModel(ObservableCollection<ServiceViewModel> services, MainViewModel mainViewModel)
         {
-            _serviceDataProvider = serviceDataProvider;
+            Services = services;
             AddCommand = new DelegateCommand(Add);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
+            _mainViewModel = mainViewModel;
         }
 
-        public static ObservableCollection<ServiceViewModel> Services { get; } = new();
+        public ObservableCollection<ServiceViewModel> Services { get; }
 
         public ServiceViewModel? SelectedService
         {
             get => _selectedService;
             set
             {
+                if (_selectedService == value)
+                    return;
+
                 _selectedService = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsServiceSelected));
                 RemoveCommand.OnCanExecuteChanged();
             }
-
         }
 
+        // Used for hiding the service details when no service is selected
         public bool IsServiceSelected => SelectedService is not null;
 
         public DelegateCommand AddCommand { get; }
 
         public DelegateCommand RemoveCommand { get; }
 
-        public async Task LoadAsync()
-        {
-            if (Services.Count > 0) 
-                return;
-
-            var services = await _serviceDataProvider.GetAllAsync();
-            if (services is not null)
-            {
-                foreach (var service in services)
-                {
-                    Services.Add(new ServiceViewModel(service));
-                }
-            }
-        }
-
         private void Add(object? parameter)
         {
             var service = new Service { Name = "NEW SERVICE" };
-            var viewModel = new ServiceViewModel(service);
+            var viewModel = new ServiceViewModel(service, _mainViewModel);
             Services.Add(viewModel);
             SelectedService = viewModel;
         }
 
+        private bool CanRemove(object? parameter) => SelectedService is not null;
         private void Remove(object? parameter)
         {
-            if (SelectedService is not null)
-            {
-                Services.Remove(SelectedService);
-                SelectedService = null;
-            }
-        }
+            if (SelectedService is null)
+                return;
 
-        private bool CanRemove(object? parameter) => SelectedService is not null;
+            Services.Remove(SelectedService);
+            SelectedService = null;
+        }
 
     }
 }

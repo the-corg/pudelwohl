@@ -1,8 +1,7 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View;
@@ -11,7 +10,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 {
     public class GuestsViewModel : ViewModelBase
     {
-        private readonly IGuestDataProvider _guestDataProvider;
         private GuestViewModel? _selectedGuest;
         private Booking? _selectedBooking;
         private ServiceBooking? _selectedServiceBooking;
@@ -19,11 +17,26 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private bool _isArchiveHidden = true;
         private DateTime _selectedMenuDate;
-        private Window? _mainWindow;
+        private readonly MainViewModel _mainViewModel;
+        private ICollectionView BookingsView { get; set; }
+        private ICollectionView ServiceBookingsView { get; set; }
 
-        public GuestsViewModel(IGuestDataProvider guestDataProvider)
+        private Window? _mainWindow;
+        // Lazy loading the main window reference (because null when the constructor is called)
+        private Window? MainWindow => _mainWindow ??= Window.GetWindow(App.Current.MainWindow) as MainWindow;
+
+        public GuestsViewModel(
+            ObservableCollection<GuestViewModel> guests,
+            ObservableCollection<Booking> bookings,
+            ObservableCollection<ServiceBooking> serviceBookings,
+            ObservableCollection<GuestMenu> guestMenus,
+            MainViewModel mainViewModel)
         {
-            _guestDataProvider = guestDataProvider;
+            Guests = guests;
+            Bookings = bookings;
+            ServiceBookings = serviceBookings;
+            GuestMenus = guestMenus;
+            _mainViewModel = mainViewModel;
             AddCommand = new DelegateCommand(Add);
             RemoveCommand = new DelegateCommand(Remove, CanRemove);
             ArchiveCommand = new DelegateCommand(Archive, CanArchive);
@@ -32,27 +45,41 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditBookingCommand = new DelegateCommand(EditBooking, CanEditBooking);
             RemoveBookingCommand = new DelegateCommand(RemoveBooking, CanRemoveBooking);
             _selectedMenuDate = DateTime.Today;
-            _mainWindow = Window.GetWindow(App.Current.MainWindow) as MainWindow;
+
+            BookingsView = CollectionViewSource.GetDefaultView(Bookings);
+            // Filter the bookings list according to the selected guest
+            BookingsView.Filter = (o) => (SelectedGuest is not null) && (((Booking)o).GuestId == SelectedGuest.Id);
+            // And sort it by check-in date
+            BookingsView.SortDescriptions.Add(new SortDescription("CheckInDate", ListSortDirection.Ascending));
+
+            ServiceBookingsView = CollectionViewSource.GetDefaultView(ServiceBookings);
+            // Filter the service bookings list according to the selected guest
+            ServiceBookingsView.Filter = (o) => (SelectedGuest is not null) && (((ServiceBooking)o).GuestId == SelectedGuest.Id);
+            // And sort it by date, then by start time
+            ServiceBookingsView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+            ServiceBookingsView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
-        public static ObservableCollection<GuestViewModel> Guests { get; } = new();
-
-        public static List<Booking> Bookings { get; } = new();
-
-        public static List<ServiceBooking> ServiceBookings { get; } = new();
-
-        public static List<GuestMenu> GuestMenus { get; } = new();
+        public ObservableCollection<GuestViewModel> Guests { get; }
+        public ObservableCollection<Booking> Bookings { get; }
+        public ObservableCollection<ServiceBooking> ServiceBookings { get; }
+        public ObservableCollection<GuestMenu> GuestMenus { get; }
 
         public GuestViewModel? SelectedGuest
         {
             get => _selectedGuest;
             set
             {
+                if (_selectedGuest == value)
+                    return;
+
                 _selectedGuest = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsGuestSelected));
                 RemoveCommand.OnCanExecuteChanged();
                 ArchiveCommand.OnCanExecuteChanged();
+                BookingsView.Refresh();
+                ServiceBookingsView.Refresh();
             }
         }
 
@@ -61,12 +88,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedBooking;
             set
             {
+                if (_selectedBooking == value)
+                    return;
+
                 _selectedBooking = value;
                 OnPropertyChanged();
                 RemoveBookingCommand.OnCanExecuteChanged();
                 EditBookingCommand.OnCanExecuteChanged();
             }
-
         }
 
         public ServiceBooking? SelectedServiceBooking
@@ -74,14 +103,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedServiceBooking;
             set
             {
+                if (_selectedServiceBooking == value)
+                    return;
+
                 _selectedServiceBooking = value;
                 OnPropertyChanged();
-                //RemoveBookingCommand.OnCanExecuteChanged();
-                //EditBookingCommand.OnCanExecuteChanged();
+                // TODO!
+                //RemoveServiceBookingCommand.OnCanExecuteChanged();
+                //EditServiceBookingCommand.OnCanExecuteChanged();
             }
-
         }
 
+        // Used for hiding the guest details when no guest is selected
         public bool IsGuestSelected => SelectedGuest is not null;
 
 
@@ -90,11 +123,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _selectedMenuDate;
             set
             {
+                if (_selectedMenuDate == value)
+                    return;
+
                 _selectedMenuDate = value;
                 OnPropertyChanged();
             }
         }
 
+        //TODO!
+        /*
         public string? BreakfastOption
         {
             get
@@ -116,8 +154,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
             set
             {
-                if (value is null) return;
-                if (SelectedGuest is null) return;
+                if (value is null || SelectedGuest is null)
+                    return;
+                // TODO: Add check for value == old value
                 bool dateFound = false;
                 foreach (GuestMenu guestMenu in SelectedGuest.GuestMenus)
                 {
@@ -137,7 +176,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 }
                 OnPropertyChanged();
             }
-        }
+        }*/
 
 
         public bool IsArchiveHidden
@@ -145,6 +184,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _isArchiveHidden;
             set
             {
+                if (_isArchiveHidden == value)
+                    return;
+
                 _isArchiveHidden = value;
                 if (IsArchiveHidden)
                 {
@@ -166,6 +208,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _archiveButtonText;
             set
             {
+                if (_archiveButtonText == value)
+                    return;
+
                 _archiveButtonText = value;
                 OnPropertyChanged();
             }
@@ -176,11 +221,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _viewArchiveButtonText;
             set
             {
+                if (_viewArchiveButtonText == value)
+                    return;
+
                 _viewArchiveButtonText = value;
                 OnPropertyChanged();
             }
         }
 
+        // Selectable values for the ComboBox
         public string[] EarFloppinessValues
         {
             get
@@ -191,26 +240,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public static ObservableCollection<Booking> SortBookings(ObservableCollection<Booking> observableCollection)
-        {
-            ObservableCollection<Booking> temp;
-            temp = new ObservableCollection<Booking>(observableCollection.OrderBy(x => x.CheckInDate));
-            observableCollection.Clear();
-            foreach (var booking in temp)
-                observableCollection.Add(booking);
-            return observableCollection;
-        }
-
-        public static ObservableCollection<ServiceBooking> SortServiceBookings(ObservableCollection<ServiceBooking> observableCollection)
-        {
-            ObservableCollection<ServiceBooking> temp;
-            temp = new ObservableCollection<ServiceBooking>(observableCollection.OrderBy(x => x.Date).ThenBy(x => x.StartTime));
-            observableCollection.Clear();
-            foreach (var serviceBooking in temp)
-                observableCollection.Add(serviceBooking);
-            return observableCollection;
-        }
-
         public DelegateCommand AddCommand { get; }
         public DelegateCommand RemoveCommand { get; }
         public DelegateCommand ArchiveCommand { get; }
@@ -219,95 +248,46 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand EditBookingCommand { get; }
         public DelegateCommand RemoveBookingCommand { get; }
 
-        public async Task LoadAsync()
-        {
-            if (Guests.Count > 0)
-                return;
-
-            var guests = await _guestDataProvider.GetAllAsync();
-            if (guests is not null)
-            {
-                foreach (var guest in guests)
-                {
-                    Guests.Add(new GuestViewModel(guest, this));
-                }
-            }
-
-            var bookings = await BookingDataProvider.GetAllAsync();
-            if (bookings is not null)
-            {
-                foreach (var booking in bookings)
-                {
-                    Bookings.Add(booking);
-                    Guests.First(x => x.Id == booking.GuestId).Bookings.Add(booking);
-                }
-            }
-
-            foreach (var guest in Guests)
-            {
-                GuestsViewModel.SortBookings(guest.Bookings);
-            }
-
-            var serviceBookings = await ServiceBookingDataProvider.GetAllAsync();
-            if (serviceBookings is not null)
-            {
-                foreach (var serviceBooking in  serviceBookings)
-                {
-                    ServiceBookings.Add(serviceBooking);
-                    Guests.First(x => x.Id == serviceBooking.GuestId).ServiceBookings.Add(serviceBooking);
-                }
-            }
-
-            var guestMenus = await GuestMenuDataProvider.GetAllAsync();
-            if (guestMenus is not null)
-            {
-                foreach (var guestMenu in guestMenus)
-                {
-                    GuestMenus.Add(guestMenu);
-                    Guests.First(x => x.Id == guestMenu.GuestId).GuestMenus.Add(guestMenu);
-                }
-            }
-        }
-
         private void Add(object? parameter)
         {
             var guest = new Guest { Name = "NEW GUEST" };
-            var viewModel = new GuestViewModel(guest, this);
+            var viewModel = new GuestViewModel(guest, _mainViewModel);
             Guests.Add(viewModel);
             SelectedGuest = viewModel;
             IsArchiveHidden = true;
-        }
-
-        private void Remove(object? parameter)
-        {
-            if (SelectedGuest is not null)
-            {
-                foreach (var booking in SelectedGuest.Bookings)
-                {
-                    Bookings.Remove(booking);
-                    foreach (var room in RoomsViewModel.Rooms)
-                    {
-                        room.Bookings.Remove(booking);
-                    }
-                }
-                Guests.Remove(SelectedGuest);
-                SelectedGuest = null;
-                RoomsViewModel.BookingsChanged();
-            }
+            // TODO: ID
         }
 
         private bool CanRemove(object? parameter) => SelectedGuest is not null;
-
-        private void Archive(object? parameter)
+        private void Remove(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                SelectedGuest.IsArchived = !SelectedGuest.IsArchived;
-                SelectedGuest = null;
-            }
+            if (SelectedGuest is null)
+                return;
+
+            // Remove all bookings, service bookings, menus for the selected guest
+            for (int i = Bookings.Count - 1; i >= 0; i--)
+                if (Bookings[i].GuestId == SelectedGuest.Id)
+                    Bookings.RemoveAt(i);
+            for (int i = ServiceBookings.Count - 1; i >= 0; i--)
+                if (ServiceBookings[i].GuestId == SelectedGuest.Id)
+                    ServiceBookings.RemoveAt(i);
+            for (int i = GuestMenus.Count - 1; i >= 0; i--)
+                if (GuestMenus[i].GuestId == SelectedGuest.Id)
+                    GuestMenus.RemoveAt(i);
+            Guests.Remove(SelectedGuest);
+
+            SelectedGuest = null;
         }
 
         private bool CanArchive(object? parameter) => SelectedGuest is not null;
+        private void Archive(object? parameter)
+        {
+            if (SelectedGuest is null)
+                return;
+
+            SelectedGuest.IsArchived = !SelectedGuest.IsArchived;
+            SelectedGuest = null;
+        }
 
         private void ViewArchive(object? parameter)
         {
@@ -316,55 +296,39 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         private bool CanEditBooking(object? parameter) => SelectedGuest is not null && SelectedBooking is not null;
-
         private void EditBooking(object? parameter)
         {
-            if (SelectedGuest is not null && SelectedBooking is not null)
-            {
-                BookingDetails bookingDetails = new BookingDetails("Edit Booking", SelectedGuest, SelectedBooking);
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 0.4;
-                bookingDetails.ShowDialog();
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 1.0;
-            }
+            if (SelectedGuest is null || SelectedBooking is null)
+                return;
+
+            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "Edit Booking", SelectedGuest.Id, SelectedBooking);
+            // Dim main window before showing the modal window, then restore it back
+            MainWindow.Opacity = 0.4;
+            bookingDetails.ShowDialog();
+            MainWindow.Opacity = 1.0;
         }
 
         private bool CanRemoveBooking(object? parameter) => SelectedBooking is not null;
-
         private void RemoveBooking(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                if (SelectedBooking is not null)
-                {
-                    Booking booking = SelectedBooking;
+            if (SelectedGuest is null || SelectedBooking is null)
+                return;
 
-                    SelectedGuest.Bookings.Remove(booking);
-                    foreach (var room in RoomsViewModel.Rooms)
-                    {
-                        room.Bookings.Remove(booking);
-                    }
-                    Bookings.Remove(booking);
-
-                    SelectedBooking = null;
-                    RoomsViewModel.BookingsChanged();
-
-                }
-            }
+            Bookings.Remove(SelectedBooking);
+            SelectedBooking = null;
         }
 
         private void AddBooking(object? parameter)
         {
-            if (SelectedGuest is not null)
-            {
-                BookingDetails bookingDetails = new BookingDetails("New Booking", SelectedGuest);
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 0.4;
-                bookingDetails.ShowDialog();
-                if (_mainWindow is not null)
-                    _mainWindow.Opacity = 1.0;
-            }
+            if (SelectedGuest is null)
+                return;
+
+            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "New Booking", SelectedGuest.Id);
+            // Dim main window before showing the modal window, then restore it back
+            MainWindow.Opacity = 0.4;
+            bookingDetails.ShowDialog();
+            MainWindow.Opacity = 1.0;
         }
+
     }
 }

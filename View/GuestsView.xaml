@@ -7,7 +7,6 @@
              xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:mvvm="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=viewmodel:GuestsViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -51,7 +50,6 @@
                         <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Style>
                 </ListView.ItemContainerStyle>
-
             </ListView>
 
             <Button Grid.Row="2" Content="{Binding ViewArchiveButtonText}" Command="{Binding ViewArchiveCommand}"/>
@@ -148,7 +146,7 @@
                 <GridSplitter Grid.Column="3" />
                 <Label Grid.Column="3" Content="||" Foreground="{StaticResource DogBrown}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" IsHitTestVisible="False" Padding="0"/>
 
-                <!-- Room -->
+                <!-- Bookings -->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height = "Auto"/>
@@ -167,7 +165,7 @@
                         <Button Grid.Column="1" Content="Edit" Command="{Binding EditBookingCommand}"/>
                         <Button Grid.Column="2" Content="🗑️" Command="{Binding RemoveBookingCommand}"/>
                     </Grid>
-                    <ListView Grid.Row="2" ItemsSource="{Binding SelectedGuest.Bookings}" SelectedItem="{Binding SelectedBooking, Mode=TwoWay}" >
+                    <ListView Grid.Row="2" ItemsSource="{Binding Bookings}" SelectedItem="{Binding SelectedBooking, Mode=TwoWay}" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -181,24 +179,19 @@
                                         <TextBlock Grid.Column="1" Text="–" HorizontalAlignment="Center"/>
                                         <TextBlock Grid.Column="2" Text="{mvvm:CultureAwareBinding Path=CheckOutDate, StringFormat=d}" HorizontalAlignment="Right" />
                                     </Grid>
-                                    <TextBlock Text="{Binding RoomId, Converter={StaticResource RoomIdNameConverter}}" />
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource RoomIdNameConverter}">
+                                                <Binding Path="RoomId"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-
                 </Grid>
-                <!--<ScrollViewer>
-                    <StackPanel>
-                        <Label Content="Room" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
-                        <TextBlock Text="Double Suite 13b" HorizontalAlignment="Center" Foreground="{StaticResource DogDark}" />
-                        <Button Content="Assign Room" Margin="10" Height="30"/>
-                        <Label Content="Check-In" HorizontalAlignment="Center"/>
-                        <DatePicker SelectedDate="2/23/2025" HorizontalAlignment="Center"/>
-                        <Label Content="Check-Out" HorizontalAlignment="Center"/>
-                        <DatePicker SelectedDate="3/3/2025" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </ScrollViewer>-->
 
                 <!-- Services -->
                 <Grid Grid.Column = "2">
@@ -213,11 +206,18 @@
                         <Button Content="Book" Margin="5 0" Width="80" Height="30"/>
                         <Button Content="Cancel" Margin="5 0"  Width="80" Height="30"/>
                     </StackPanel>
-                    <ListView Grid.Row="2" ItemsSource="{Binding SelectedGuest.ServiceBookings}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
+                    <ListView Grid.Row="2" ItemsSource="{Binding ServiceBookings}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding ServiceId, Converter={StaticResource ServiceIdNameConverter}}" />
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource ServiceIdNameConverter}">
+                                                <Binding Path="ServiceId"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBlock Text=" ("/>
                                     <TextBlock Text="{mvvm:CultureAwareBinding Path=Date, StringFormat=d}" />
                                     <TextBlock Text=")"/>

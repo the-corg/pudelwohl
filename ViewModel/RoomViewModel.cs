@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class RoomViewModel : ViewModelBase
     {
         private readonly Room _model;
-        private readonly RoomsViewModel _parentViewModel;
+        private readonly MainViewModel _mainViewModel;
 
-        public RoomViewModel(Room model, RoomsViewModel parentViewModel)
+        public RoomViewModel(Room model, MainViewModel mainViewModel)
         {
             _model = model;
-            _parentViewModel = parentViewModel;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -27,26 +23,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public int MaxGuests => _model.MaxGuests;
 
-        public ObservableCollection<Booking> Bookings { get; } = new();
-
         public bool IsFull
         {
             get
             {
-                if (Bookings.Count == 0) return false;
+                if (_mainViewModel.Bookings.Count == 0)
+                    return false;
                 
                 int occupants = 0;
-
-                foreach (Booking booking in Bookings)
+                // Count occupants in this room on the selected date
+                foreach (Booking booking in _mainViewModel.Bookings)
                 {
-                    if (booking.CheckInDate <= _parentViewModel.OccupancyDate && booking.CheckOutDate >= _parentViewModel.OccupancyDate)
+                    if (booking.RoomId == Id &&
+                        booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && 
+                        booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
                         occupants++;
                 }
 
-                if (occupants >= MaxGuests)
-                    return true; 
-                else
-                    return false;
+                return (occupants >= MaxGuests);
             }
         }
 
@@ -54,17 +48,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                if (Bookings.Count == 0)
+                if (_mainViewModel.Bookings.Count == 0)
                     return true;
-                foreach (Booking booking in Bookings)
+
+                // Look for at least one occupant in this room on the selected date
+                foreach (Booking booking in _mainViewModel.Bookings)
                 {
-                    if (booking.CheckInDate <= _parentViewModel.OccupancyDate && booking.CheckOutDate >= _parentViewModel.OccupancyDate)
+                    if (booking.RoomId == Id && 
+                        booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && 
+                        booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
                         return false;
                 }
+                // No occupants found
                 return true;
             }
         }
 
+        // TODO!
+        /*
         public string? BookingsString
         {
             get
@@ -91,14 +92,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 return result;
             }
-        }
+        }*/
 
-        internal void BookingsChanged()
+        // Called from the MainViewModel when bookings for this room change
+        public void BookingsChanged()
         {
-            CollectionViewSource.GetDefaultView(Bookings).Refresh();
             OnPropertyChanged(nameof(IsFull));
             OnPropertyChanged(nameof(IsFree));
-            OnPropertyChanged(nameof(BookingsString));
+            // TODO! Probably better to have a Booking View in RoomsViewModel and refresh it there
+            // from MainViewModel BookingsChange event handler once, instead of here for each room
+            //OnPropertyChanged(nameof(BookingsString));
         }
     }
 }

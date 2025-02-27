@@ -34,16 +34,16 @@
         <!-- Each of the four tabs is a separate User Control -->
         <TabControl Grid.Row="1">
             <TabItem Header="Guests" >
-                <view:GuestsView />
+                <view:GuestsView DataContext="{Binding GuestsViewModel}" />
             </TabItem>
             <TabItem Header="Rooms" >
-                <view:RoomsView />
+                <view:RoomsView DataContext="{Binding RoomsViewModel}" />
             </TabItem>
             <TabItem Header="Services" >
-                <view:ServicesView />
+                <view:ServicesView DataContext="{Binding ServicesViewModel}" />
             </TabItem>
             <TabItem Header="Cuisine" >
-                <view:CuisineView />
+                <view:CuisineView DataContext="{Binding MealOptionsViewModel}" />
             </TabItem>
         </TabControl>
         
@@ -55,14 +55,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Content="Best Woofstern Lakeside Resort"   />
-            <StatusBarItem Grid.Column="1" Content="Free rooms today:" />
-            <StatusBarItem Grid.Column="2" Content="{Binding Path=(viewmodel:RoomsViewModel.FreeRoomsToday)}"/>
+            <StatusBarItem Grid.Column="1" Content="{Binding FreeRoomsToday}"/>
         </StatusBar>
 
     </Grid>

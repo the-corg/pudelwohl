@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel;
-
-namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
+﻿namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
 {
     public class Guest
     {
@@ -14,9 +11,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
         public string? FavoriteToy { get; set; }
         public EarFloppiness EarFloppiness { get; set; }
         public string? SpecialRequests { get; set; }
-        public List<Booking>? Bookings { get; set; }
-        public List<Service>? Services { get; set; }
-        public List<GuestMenu>? GuestMenus { get; set; }
         public bool IsArchived { get; set; }
 
     }

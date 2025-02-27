@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class GuestViewModel : ViewModelBase
     {
         private readonly Guest _model;
-        private readonly GuestsViewModel _parentViewModel;
+        private readonly MainViewModel _mainViewModel;
 
-        public GuestViewModel(Guest model, GuestsViewModel parentViewModel)
+        public GuestViewModel(Guest model, MainViewModel mainViewModel)
         {
             _model = model;
-            _parentViewModel = parentViewModel;
+            _mainViewModel = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -23,9 +20,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Name;
             set
             {
+                if (value == _model.Name)
+                    return;
+
                 _model.Name = value;
                 OnPropertyChanged();
-                RoomsViewModel.BookingsChanged();
+                // TODO! RoomsViewModel.BookingsChanged();
             }
         }
 
@@ -34,9 +34,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Breed;
             set
             {
+                if (value == _model.Breed)
+                    return;
+
                 _model.Breed = value;
                 OnPropertyChanged();
-                RoomsViewModel.BookingsChanged();
+                // TODO! RoomsViewModel.BookingsChanged();
             }
         }
         public bool IsGenderMaleButtonChecked
@@ -44,7 +47,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Male;
             set
             {
-                if (value) _model.Gender = Model.Gender.Male;
+                if (value) 
+                    _model.Gender = Model.Gender.Male;
                 OnPropertyChanged();
             }
         }
@@ -54,7 +58,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Female;
             set
             {
-                if (value) _model.Gender = Model.Gender.Female;
+                if (value) 
+                    _model.Gender = Model.Gender.Female;
                 OnPropertyChanged();
             }
         }
@@ -64,7 +69,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Gender == Model.Gender.Other;
             set
             {
-                if (value) _model.Gender = Model.Gender.Other;
+                if (value) 
+                    _model.Gender = Model.Gender.Other;
                 OnPropertyChanged();
             }
         }
@@ -74,6 +80,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.CoatColor;
             set
             {
+                if (_model.CoatColor == value)
+                    return;
+
                 _model.CoatColor = value;
                 OnPropertyChanged();
             }
@@ -83,6 +92,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.DateOfBirth;
             set
             {
+                if (_model.DateOfBirth == value)
+                    return;
+
                 _model.DateOfBirth = value;
                 OnPropertyChanged();
             }
@@ -92,6 +104,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.FavoriteToy;
             set
             {
+                if (_model.FavoriteToy == value)
+                    return;
+
                 _model.FavoriteToy = value;
                 OnPropertyChanged();
             }
@@ -102,6 +117,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 if (_model.EarFloppiness == Model.EarFloppiness.Unknown) 
                     return null;
+                // Replace _ from the Enum with spaces for the ComboBox
                 return _model.EarFloppiness.ToString().Replace('_', ' ');
             }
             set
@@ -113,6 +129,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 }
                 else
                 {
+                    // Replace space from the ComboBox item with _ to find the required Enum value
                     var newValue = value.Replace(" ", "_");
                     if (_model.EarFloppiness.ToString() != newValue)
                     {
@@ -127,35 +144,30 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.SpecialRequests;
             set
             {
+                if (_model.SpecialRequests == value)
+                    return;
+
                 _model.SpecialRequests = value;
                 OnPropertyChanged();
             }
         }
-
-        public ObservableCollection<Booking> Bookings { get; } = new();
-
-        public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
-
-        public List<GuestMenu> GuestMenus { get; } = new();
 
         public bool IsArchived
         {
             get => _model.IsArchived;
             set
             {
+                if (_model.IsArchived == value)
+                    return;
+
                 _model.IsArchived = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsVisible));
             }
         }
 
-        public bool IsVisible
-        {
-            get
-            {
-                return _parentViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
-            }
-        }
+        // ListView binds to this to show only archived/not archived guests
+        public bool IsVisible => _mainViewModel.GuestsViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
 
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
@@ -8,9 +6,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     {
         private readonly MealOption _model;
 
-        public MealOptionViewModel(MealOption model)
+        public MealOptionViewModel(MealOption model, MainViewModel mainViewModel)
         {
             _model = model;
+            _ = mainViewModel;
         }
 
         public int Id => _model.Id;
@@ -20,6 +19,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.Name;
             set
             {
+                if (_model.Name == value)
+                    return;
+
                 _model.Name = value;
                 OnPropertyChanged();
             }
@@ -30,6 +32,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.IsBreakfast;
             set
             {
+                if (_model.IsBreakfast == value)
+                    return;
+
                 _model.IsBreakfast = value;
                 OnPropertyChanged();
             }
@@ -39,6 +44,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.IsLunch;
             set
             {
+                if (_model.IsLunch == value)
+                    return;
+
                 _model.IsLunch = value;
                 OnPropertyChanged();
             }
@@ -48,6 +56,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.IsSnack;
             set
             {
+                if (_model.IsSnack == value)
+                    return;
+
                 _model.IsSnack = value;
                 OnPropertyChanged();
             }
@@ -57,6 +68,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.IsDinner;
             set
             {
+                if (_model.IsDinner == value)
+                    return;
+
                 _model.IsDinner = value;
                 OnPropertyChanged();
             }
