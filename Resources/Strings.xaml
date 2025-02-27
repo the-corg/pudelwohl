@@ -3,6 +3,7 @@
                     xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <col:ArrayList x:Key="startTimes">
+        <sys:String>07:30</sys:String>
         <sys:String>08:00</sys:String>
         <sys:String>08:30</sys:String>
         <sys:String>09:00</sys:String>
@@ -38,6 +39,8 @@
         <sys:String>18:00</sys:String>
         <sys:String>18:30</sys:String>
         <sys:String>19:00</sys:String>
+        <sys:String>19:30</sys:String>
+        <sys:String>20:00</sys:String>
     </col:ArrayList>
 
     <col:ArrayList x:Key="durations">

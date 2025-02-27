@@ -13,7 +13,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
             if (values[0] == DependencyProperty.UnsetValue) return "Error: UnsetValue was sent to RoomIdNameConverter";
             var id = (int) (values[0]);
             var rooms = ((MainViewModel) values[1]).Rooms;
-            return rooms.First(x => x.Id == id).Name;
+            return rooms.FirstOrDefault(x => x.Id == id)?.Name ?? "Error: Room not found!";
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

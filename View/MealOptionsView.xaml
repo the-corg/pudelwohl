@@ -22,6 +22,6 @@
             <Button Grid.Column="2" Content="Remove" Command="{Binding RemoveCommand}"/>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay}" DisplayMemberPath="Name"/>
     </Grid>
 </UserControl>

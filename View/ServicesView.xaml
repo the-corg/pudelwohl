@@ -29,7 +29,7 @@
                 <Button Grid.Column="1" Content="🗑️" Command="{Binding RemoveCommand}" />
             </Grid>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding Services}" SelectedItem="{Binding SelectedService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"/>
+            <ListView Grid.Row="1" ItemsSource="{Binding Services}" SelectedItem="{Binding SelectedService, Mode=TwoWay}" DisplayMemberPath="Name"/>
         </Grid>
 
         <GridSplitter Grid.Column="1" />

@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Converters
 {
