@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
@@ -46,30 +47,40 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
         public ObservableCollection<GuestMenu> GuestMenus { get; } = new();
 
-
-        // Property to show the number of free rooms in the main window's status bar
-        public static int FreeRoomsToday
+        // Property to show the number of free rooms (and occupied rooms) in the main window's status bar
+        public string FreeRoomsToday
         {
             get
             {
-                /*var today = DateTime.Now;
+                var today = DateTime.Today;
                 int freeRooms = Rooms.Count;
+                string occupiedRooms = "";
 
                 foreach (var room in Rooms)
                 {
-                    foreach (var booking in room.Bookings)
+                    foreach (var booking in Bookings)
                     {
-                        if (booking.CheckInDate <= today && booking.CheckOutDate >= today)
+                        if (booking.RoomId == room.Id && booking.CheckInDate <= today && booking.CheckOutDate >= today)
                         {
                             freeRooms--;
+                            occupiedRooms += room.Id + ", ";
                             break;
                         }
                     }
                 }
-                return freeRooms;*/
-                //TODO!
-                return 0;
+                string result = "Free rooms today: " + freeRooms.ToString() + " out of " + Rooms.Count.ToString();
+                if (freeRooms < Rooms.Count)
+                {
+                    occupiedRooms = occupiedRooms.Substring(0, occupiedRooms.Length - 2); // delete the last ", "
+                    result += ".  Occupied rooms: " + occupiedRooms;
+                }
+                return result;
             }
+        }
+
+        public void BookingsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(FreeRoomsToday));
         }
 
         public async Task LoadAsync()
@@ -81,6 +92,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             LoadCollectionAsync<Booking>(Bookings, await _bookingDataProvider.GetAllAsync());
             LoadCollectionAsync<ServiceBooking>(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
             //LoadCollectionAsync<GuestMenu>(GuestMenus, await _guestMenuDataProvider.GetAllAsync());
+            // Add an event handler to refersh FreeRoomsToday in the status bar
+            Bookings.CollectionChanged += BookingsChanged;
+            // Everything loaded - refresh FreeRoomsToday once
+            OnPropertyChanged(nameof(FreeRoomsToday));
         }
 
         // Loads elements provided in data to the corresponding ObservableCollection

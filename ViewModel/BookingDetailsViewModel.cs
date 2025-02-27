@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
@@ -17,7 +18,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private Window _parentWindow;
         private MainViewModel _mainViewModel;
 
-        public BookingDetailsViewModel(MainViewModel mainViewModel, Window parentWindow, 
+        public BookingDetailsViewModel(MainViewModel mainViewModel, Window parentWindow,
             string headerText, int guestId, Booking? booking = null)
         {
             _mainViewModel = mainViewModel;
@@ -31,7 +32,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 // This will be a new booking
                 _checkInDate = DateTime.Today;
                 _checkOutDate = DateTime.Today.AddDays(1);
-                _roomId = -1; 
+                _roomId = -1;
             }
             else
             {
@@ -40,7 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _checkOutDate = booking.CheckOutDate;
                 _roomId = booking.RoomId;
             }
-            
+
             ConfirmCommand = new DelegateCommand(Confirm, CanConfirm);
             InitializeRoomNames();
         }
@@ -137,14 +138,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _booking.RoomId = _roomId;
             _booking.CheckInDate = _checkInDate;
             _booking.CheckOutDate = _checkOutDate;
-            // TODO: Check that this will refresh the bookings view on the Rooms tab
+
+            // TODO: Check that this will refresh the bookings view on the Rooms tab (esp on Edit)
+            // Have to call these manually to make the collection react to and Edit of a booking,
+            // which otherwise wouldn't produce a collection change event
             CollectionViewSource.GetDefaultView(_mainViewModel.Bookings).Refresh();
+            _mainViewModel.BookingsChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
             _parentWindow.Close();
         }
 
         // Make Confirm button inactive if the check-out date is earlier than today,
         // no room name is entered, or the check-out-date is earlier than the check-in date
-        private bool CanConfirm(object? parameter) => 
+        private bool CanConfirm(object? parameter) =>
             !(CheckOutDate < DateTime.Today || RoomName is null || CheckInDate > CheckOutDate);
 
         private void InitializeRoomNames()
