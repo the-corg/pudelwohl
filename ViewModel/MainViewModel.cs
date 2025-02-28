@@ -52,7 +52,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                var today = DateTime.Today;
+                var today = DateOnly.FromDateTime(DateTime.Now);
                 int freeRooms = Rooms.Count;
                 string occupiedRooms = "";
 

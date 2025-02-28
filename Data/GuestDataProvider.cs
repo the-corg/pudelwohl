@@ -28,7 +28,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data
                                Breed = split[2],
                                Gender = (Gender)Enum.Parse(typeof(Gender), split[3]),
                                CoatColor = split[4],
-                               DateOfBirth = DateTime.Parse(split[5]),
+                               DateOfBirth = DateOnly.Parse(split[5]),
                                FavoriteToy = split[6],
                                EarFloppiness = (EarFloppiness)Enum.Parse(typeof(EarFloppiness), split[7]),
                                SpecialRequests = split[8],

@@ -23,7 +23,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data
                            let split = line.Split('|')
                            select new GuestMenu
                            {
-                               Date = DateTime.Parse(split[0]),
+                               Date = DateOnly.Parse(split[0]),
                                GuestId = int.Parse(split[1]),
                                Breakfast = split[2],
                                Lunch = split[3],

@@ -25,7 +25,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data
                            {
                                GuestId = int.Parse(split[0]),
                                ServiceId = int.Parse(split[1]),
-                               Date = DateTime.Parse(split[2]),
+                               Date = DateOnly.Parse(split[2]),
                                StartTime = split[3]
                            };
                 newList.AddRange(data);

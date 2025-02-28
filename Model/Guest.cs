@@ -7,7 +7,7 @@
         public string? Breed { get; set; }
         public Gender Gender { get; set; }
         public string? CoatColor { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public string? FavoriteToy { get; set; }
         public EarFloppiness EarFloppiness { get; set; }
         public string? SpecialRequests { get; set; }
@@ -19,6 +19,7 @@
         private static int NextId => _nextId++;
 
         private static bool nextIdAlreadyCalculated = false;
+
         // Calculate the next ID based on the maximum of all IDs.
         // Works only once, should be called after initial data loading
         public static void CalculateNextId(List<Guest> guests)

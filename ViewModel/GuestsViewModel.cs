@@ -16,7 +16,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _archiveButtonText = "Archive";
         private string _viewArchiveButtonText = "View Archive";
         private bool _isArchiveHidden = true;
-        private DateTime _selectedMenuDate;
+        private DateOnly _selectedMenuDate;
         private readonly MainViewModel _mainViewModel;
 
         // ICollectionView objects for filtering and sorting of the corresponding collections
@@ -51,7 +51,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             AddBookingCommand = new DelegateCommand(execute => AddBooking());
             EditBookingCommand = new DelegateCommand(execute => EditBooking(), canExecute => CanEditBooking());
             RemoveBookingCommand = new DelegateCommand(execute => RemoveBooking(), canExecute => CanRemoveBooking());
-            _selectedMenuDate = DateTime.Today;
+            _selectedMenuDate = DateOnly.FromDateTime(DateTime.Now);
 
             BookingsCollectionView = CollectionViewSource.GetDefaultView(Bookings);
             // Filter the bookings list according to the selected guest
@@ -127,7 +127,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public bool IsGuestSelected => SelectedGuest is not null;
 
 
-        public DateTime SelectedMenuDate
+        public DateOnly SelectedMenuDate
         {
             get => _selectedMenuDate;
             set
