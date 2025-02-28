@@ -12,9 +12,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public MealOptionsViewModel(ObservableCollection<MealOptionViewModel> mealOptions, MainViewModel mainViewModel)
         {
             MealOptions = mealOptions;
-            AddCommand = new DelegateCommand(Add);
-            EditCommand = new DelegateCommand(Edit, CanEdit);
-            RemoveCommand = new DelegateCommand(Remove, CanRemove);
+            AddCommand = new DelegateCommand(execute => Add());
+            EditCommand = new DelegateCommand(execute => Edit(), canExecute => CanEdit());
+            RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
             _mainViewModel = mainViewModel;
         }
 
@@ -40,7 +40,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand RemoveCommand { get; }
 
 
-        private void Add(object? parameter)
+        private void Add()
         {
             var mealOption = new MealOption { Name = "NEW MEAL OPTION" };
             var viewModel = new MealOptionViewModel(mealOption, _mainViewModel);
@@ -48,7 +48,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedMealOption = viewModel;
         }
 
-        private void Edit(object? parameter)
+        private bool CanEdit() => SelectedMealOption is not null;
+        private void Edit()
         {
             if (SelectedMealOption is null)
                 return;
@@ -56,9 +57,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedMealOption.Name = "!" + SelectedMealOption.Name;
         }
 
-        private bool CanEdit(object? parameter) => SelectedMealOption is not null;
-
-        private void Remove(object? parameter)
+        private bool CanRemove() => SelectedMealOption is not null;
+        private void Remove()
         {
             if (SelectedMealOption is null)
                 return;
@@ -66,8 +66,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             MealOptions.Remove(SelectedMealOption);
             SelectedMealOption = null;
         }
-
-        private bool CanRemove(object? parameter) => SelectedMealOption is not null;
 
     }
 }

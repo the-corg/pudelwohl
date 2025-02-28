@@ -42,7 +42,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _roomId = booking.RoomId;
             }
 
-            ConfirmCommand = new DelegateCommand(Confirm, CanConfirm);
+            ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
             InitializeRoomNames();
         }
         public string HeaderText => _headerText;
@@ -103,7 +103,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand ConfirmCommand { get; }
 
 
-        private void Confirm(object? parameter)
+        private void Confirm()
         {
             foreach (var booking in _mainViewModel.Bookings)
             {
@@ -153,7 +153,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         // Make Confirm button inactive if the check-out date is earlier than today,
         // no room name is entered, or the check-out-date is earlier than the check-in date
-        private bool CanConfirm(object? parameter) =>
+        private bool CanConfirm() =>
             !(CheckOutDate < DateTime.Today || RoomName is null || CheckInDate > CheckOutDate);
 
         private void InitializeRoomNames()

@@ -12,8 +12,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ServicesViewModel(ObservableCollection<ServiceViewModel> services, MainViewModel mainViewModel)
         {
             Services = services;
-            AddCommand = new DelegateCommand(Add);
-            RemoveCommand = new DelegateCommand(Remove, CanRemove);
+            AddCommand = new DelegateCommand(execute => Add());
+            RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
             _mainViewModel = mainViewModel;
         }
 
@@ -41,7 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public DelegateCommand RemoveCommand { get; }
 
-        private void Add(object? parameter)
+        private void Add()
         {
             var service = new Service { Name = "NEW SERVICE" };
             var viewModel = new ServiceViewModel(service, _mainViewModel);
@@ -49,8 +49,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedService = viewModel;
         }
 
-        private bool CanRemove(object? parameter) => SelectedService is not null;
-        private void Remove(object? parameter)
+        private bool CanRemove() => SelectedService is not null;
+        private void Remove()
         {
             if (SelectedService is null)
                 return;
