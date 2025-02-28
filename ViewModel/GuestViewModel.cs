@@ -169,5 +169,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         // ListView binds to this to show only archived/not archived guests
         public bool IsVisible => _mainViewModel.GuestsViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
 
+        // All bookings for this guest
+        public List<Booking> Bookings => _mainViewModel.Bookings.Where(x => x.GuestId == Id).ToList();
+        
+        // All service bookings for this guest
+        public List<ServiceBooking> ServiceBookings => _mainViewModel.ServiceBookings.Where(x => x.GuestId == Id).ToList();
+
     }
 }

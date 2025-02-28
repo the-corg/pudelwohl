@@ -151,8 +151,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             else if (maxOccupants > 0)
             {
                 // The room is neither free nor full, ask the user
-                var Result = MessageBox.Show("Someone else has an overlapping booking for this room.\nAdd the booking anyway?", "Share the room?", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (Result != MessageBoxResult.Yes)
+                var result = MessageBox.Show("Someone else has an overlapping booking for this room.\nAdd the booking anyway?", "Share the room?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes)
                     return;
             }
 

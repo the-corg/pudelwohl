@@ -273,24 +273,46 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null)
                 return;
 
-            // Find all bookings and service bookings for the selected guest
+            // Count all bookings and service bookings for the selected guest
             // and ask the user to confirm deletion
+            var bookings = SelectedGuest.Bookings;
+            var serviceBookings = SelectedGuest.ServiceBookings;
+            int numberOfBookings = bookings.Count;
+            int numberOfServiceBookings = serviceBookings.Count;
 
-            // If user selects "Archive instead", archive the guest
-            // Archive();
+            if (numberOfBookings > 0 || numberOfServiceBookings > 0)
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                int numberOfFutureBookings = bookings.Where(x => x.CheckOutDate >= today).Count();
+                int numberOfFutureServiceBookings = serviceBookings.Where(x => x.Date >= today).Count();
 
-            // Remove all bookings, service bookings, menus for the selected guest
-            for (int i = Bookings.Count - 1; i >= 0; i--)
-                if (Bookings[i].GuestId == SelectedGuest.Id)
-                    Bookings.RemoveAt(i);
-            for (int i = ServiceBookings.Count - 1; i >= 0; i--)
-                if (ServiceBookings[i].GuestId == SelectedGuest.Id)
-                    ServiceBookings.RemoveAt(i);
+                // Cook up another localization engineer's nightmare
+                string messageBoxString = $"This guest has {numberOfBookings} booking" + (numberOfBookings != 1 ? "s" : "") +
+                    $" and {numberOfServiceBookings} service booking" + (numberOfServiceBookings != 1 ? "s" : "") +
+                    $", including {numberOfFutureBookings} active booking" + (numberOfFutureBookings != 1 ? "s" : "") +
+                    $" and {numberOfFutureServiceBookings} active service booking" + (numberOfFutureServiceBookings != 1 ? "s" : "") +
+                    $".\n\nAre you sure you want to delete the guest and cancel all their bookings?";
+                if (!SelectedGuest.IsArchived)
+                    messageBoxString += $"\n\n(Another option would be to click \"No\" and archive the guest instead.)";
+
+                var result = MessageBox.Show(messageBoxString, "Are you sure you want to delete the guest?", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                if (result != MessageBoxResult.Yes)
+                    return;
+
+                // Remove all bookings, service bookings, menus for the selected guest
+                foreach (var booking in bookings)
+                    Bookings.Remove(booking);
+                foreach (var serviceBooking in serviceBookings)
+                    ServiceBookings.Remove(serviceBooking);
+            }
+
+            // GuestMenus are not important, delete them without asking the user
             for (int i = GuestMenus.Count - 1; i >= 0; i--)
                 if (GuestMenus[i].GuestId == SelectedGuest.Id)
                     GuestMenus.RemoveAt(i);
+            
             Guests.Remove(SelectedGuest);
-
             SelectedGuest = null;
         }
 
