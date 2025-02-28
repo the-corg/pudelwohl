@@ -80,7 +80,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 string result = "";
                 foreach (var booking in sortedBookings)
                 {
-                    if (booking.CheckOutDate < DateTime.Now)
+                    if (booking.CheckOutDate < DateTime.Today)
                     {
                         result += "(PAST BOOKING) ";
                     }
@@ -103,5 +103,30 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // from MainViewModel BookingsChange event handler once, instead of here for each room
             //OnPropertyChanged(nameof(BookingsString));
         }
+
+        public int MaxOccupantsWithinDates(DateOnly checkInDate, DateOnly checkOutDate, Booking? bookingToIgnore = null)
+        {
+            int maxOccupants = 0;
+
+            // Loop through each date of the time period
+            for (var day = checkInDate; day <= checkOutDate; day = day.AddDays(1))
+            {
+                int dayOccupants = 0;
+                foreach (var booking in _mainViewModel.Bookings)
+                {
+                    // Ignore bookingToIgnore as well as bookings for other rooms
+                    if (booking == bookingToIgnore || booking.RoomId != Id)
+                        continue;
+
+                    // Check if the current day falls within the booking dates
+                    if (booking.CheckInDate <= day && booking.CheckOutDate >= day)
+                        dayOccupants++; // Found a booking for this room on this day
+                }
+                if (dayOccupants > maxOccupants)
+                    maxOccupants = dayOccupants;
+            }
+            return maxOccupants;
+        }
+
     }
 }
