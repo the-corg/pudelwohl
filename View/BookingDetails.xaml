@@ -37,9 +37,9 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding HeaderText}" Grid.Column="1" Foreground="{StaticResource DogBrown}" FontWeight="Bold" />
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Check-In Date:" />
-        <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding CheckInDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding CheckInDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" />
         <TextBlock Grid.Row="3" Grid.Column="1"  Text="Check-Out Date:"/>
-        <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding CheckOutDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding CheckOutDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" />
         <TextBlock Grid.Row="5" Grid.Column="1"  Text="Room:"/>
         <ComboBox Grid.Row="6" Grid.Column="1" SelectedItem="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding RoomNames}" />
         <Grid Grid.Row="8" Grid.Column="1" >

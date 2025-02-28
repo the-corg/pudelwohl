@@ -26,7 +26,7 @@
                 <Rectangle Fill="{StaticResource NiceGreen}" Width="10" Height="10" Margin="5"/>
                 <Label Content="Occupancy on:" />
             </StackPanel>
-            <DatePicker Grid.Row="1" SelectedDate="{Binding OccupancyDate, Mode=TwoWay}" />
+            <DatePicker Grid.Row="1" SelectedDate="{Binding OccupancyDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" />
 
             <ListView Grid.Row="2" ItemsSource="{Binding Rooms}" SelectedItem="{Binding SelectedRoom, Mode=TwoWay}" DisplayMemberPath="Name">
                 <ListView.Resources>

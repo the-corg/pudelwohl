@@ -130,7 +130,7 @@
                         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedGuest.CoatColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <Label Grid.Row="4" Content="Date of Birth: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
-                        <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding SelectedGuest.DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding SelectedGuest.DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateOnlyDateTimeConverter}}" />
 
                         <Label Grid.Row="5" Content="Favorite Toy: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
                         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SelectedGuest.FavoriteToy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -249,7 +249,7 @@
                 <ScrollViewer Grid.Column="4">
                     <StackPanel>
                         <Label Content="Cuisine" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
-                        <DatePicker SelectedDate="{Binding SelectedMenuDate}" HorizontalAlignment="Center"/>
+                        <DatePicker SelectedDate="{Binding SelectedMenuDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" HorizontalAlignment="Center"/>
                         <Label Content="Breakfast" Padding="5 5 5 2"/>
                         <ComboBox Margin="5 0"  SelectedItem="{Binding BreakfastOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="Option 1"/>

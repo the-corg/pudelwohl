@@ -28,7 +28,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <DatePicker Grid.ColumnSpan="3" SelectedDate="{x:Static sys:DateTime.Now}" HorizontalAlignment="Center" Width="160"/>
+            <DatePicker Grid.ColumnSpan="3" SelectedDate="{x:Static sys:DateTime.Today}" HorizontalAlignment="Center" Width="160"/>
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Fill="{StaticResource DogBrown}"/>
             <Rectangle Grid.Row="3" Grid.ColumnSpan="3" Fill="{StaticResource DogBrown}"/>
