@@ -56,8 +56,4 @@
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\DataServices\" />
-  </ItemGroup>
-
 </Project>

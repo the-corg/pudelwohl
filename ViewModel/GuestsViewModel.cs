@@ -51,14 +51,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             BookingsCollectionView = CollectionViewSource.GetDefaultView(Bookings);
             // Filter the bookings list according to the selected guest
             BookingsCollectionView.Filter = 
-                o => (SelectedGuest is not null) && (((Booking)o).GuestId == SelectedGuest.Id);
+                booking => (SelectedGuest is not null) && (((Booking)booking).GuestId == SelectedGuest.Id);
             // And sort it by check-in date
             BookingsCollectionView.SortDescriptions.Add(new SortDescription("CheckInDate", ListSortDirection.Ascending));
 
             ServiceBookingsCollectionView = CollectionViewSource.GetDefaultView(ServiceBookings);
             // Filter the service bookings list according to the selected guest
             ServiceBookingsCollectionView.Filter = 
-                o => (SelectedGuest is not null) && (((ServiceBooking)o).GuestId == SelectedGuest.Id);
+                serviceBooking => (SelectedGuest is not null) && (((ServiceBooking)serviceBooking).GuestId == SelectedGuest.Id);
             // And sort it by date, then by start time
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));

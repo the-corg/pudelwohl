@@ -18,8 +18,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public MainViewModel(IGuestDataProvider guestDataProvider, IRoomDataProvider roomDataProvider,
             IServiceDataProvider serviceDataProvider, IMealOptionDataProvider mealOptionDataProvider,
             IBookingDataProvider bookingDataProvider, IServiceBookingDataProvider serviceBookingDataProvider,
-            IGuestMenuDataProvider guestMenuDataProvider, GuestsViewModel guestsViewModel, RoomsViewModel roomsViewModel,
-            ServicesViewModel servicesViewModel, MealOptionsViewModel mealOptionsViewModel)
+            IGuestMenuDataProvider guestMenuDataProvider)//, GuestsViewModel guestsViewModel, RoomsViewModel roomsViewModel,
+            //ServicesViewModel servicesViewModel, MealOptionsViewModel mealOptionsViewModel)
         {
             _guestDataProvider = guestDataProvider;
             _roomDataProvider = roomDataProvider;
@@ -28,10 +28,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _bookingDataProvider = bookingDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
             _guestMenuDataProvider = guestMenuDataProvider;
-            GuestsViewModel = guestsViewModel;
-            RoomsViewModel = roomsViewModel;
-            ServicesViewModel = servicesViewModel;
-            MealOptionsViewModel = mealOptionsViewModel;
+            GuestsViewModel = new GuestsViewModel(this);
+            RoomsViewModel = new RoomsViewModel(this);
+            ServicesViewModel = new ServicesViewModel(this);
+            MealOptionsViewModel = new MealOptionsViewModel(this);
         }
 
         public GuestsViewModel GuestsViewModel { get; }
@@ -94,43 +94,32 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public async Task LoadAsync()
         {
-            LoadCollectionVMAsync<GuestViewModel, Guest>(Guests, await _guestDataProvider.GetAllAsync());
-            LoadCollectionVMAsync<RoomViewModel, Room>(Rooms, await _roomDataProvider.GetAllAsync());
-            LoadCollectionVMAsync<ServiceViewModel, Service>(Services, await _serviceDataProvider.GetAllAsync());
-            LoadCollectionVMAsync<MealOptionViewModel, MealOption>(MealOptions, await _mealOptionDataProvider.GetAllAsync());
-            LoadCollectionAsync<Booking>(Bookings, await _bookingDataProvider.GetAllAsync());
-            LoadCollectionAsync<ServiceBooking>(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
+            LoadCollectionAsync(Guests, await _guestDataProvider.GetAllAsync(), guest => new GuestViewModel(guest, this));
+            LoadCollectionAsync(Rooms, await _roomDataProvider.GetAllAsync(), room => new RoomViewModel(room, this));
+            LoadCollectionAsync(Services, await _serviceDataProvider.GetAllAsync(), service => new ServiceViewModel(service, this));
+            LoadCollectionAsync(MealOptions, await _mealOptionDataProvider.GetAllAsync(), mealOption => new MealOptionViewModel(mealOption, this));
+            LoadCollectionAsync(Bookings, await _bookingDataProvider.GetAllAsync());
+            LoadCollectionAsync(ServiceBookings, await _serviceBookingDataProvider.GetAllAsync());
             //LoadCollectionAsync<GuestMenu>(GuestMenus, await _guestMenuDataProvider.GetAllAsync());
+
             // Add an event handler to refersh FreeRoomsToday in the status bar
             Bookings.CollectionChanged += BookingsChanged;
             // Everything loaded - refresh FreeRoomsToday once
             OnPropertyChanged(nameof(FreeRoomsToday));
         }
 
-        // Loads elements provided in data into the corresponding ObservableCollection
-        private static void LoadCollectionAsync<T>(ObservableCollection<T> collection, IEnumerable<T>? data)
-            where T : class
+        // Load elements from data into the corresponding collection using the wrapping function, when needed
+        private void LoadCollectionAsync<TModel, TViewModel>(ObservableCollection<TViewModel> collection, 
+            IEnumerable<TModel>? data, Func<TModel, TViewModel>? wrap = null)
+            where TModel : class
+            where TViewModel : class
         {
             if (collection.Count > 0 || data is null)
                 return;
 
-            foreach (var element in data)
+            foreach (var item in data)
             {
-                collection.Add(element);
-            }
-        }
-
-        // Loads item view models created from elements provided in data into the corresponding ObservableCollection
-        private void LoadCollectionVMAsync<VMT, T>(ObservableCollection<VMT> collection, IEnumerable<T>? data)
-            where VMT : class
-            where T : class
-        {
-            if (collection.Count > 0 || data is null)
-                return;
-
-            foreach (var element in data)
-            {
-                collection.Add((VMT)Activator.CreateInstance(typeof(VMT), element, this));
+                collection.Add(wrap == null ? (item as TViewModel)! : wrap(item));
             }
         }
 
