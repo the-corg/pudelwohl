@@ -28,17 +28,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         // (needed because it's null at the time when the constructor is called)
         private Window? MainWindow => _mainWindow ??= Window.GetWindow(App.Current.MainWindow) as MainWindow;
 
-        public GuestsViewModel(
-            ObservableCollection<GuestViewModel> guests,
-            ObservableCollection<Booking> bookings,
-            ObservableCollection<ServiceBooking> serviceBookings,
-            ObservableCollection<GuestMenu> guestMenus,
-            MainViewModel mainViewModel)
+        public GuestsViewModel(MainViewModel mainViewModel)
         {
-            Guests = guests;
-            Bookings = bookings;
-            ServiceBookings = serviceBookings;
-            GuestMenus = guestMenus;
+            Guests = mainViewModel.Guests;
+            Bookings = mainViewModel.Bookings;
+            ServiceBookings = mainViewModel.ServiceBookings;
+            GuestMenus = mainViewModel.GuestMenus;
             _mainViewModel = mainViewModel;
 
             // Add() and others are parameterless but ICommand wants methods with one parameter
@@ -300,7 +295,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (result != MessageBoxResult.Yes)
                     return;
 
-                // Remove all bookings, service bookings, menus for the selected guest
+                // Remove all bookings and service bookings for the selected guest
                 foreach (var booking in bookings)
                     Bookings.Remove(booking);
                 foreach (var serviceBooking in serviceBookings)

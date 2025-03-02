@@ -8,9 +8,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private RoomViewModel? _selectedRoom;
         private DateOnly _occupancyDate;
 
-        public RoomsViewModel(ObservableCollection<RoomViewModel> rooms)
+        public RoomsViewModel(MainViewModel mainViewModel)
         {
-            Rooms = rooms;
+            Rooms = mainViewModel.Rooms;
             _occupancyDate = DateOnly.FromDateTime(DateTime.Now);
         }
 

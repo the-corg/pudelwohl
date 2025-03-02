@@ -9,9 +9,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private ServiceViewModel? _selectedService;
         private readonly MainViewModel _mainViewModel;
 
-        public ServicesViewModel(ObservableCollection<ServiceViewModel> services, MainViewModel mainViewModel)
+        public ServicesViewModel(MainViewModel mainViewModel)
         {
-            Services = services;
+            Services = mainViewModel.Services;
             AddCommand = new DelegateCommand(execute => Add());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
             _mainViewModel = mainViewModel;

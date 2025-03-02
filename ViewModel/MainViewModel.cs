@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -18,7 +18,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public MainViewModel(IGuestDataProvider guestDataProvider, IRoomDataProvider roomDataProvider,
             IServiceDataProvider serviceDataProvider, IMealOptionDataProvider mealOptionDataProvider,
             IBookingDataProvider bookingDataProvider, IServiceBookingDataProvider serviceBookingDataProvider,
-            IGuestMenuDataProvider guestMenuDataProvider)
+            IGuestMenuDataProvider guestMenuDataProvider, GuestsViewModel guestsViewModel, RoomsViewModel roomsViewModel,
+            ServicesViewModel servicesViewModel, MealOptionsViewModel mealOptionsViewModel)
         {
             _guestDataProvider = guestDataProvider;
             _roomDataProvider = roomDataProvider;
@@ -27,10 +28,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _bookingDataProvider = bookingDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
             _guestMenuDataProvider = guestMenuDataProvider;
-            GuestsViewModel = new GuestsViewModel(Guests, Bookings, ServiceBookings, GuestMenus, this);
-            RoomsViewModel = new RoomsViewModel(Rooms);
-            ServicesViewModel = new ServicesViewModel(Services, this);
-            MealOptionsViewModel = new MealOptionsViewModel(MealOptions, this);
+            GuestsViewModel = guestsViewModel;
+            RoomsViewModel = roomsViewModel;
+            ServicesViewModel = servicesViewModel;
+            MealOptionsViewModel = mealOptionsViewModel;
         }
 
         public GuestsViewModel GuestsViewModel { get; }
@@ -106,7 +107,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             OnPropertyChanged(nameof(FreeRoomsToday));
         }
 
-        // Loads elements provided in data to the corresponding ObservableCollection
+        // Loads elements provided in data into the corresponding ObservableCollection
         private static void LoadCollectionAsync<T>(ObservableCollection<T> collection, IEnumerable<T>? data)
             where T : class
         {
@@ -119,7 +120,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        // Loads item view models created from elements provided in data to the corresponding ObservableCollection
+        // Loads item view models created from elements provided in data into the corresponding ObservableCollection
         private void LoadCollectionVMAsync<VMT, T>(ObservableCollection<VMT> collection, IEnumerable<T>? data)
             where VMT : class
             where T : class

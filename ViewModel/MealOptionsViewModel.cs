@@ -9,9 +9,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private MealOptionViewModel? _selectedMealOption;
         private readonly MainViewModel _mainViewModel;
 
-        public MealOptionsViewModel(ObservableCollection<MealOptionViewModel> mealOptions, MainViewModel mainViewModel)
+        public MealOptionsViewModel(MainViewModel mainViewModel)
         {
-            MealOptions = mealOptions;
+            MealOptions = mainViewModel.MealOptions;
             AddCommand = new DelegateCommand(execute => Add());
             EditCommand = new DelegateCommand(execute => Edit(), canExecute => CanEdit());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());

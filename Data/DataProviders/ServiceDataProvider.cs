@@ -1,27 +1,27 @@
 ﻿using System.IO;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
-namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data
+namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders
 {
-    /*public interface IDailyMenuDataProvider
+    public interface IServiceDataProvider
     {
-        Task<IEnumerable<DailyMenu>?> GetAllAsync();
+        Task<IEnumerable<Service>?> GetAllAsync();
     }
 
-    public class DailyMenuDataProvider : IDailyMenuDataProvider
+    public class ServiceDataProvider : IServiceDataProvider
     {
-        public async Task<IEnumerable<DailyMenu>?> GetAllAsync()
+        public async Task<IEnumerable<Service>?> GetAllAsync()
         {
-            var newList = new List<DailyMenu>();
+            var newList = new List<Service>();
 
-            using (var reader = File.OpenText("Data/DataFiles/DailyMenus.csv"))
+            using (var reader = File.OpenText("Data/DataFiles/Services.csv"))
             {
                 var fileText = await reader.ReadToEndAsync();
                 var lines = fileText.Split(Environment.NewLine);
 
                 var data = from line in lines.Skip(1)
                            let split = line.Split('|')
-                           select new DailyMenu
+                           select new Service
                            {
                                Id = int.Parse(split[0]),
                                Name = split[1],
@@ -32,7 +32,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data
                            };
                 newList.AddRange(data);
             }
+            Service.CalculateNextId(newList);
             return newList;
         }
-    }*/
+    }
 }

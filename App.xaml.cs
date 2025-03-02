@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
@@ -18,13 +18,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
 
         private void ConfigureServices(ServiceCollection services)
         {
-            services.AddTransient<MainWindow>();
-            services.AddTransient<MainViewModel>();
-            // TODO!
-            //services.AddTransient<GuestsViewModel>();
-            //services.AddTransient<RoomsViewModel>();
-            //services.AddTransient<ServicesViewModel>();
-            //services.AddTransient<MealOptionsViewModel>();
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<GuestsViewModel>();
+            services.AddSingleton<RoomsViewModel>();
+            services.AddSingleton<ServicesViewModel>();
+            services.AddSingleton<MealOptionsViewModel>();
             services.AddTransient<IGuestDataProvider, GuestDataProvider>();
             services.AddTransient<IRoomDataProvider, RoomDataProvider>();
             services.AddTransient<IServiceDataProvider, ServiceDataProvider>();
