@@ -2,7 +2,7 @@
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices
 {
@@ -12,6 +12,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
         ObservableCollection<Booking> Bookings { get; }
         DateOnly OccupancyDate { get; set; }
         string FreeRoomsToday { get; }
+        Action? FreeRoomsUpdated { get; set; } 
+        void UpdateBookingData();
         Task LoadAsync();
     }
     public class RoomDataService : BaseDataService, IRoomDataService
@@ -66,14 +68,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
             }
         }
 
-        public void BookingsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            //TODO
-            //OnPropertyChanged(nameof(FreeRoomsToday));
+        public Action? FreeRoomsUpdated { get; set; }
 
-            // Update room occupancy colors on the Rooms tab
-            foreach (var room in Rooms)
-                room.BookingsChanged();
+        // Called on Bookings.CollectionChanged but also manually when a booking is edited
+        public void UpdateBookingData()
+        {
+            // Update FreeRoomsToday in the status bar
+            FreeRoomsUpdated?.Invoke();
+            // Update the room occupancy colors on the Rooms tab
+            CollectionViewSource.GetDefaultView(Rooms).Refresh();
         }
 
         public async Task LoadAsync()
@@ -84,10 +87,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
             var bookings = await _bookingDataProvider.GetAllAsync();
             LoadCollection(Bookings, bookings);
 
-            // Add an event handler to refersh FreeRoomsToday in the status bar
-            Bookings.CollectionChanged += BookingsChanged;
-            // Everything loaded - refresh FreeRoomsToday once
-            //OnPropertyChanged(nameof(FreeRoomsToday));
+            // Add this handler only after the bookings have been loaded
+            // to prevent a ton of events while populating the collection
+            Bookings.CollectionChanged += (s, e) => UpdateBookingData();
+            UpdateBookingData();
         }
+
     }
 }

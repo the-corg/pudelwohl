@@ -95,16 +95,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }*/
 
-        // Called from the MainViewModel when bookings for this room change
-        public void BookingsChanged()
-        {
-            OnPropertyChanged(nameof(IsFull));
-            OnPropertyChanged(nameof(IsFree));
-            // TODO! Probably better to have a Booking View in RoomsViewModel and refresh it there
-            // from MainViewModel BookingsChange event handler once, instead of here for each room
-            //OnPropertyChanged(nameof(BookingsString));
-        }
-
         public int MaxOccupantsWithinDates(DateOnly checkInDate, DateOnly checkOutDate, Booking? bookingToIgnore = null)
         {
             int maxOccupants = 0;
