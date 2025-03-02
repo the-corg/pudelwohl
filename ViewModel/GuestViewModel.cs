@@ -1,16 +1,17 @@
-﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class GuestViewModel : ViewModelBase
     {
         private readonly Guest _model;
-        private readonly MainViewModel _mainViewModel;
+        private readonly IGuestDataService _guestDataService;
 
-        public GuestViewModel(Guest model, MainViewModel mainViewModel)
+        public GuestViewModel(Guest model, IGuestDataService guestDataService)
         {
             _model = model;
-            _mainViewModel = mainViewModel;
+            _guestDataService = guestDataService;
         }
 
         public int Id => _model.Id;
@@ -167,13 +168,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         // ListView binds to this to show only archived/not archived guests
-        public bool IsVisible => _mainViewModel.GuestsViewModel.IsArchiveHidden ? !IsArchived : IsArchived;
-
-        // All bookings for this guest
-        public List<Booking> Bookings => _mainViewModel.Bookings.Where(x => x.GuestId == Id).ToList();
-        
-        // All service bookings for this guest
-        public List<ServiceBooking> ServiceBookings => _mainViewModel.ServiceBookings.Where(x => x.GuestId == Id).ToList();
+        public bool IsVisible => _guestDataService.IsArchiveHidden ? !IsArchived : IsArchived;
 
     }
 }

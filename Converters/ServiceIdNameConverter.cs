@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Converters
 {
@@ -11,8 +11,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
         {
             // This check is needed to run the app in Debug mode
             if (values[0] == DependencyProperty.UnsetValue) return "Error: UnsetValue was sent to ServiceIdNameConverter";
-            var id = (int) (values[0]);
-            var services = ((MainViewModel) values[1]).Services;
+            var id = (int)(values[0]);
+            var services = ((IServiceDataService)values[1]).Services;
             return services.FirstOrDefault(x => x.Id == id)?.Name ?? "Error: Service not found!";
         }
 

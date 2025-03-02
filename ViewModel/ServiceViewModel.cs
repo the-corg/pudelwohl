@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Windows;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -7,12 +8,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServiceViewModel : ViewModelBase
     {
         private readonly Service _model;
-        private readonly MainViewModel _mainViewModel;
+        //private readonly IServiceDataService _serviceDataService;
 
-        public ServiceViewModel(Service model, MainViewModel mainViewModel)
+        public ServiceViewModel(Service model, IServiceDataService serviceDataService)
         {
             _model = model;
-            _mainViewModel = mainViewModel;
+            // TODO
+            //_serviceDataService = serviceDataService;
         }
 
         public int Id => _model.Id;

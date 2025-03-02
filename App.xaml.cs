@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
@@ -19,11 +20,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddSingleton<MainWindow>();
+
+            // View Models
             services.AddSingleton<MainViewModel>();
-            //services.AddSingleton<GuestsViewModel>();
-            //services.AddSingleton<RoomsViewModel>();
-            //services.AddSingleton<ServicesViewModel>();
+            services.AddSingleton<GuestsViewModel>();
+            services.AddSingleton<RoomsViewModel>();
+            services.AddSingleton<ServicesViewModel>();
             //services.AddSingleton<MealOptionsViewModel>();
+
+            // Data Providers
             services.AddTransient<IGuestDataProvider, GuestDataProvider>();
             services.AddTransient<IRoomDataProvider, RoomDataProvider>();
             services.AddTransient<IServiceDataProvider, ServiceDataProvider>();
@@ -31,6 +36,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             services.AddTransient<IBookingDataProvider, BookingDataProvider>();
             services.AddTransient<IServiceBookingDataProvider, ServiceBookingDataProvider>();
             services.AddTransient<IGuestMenuDataProvider, GuestMenuDataProvider>();
+
+            // Data Services
+            services.AddSingleton<IGuestDataService, GuestDataService>();
+            services.AddSingleton<IRoomDataService, RoomDataService>();
+            services.AddSingleton<IServiceDataService, ServiceDataService>();
+            //services.AddSingleton<IMenuDataService, MenuDataService>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

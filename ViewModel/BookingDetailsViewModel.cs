@@ -78,11 +78,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
+                return "name1";
+                //TODO
                 if (_roomId == -1)
                     return null;
                 // This would crash intentionally if no room is found.
                 // Rooms can't be deleted, so it would mean something is seriously wrong
-                return _mainViewModel.Rooms.First(x => x.Id == _roomId).Name;
+                //return _mainViewModel.Rooms.First(x => x.Id == _roomId).Name;
             }
             set
             {
@@ -111,7 +113,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             CheckOutDate < DateOnly.FromDateTime(DateTime.Now) || RoomName is null || CheckInDate > CheckOutDate);
         private void Confirm()
         {
-            if (_booking is not null)
+            //TODO
+            /*if (_booking is not null)
             {
                 // This is an Edit. Check if nothing was edited
                 if (_booking.RoomId == _roomId && _booking.CheckInDate == _checkInDate && _booking.CheckOutDate == _checkOutDate)
@@ -175,15 +178,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _mainViewModel.BookingsChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
             // Close the dialog
-            _parentWindow.Close();
+            _parentWindow.Close();*/
         }
 
         private void InitializeRoomNames()
         {
-            foreach (var room in _mainViewModel.Rooms)
+            //TODO
+            /*foreach (var room in _mainViewModel.Rooms)
             {
                 RoomNames.Add(room.Name);
-            }
+            }*/
         }
     }
 }

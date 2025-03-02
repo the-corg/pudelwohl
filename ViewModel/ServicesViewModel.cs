@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
 
@@ -7,14 +8,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServicesViewModel : ViewModelBase
     {
         private ServiceViewModel? _selectedService;
-        private readonly MainViewModel _mainViewModel;
+        private readonly IServiceDataService _serviceDataService;
 
-        public ServicesViewModel(MainViewModel mainViewModel)
+        public ServicesViewModel(IServiceDataService serviceDataService)
         {
-            Services = mainViewModel.Services;
+            _serviceDataService = serviceDataService;
+            Services = serviceDataService.Services;
             AddCommand = new DelegateCommand(execute => Add());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
-            _mainViewModel = mainViewModel;
         }
 
         public ObservableCollection<ServiceViewModel> Services { get; }
@@ -44,7 +45,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private void Add()
         {
             var service = new Service { Name = "NEW SERVICE" };
-            var viewModel = new ServiceViewModel(service, _mainViewModel);
+            var viewModel = new ServiceViewModel(service, _serviceDataService);
             Services.Add(viewModel);
             SelectedService = viewModel;
         }

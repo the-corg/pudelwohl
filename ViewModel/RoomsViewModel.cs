@@ -1,17 +1,19 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class RoomsViewModel : ViewModelBase
     {
         private RoomViewModel? _selectedRoom;
-        private DateOnly _occupancyDate;
+        IRoomDataService _roomDataService;
 
-        public RoomsViewModel(MainViewModel mainViewModel)
+        public RoomsViewModel(IRoomDataService roomDataService)
         {
-            Rooms = mainViewModel.Rooms;
-            _occupancyDate = DateOnly.FromDateTime(DateTime.Now);
+            _roomDataService = roomDataService;
+            Rooms = roomDataService.Rooms;
+            roomDataService.OccupancyDate = DateOnly.FromDateTime(DateTime.Now);
         }
 
         public ObservableCollection<RoomViewModel> Rooms { get; }
@@ -32,13 +34,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public DateOnly OccupancyDate
         {
-            get => _occupancyDate;
+            get => _roomDataService.OccupancyDate;
             set
             {
-                if (_occupancyDate == value)
+                if (_roomDataService.OccupancyDate == value)
                     return;
 
-                _occupancyDate = value;
+                _roomDataService.OccupancyDate = value;
                 OnPropertyChanged();
                 CollectionViewSource.GetDefaultView(Rooms).Refresh();
             }

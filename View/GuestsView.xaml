@@ -200,7 +200,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource RoomIdNameConverter}">
                                                 <Binding Path="RoomId"/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.RoomDataService"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
@@ -231,7 +231,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource ServiceIdNameConverter}">
                                                 <Binding Path="ServiceId"/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.ServiceDataService"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>

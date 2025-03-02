@@ -1,16 +1,17 @@
-﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class RoomViewModel : ViewModelBase
     {
         private readonly Room _model;
-        private readonly MainViewModel _mainViewModel;
+        private readonly IRoomDataService _roomDataService;
 
-        public RoomViewModel(Room model, MainViewModel mainViewModel)
+        public RoomViewModel(Room model, IRoomDataService roomDataService)
         {
             _model = model;
-            _mainViewModel = mainViewModel;
+            _roomDataService = roomDataService;
         }
 
         public int Id => _model.Id;
@@ -27,16 +28,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                if (_mainViewModel.Bookings.Count == 0)
+                if (_roomDataService.Bookings.Count == 0)
                     return false;
                 
                 int occupants = 0;
                 // Count occupants in this room on the selected date
-                foreach (Booking booking in _mainViewModel.Bookings)
+                foreach (Booking booking in _roomDataService.Bookings)
                 {
                     if (booking.RoomId == Id &&
-                        booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && 
-                        booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
+                        booking.CheckInDate <= _roomDataService.OccupancyDate && 
+                        booking.CheckOutDate >= _roomDataService.OccupancyDate)
                         occupants++;
                 }
 
@@ -48,15 +49,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                if (_mainViewModel.Bookings.Count == 0)
+                if (_roomDataService.Bookings.Count == 0)
                     return true;
 
                 // Look for at least one occupant in this room on the selected date
-                foreach (Booking booking in _mainViewModel.Bookings)
+                foreach (Booking booking in _roomDataService.Bookings)
                 {
                     if (booking.RoomId == Id && 
-                        booking.CheckInDate <= _mainViewModel.RoomsViewModel.OccupancyDate && 
-                        booking.CheckOutDate >= _mainViewModel.RoomsViewModel.OccupancyDate)
+                        booking.CheckInDate <= _roomDataService.OccupancyDate && 
+                        booking.CheckOutDate >= _roomDataService.OccupancyDate)
                         return false;
                 }
                 // No occupants found
@@ -112,7 +113,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             for (var day = checkInDate; day <= checkOutDate; day = day.AddDays(1))
             {
                 int dayOccupants = 0;
-                foreach (var booking in _mainViewModel.Bookings)
+                foreach (var booking in _roomDataService.Bookings)
                 {
                     // Ignore bookingToIgnore as well as bookings for other rooms
                     if (booking == bookingToIgnore || booking.RoomId != Id)
