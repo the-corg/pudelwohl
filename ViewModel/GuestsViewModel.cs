@@ -18,6 +18,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private DateOnly _selectedMenuDate;
         private readonly IGuestDataService _guestDataService;
+        private readonly IRoomDataService _roomDataService;
 
         // ICollectionView objects for filtering and sorting of the corresponding collections
         private ICollectionView BookingsCollectionView { get; set; }
@@ -32,6 +33,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             IServiceDataService serviceDataService)
         {
             _guestDataService = guestDataService;
+            _roomDataService = roomDataService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
             ServiceBookings = serviceDataService.ServiceBookings;
@@ -329,18 +331,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedGuest = null;
         }
 
-        //TODO
-        private bool CanEditBooking() => false;// SelectedGuest is not null && SelectedBooking is not null;
+        private bool CanEditBooking() => SelectedGuest is not null && SelectedBooking is not null;
         private void EditBooking()
         {
-            /*if (SelectedGuest is null || SelectedBooking is null)
+            if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "Edit Booking", SelectedGuest.Id, SelectedBooking);
+            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "Edit Booking", SelectedGuest.Id, SelectedBooking);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
-            MainWindow.Opacity = 1.0;*/
+            MainWindow.Opacity = 1.0;
         }
 
         private bool CanRemoveBooking() => SelectedGuest is not null && SelectedBooking is not null;
@@ -355,14 +356,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void AddBooking()
         {
-            /*if (SelectedGuest is null)
+            if (SelectedGuest is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_mainViewModel, "New Booking", SelectedGuest.Id);
+            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "New Booking", SelectedGuest.Id);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
-            MainWindow.Opacity = 1.0;*/
+            MainWindow.Opacity = 1.0;
         }
 
     }

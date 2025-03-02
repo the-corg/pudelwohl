@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Data;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
 
@@ -16,12 +15,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly int _guestId;
         private Booking? _booking;
         private Window _parentWindow;
-        private MainViewModel _mainViewModel;
+        private IRoomDataService _roomDataService;
 
-        public BookingDetailsViewModel(MainViewModel mainViewModel, Window parentWindow,
+        public BookingDetailsViewModel(IRoomDataService roomDataService, Window parentWindow,
             string headerText, int guestId, Booking? booking = null)
         {
-            _mainViewModel = mainViewModel;
+            _roomDataService = roomDataService;
             _parentWindow = parentWindow;
             _headerText = headerText;
             _guestId = guestId;
@@ -78,13 +77,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                return "name1";
-                //TODO
                 if (_roomId == -1)
                     return null;
                 // This would crash intentionally if no room is found.
                 // Rooms can't be deleted, so it would mean something is seriously wrong
-                //return _mainViewModel.Rooms.First(x => x.Id == _roomId).Name;
+                return _roomDataService.Rooms.First(x => x.Id == _roomId).Name;
             }
             set
             {
@@ -113,8 +110,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             CheckOutDate < DateOnly.FromDateTime(DateTime.Now) || RoomName is null || CheckInDate > CheckOutDate);
         private void Confirm()
         {
-            //TODO
-            /*if (_booking is not null)
+            if (_booking is not null)
             {
                 // This is an Edit. Check if nothing was edited
                 if (_booking.RoomId == _roomId && _booking.CheckInDate == _checkInDate && _booking.CheckOutDate == _checkOutDate)
@@ -125,7 +121,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
             // Check if the guest has a booking for this time period already
-            foreach (var booking in _mainViewModel.Bookings)
+            foreach (var booking in _roomDataService.Bookings)
             {
                 // Ignore this exact booking as well as bookings for other guests
                 if (booking == _booking || booking.GuestId != _guestId)
@@ -143,7 +139,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             // This would crash intentionally if no room is found.
             // Rooms can't be deleted, so it would mean something is seriously wrong
-            var room = _mainViewModel.Rooms.First(x => x.Id == _roomId);
+            var room = _roomDataService.Rooms.First(x => x.Id == _roomId);
             // The dates can't be null, otherwise CanConfirm would've disabled the button
             var maxOccupants = room.MaxOccupantsWithinDates((DateOnly)_checkInDate, (DateOnly)_checkOutDate, _booking);
             if (maxOccupants >= room.MaxGuests)
@@ -163,31 +159,26 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (_booking is null)
             {
                 _booking = new Booking();
-                // This add creates a collection change event too early but a manual refersh below
-                // is inevitable either way because an Edit doesn't create such an event at all
-                _mainViewModel.Bookings.Add(_booking);
+                _roomDataService.Bookings.Add(_booking);
             }
             _booking.GuestId = _guestId;
             _booking.RoomId = _roomId;
             _booking.CheckInDate = (DateOnly)_checkInDate;
             _booking.CheckOutDate = (DateOnly)_checkOutDate;
 
-            // Have to call these manually to make the collection react to an Edit of a booking,
-            // which otherwise wouldn't produce a collection change event
-            CollectionViewSource.GetDefaultView(_mainViewModel.Bookings).Refresh();
-            _mainViewModel.BookingsChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            // Call manually to make the service update data in response to an Edit of a booking
+            _roomDataService.UpdateBookingData();
 
             // Close the dialog
-            _parentWindow.Close();*/
+            _parentWindow.Close();
         }
 
         private void InitializeRoomNames()
         {
-            //TODO
-            /*foreach (var room in _mainViewModel.Rooms)
+            foreach (var room in _roomDataService.Rooms)
             {
                 RoomNames.Add(room.Name);
-            }*/
+            }
         }
     }
 }

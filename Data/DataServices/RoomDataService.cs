@@ -77,6 +77,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
             FreeRoomsUpdated?.Invoke();
             // Update the room occupancy colors on the Rooms tab
             CollectionViewSource.GetDefaultView(Rooms).Refresh();
+            // Update Bookings on the Guests tab
+            CollectionViewSource.GetDefaultView(Bookings).Refresh();
         }
 
         public async Task LoadAsync()
