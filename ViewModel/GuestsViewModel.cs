@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
@@ -19,16 +18,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private DateOnly _selectedMenuDate;
         private readonly IGuestDataService _guestDataService;
         private readonly IBookingDialogService _bookingDialogService;
+        private readonly IMessageService _messageService;
 
         // ICollectionView objects for filtering and sorting of the corresponding collections
         private ICollectionView BookingsCollectionView { get; set; }
         private ICollectionView ServiceBookingsCollectionView { get; set; }
 
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
-            IServiceDataService serviceDataService, IBookingDialogService bookingDialogService)
+            IServiceDataService serviceDataService, IBookingDialogService bookingDialogService, IMessageService messageService)
         {
             _guestDataService = guestDataService;
             _bookingDialogService = bookingDialogService;
+            _messageService = messageService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
             ServiceBookings = serviceDataService.ServiceBookings;
@@ -279,17 +280,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 int numberOfFutureServiceBookings = serviceBookings.Where(x => x.Date >= today).Count();
 
                 // Cook up another localization engineer's nightmare
-                string messageBoxString = $"This guest has {numberOfBookings} booking" + (numberOfBookings != 1 ? "s" : "") +
+                string message = $"This guest has {numberOfBookings} booking" + (numberOfBookings != 1 ? "s" : "") +
                     $" and {numberOfServiceBookings} service booking" + (numberOfServiceBookings != 1 ? "s" : "") +
                     $", including {numberOfFutureBookings} active booking" + (numberOfFutureBookings != 1 ? "s" : "") +
                     $" and {numberOfFutureServiceBookings} active service booking" + (numberOfFutureServiceBookings != 1 ? "s" : "") +
                     $".\n\nAre you sure you want to delete the guest and cancel all their bookings?";
                 if (!SelectedGuest.IsArchived)
-                    messageBoxString += $"\n\n(Another option would be to click \"No\" and archive the guest instead.)";
+                    message += $"\n\n(Another option would be to click \"No\" and archive the guest instead.)";
 
-                var result = MessageBox.Show(messageBoxString, "Are you sure you want to delete the guest?",
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
-                if (result != MessageBoxResult.Yes)
+                if (!_messageService.ShowConfirmation(message))
                     return;
 
                 // Remove all bookings and service bookings for the selected guest

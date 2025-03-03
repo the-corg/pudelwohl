@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -18,13 +18,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private Booking? _booking;
         private readonly IGuestDataService _guestDataService;
         private readonly IRoomDataService _roomDataService;
+        private readonly IMessageService _messageService;
 
-        public BookingDetailsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService,
-            string headerText, bool isGuestSelectable, bool isRoomSelectable, int fixedGuestId, int fixedRoomId, 
-            Booking? booking = null)
+        public BookingDetailsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
+            IMessageService messageService, string headerText, bool isGuestSelectable, bool isRoomSelectable, 
+            int fixedGuestId, int fixedRoomId, Booking? booking = null)
         {
             _guestDataService = guestDataService;
             _roomDataService = roomDataService;
+            _messageService = messageService;
             _headerText = headerText;
             IsGuestSelectable = isGuestSelectable;
             IsRoomSelectable = isRoomSelectable;
@@ -158,7 +160,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 // Check if the date intervals overlap
                 if (booking.CheckInDate <= _checkOutDate && booking.CheckOutDate >= _checkInDate)
                 {
-                    MessageBox.Show("This guest has an overlapping booking!");
+                    _messageService.ShowMessage("This guest has an overlapping booking!");
                     return;
                 }
             }
@@ -172,14 +174,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             var maxOccupants = room.MaxOccupantsWithinDates((DateOnly)_checkInDate!, (DateOnly)_checkOutDate!, _booking);
             if (maxOccupants >= room.MaxGuests)
             {
-                MessageBox.Show("This room is full at least on some of the dates.\nThe booking cannot be created.", "Max capacity reached", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _messageService.ShowMessage("This room is full at least on some of the dates.\nThe booking cannot be created.");
                 return;
             }
             else if (maxOccupants > 0)
             {
                 // The room is neither free nor full, ask the user
-                var result = MessageBox.Show("Someone else has an overlapping booking for this room.\nAdd the booking anyway?", "Share the room?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result != MessageBoxResult.Yes)
+                if (!_messageService.ShowConfirmation("Someone else has an overlapping booking for this room.\n\nAdd the booking anyway?"))
                     return;
             }
 
