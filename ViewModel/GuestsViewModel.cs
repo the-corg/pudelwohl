@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
@@ -18,22 +18,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private DateOnly _selectedMenuDate;
         private readonly IGuestDataService _guestDataService;
-        private readonly IRoomDataService _roomDataService;
+        private readonly IBookingDialogService _bookingDialogService;
 
         // ICollectionView objects for filtering and sorting of the corresponding collections
         private ICollectionView BookingsCollectionView { get; set; }
         private ICollectionView ServiceBookingsCollectionView { get; set; }
 
-        private Window? _mainWindow;
-        // Lazy initialization of the main window reference
-        // (needed because it's null at the time when the constructor is called)
-        private Window? MainWindow => _mainWindow ??= Window.GetWindow(App.Current.MainWindow) as MainWindow;
-
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
-            IServiceDataService serviceDataService)
+            IServiceDataService serviceDataService, IBookingDialogService bookingDialogService)
         {
             _guestDataService = guestDataService;
-            _roomDataService = roomDataService;
+            _bookingDialogService = bookingDialogService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
             ServiceBookings = serviceDataService.ServiceBookings;
@@ -337,11 +332,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "Edit Booking", SelectedGuest.Id, -1, SelectedBooking);
-            // Dim main window before showing the modal window, then restore it back
-            MainWindow.Opacity = 0.4;
-            bookingDetails.ShowDialog();
-            MainWindow.Opacity = 1.0;
+            _bookingDialogService.ShowBookingDialog("Edit Booking", false, true, SelectedGuest.Id, -1, SelectedBooking);
         }
 
         private bool CanRemoveBooking() => SelectedGuest is not null && SelectedBooking is not null;
@@ -359,11 +350,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "New Booking", SelectedGuest.Id, -1);
-            // Dim main window before showing the modal window, then restore it back
-            MainWindow.Opacity = 0.4;
-            bookingDetails.ShowDialog();
-            MainWindow.Opacity = 1.0;
+            _bookingDialogService.ShowBookingDialog("New Booking", false, true, SelectedGuest.Id, -1);
         }
 
     }

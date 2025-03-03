@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 
@@ -42,6 +43,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             services.AddSingleton<IRoomDataService, RoomDataService>();
             services.AddSingleton<IServiceDataService, ServiceDataService>();
             //services.AddSingleton<IMenuDataService, MenuDataService>();
+
+            // Other Services
+            services.AddSingleton<IBookingDialogService, BookingDialogService>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
         d:DataContext="{d:DesignInstance Type=viewmodel:BookingDetailsViewModel}"
         mc:Ignorable="d"
-        Title="BookingDetails" Height="320" Width="280"
+        Title="BookingDetails" Height="360" Width="280"
         FontSize="16" ResizeMode="NoResize" WindowStyle="ToolWindow"
         WindowStartupLocation="CenterOwner">
     <Grid>
@@ -30,6 +30,8 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="16"/>
             <RowDefinition/>
             <RowDefinition Height="16"/>
@@ -41,8 +43,12 @@
         <TextBlock Grid.Row="3" Grid.Column="1"  Text="Check-Out Date:"/>
         <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding CheckOutDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" />
         <TextBlock Grid.Row="5" Grid.Column="1"  Text="Room:"/>
-        <ComboBox Grid.Row="6" Grid.Column="1" SelectedItem="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding RoomNames}" />
-        <Grid Grid.Row="8" Grid.Column="1" >
+        <ComboBox Grid.Row="6" Grid.Column="1" SelectedItem="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                  ItemsSource="{Binding RoomNames}" IsEnabled="{Binding IsRoomSelectable}" />
+        <TextBlock Grid.Row="7" Grid.Column="1"  Text="Guest:"/>
+        <ComboBox Grid.Row="8" Grid.Column="1" SelectedItem="{Binding GuestName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                  ItemsSource="{Binding GuestNames}" IsEnabled="{Binding IsGuestSelectable}" />
+        <Grid Grid.Row="10" Grid.Column="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

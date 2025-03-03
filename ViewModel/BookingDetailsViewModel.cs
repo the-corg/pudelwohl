@@ -8,42 +8,51 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 {
     public class BookingDetailsViewModel : ViewModelBase
     {
-        private string _headerText;
+        private readonly string _headerText;
         private DateOnly? _checkInDate;
         private DateOnly? _checkOutDate;
-        private int _roomId;
-        private readonly int _guestId;
+        private readonly int _initialGuestId;
+        private readonly int _initialRoomId;
+        private string? _guestName;
+        private string? _roomName;
         private Booking? _booking;
-        private Window _parentWindow;
-        private IRoomDataService _roomDataService;
+        private readonly IGuestDataService _guestDataService;
+        private readonly IRoomDataService _roomDataService;
 
-        public BookingDetailsViewModel(IRoomDataService roomDataService, Window parentWindow,
-            string headerText, int guestId, int roomId, Booking? booking = null)
+        public BookingDetailsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService,
+            string headerText, bool isGuestSelectable, bool isRoomSelectable, int fixedGuestId, int fixedRoomId, 
+            Booking? booking = null)
         {
+            _guestDataService = guestDataService;
             _roomDataService = roomDataService;
-            _parentWindow = parentWindow;
             _headerText = headerText;
-            _guestId = guestId;
+            IsGuestSelectable = isGuestSelectable;
+            IsRoomSelectable = isRoomSelectable;
             _booking = booking;
 
-            if (booking == null)
+            if (_booking is null)
             {
                 // This will be a new booking
                 _checkInDate = DateOnly.FromDateTime(DateTime.Now);
                 _checkOutDate = _checkInDate?.AddDays(1);
-                _roomId = -1;
+                _initialGuestId = fixedGuestId;
+                _initialRoomId = fixedRoomId;
             }
             else
             {
                 // Edit an old booking
-                _checkInDate = booking.CheckInDate;
-                _checkOutDate = booking.CheckOutDate;
-                _roomId = booking.RoomId;
+                _checkInDate = _booking.CheckInDate;
+                _checkOutDate = _booking.CheckOutDate;
+                _initialGuestId = _booking.GuestId;
+                _initialRoomId = _booking.RoomId;
             }
 
+            InitializeNames();
             ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
-            InitializeRoomNames();
         }
+
+        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing window
+
         public string HeaderText => _headerText;
 
         public DateOnly? CheckInDate
@@ -73,32 +82,36 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
-        public string? RoomName
+
+        public bool IsGuestSelectable { get; }
+        public string? GuestName
         {
-            get
-            {
-                if (_roomId == -1)
-                    return null;
-                // This would crash intentionally if no room is found.
-                // Rooms can't be deleted, so it would mean something is seriously wrong
-                return _roomDataService.Rooms.First(x => x.Id == _roomId).Name;
-            }
+            get => _guestName;
             set
             {
-                if (value is null)
+                if (value == _guestName)
                     return;
-
-                // Get roomId by using the fact that room names start with RoomId
-                var newRoomId = int.Parse(value.Split()[0]);
-                if (newRoomId == _roomId)
-                    return;
-
-                _roomId = newRoomId;
+                _guestName = value;
                 OnPropertyChanged();
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
 
+        public bool IsRoomSelectable { get; }
+        public string? RoomName
+        {
+            get => _roomName;
+            set
+            {
+                if (value == _roomName)
+                    return;
+                _roomName = value;
+                OnPropertyChanged();
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
+
+        public ObservableCollection<string> GuestNames { get; } = new();
         public ObservableCollection<string> RoomNames { get; } = new();
 
         public DelegateCommand ConfirmCommand { get; }
@@ -106,16 +119,31 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         // Make the Confirm button inactive if one of the dates or the room are missing,
         // or the check-out date is earlier than today, or the check-out date is earlier than the check-in date
-        private bool CanConfirm() => !(CheckOutDate is null || CheckInDate is null ||
-            CheckOutDate < DateOnly.FromDateTime(DateTime.Now) || RoomName is null || CheckInDate > CheckOutDate);
+        private bool CanConfirm() => !(CheckOutDate is null || CheckInDate is null || GuestName is null || RoomName is null ||
+            CheckOutDate < DateOnly.FromDateTime(DateTime.Now) || CheckInDate > CheckOutDate);
         private void Confirm()
         {
+            // Race condition check - UI is not guaranteed to check CanConfirm immediately before Confirm
+            if (!CanConfirm())
+            {
+                ConfirmCommand.OnCanExecuteChanged();
+                return;
+            }
+
+            // If guest was selecteble, parse GuestName (which includes the id - see InitializeNames())
+            int guestId = IsGuestSelectable ? int.Parse(GuestName!.Split("#").Last()) : _initialGuestId;
+
+            // If room was selectable, parse RoomName (room names always start with RoomId)
+            int roomId = IsRoomSelectable ? int.Parse(RoomName!.Split()[0]) : _initialRoomId;
+
             if (_booking is not null)
             {
                 // This is an Edit. Check if nothing was edited
-                if (_booking.RoomId == _roomId && _booking.CheckInDate == _checkInDate && _booking.CheckOutDate == _checkOutDate)
+                if (_booking.RoomId == roomId && _booking.GuestId == guestId &&
+                    _booking.CheckInDate == _checkInDate && _booking.CheckOutDate == _checkOutDate)
                 {
-                    _parentWindow.Close();
+                    // Nothing was edited, nothing to do
+                    CloseOnConfirmAction?.Invoke();
                     return;
                 }
             }
@@ -124,7 +152,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             foreach (var booking in _roomDataService.Bookings)
             {
                 // Ignore this exact booking as well as bookings for other guests
-                if (booking == _booking || booking.GuestId != _guestId)
+                if (booking == _booking || booking.GuestId != guestId)
                     continue;
 
                 // Check if the date intervals overlap
@@ -139,9 +167,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             // This would crash intentionally if no room is found.
             // Rooms can't be deleted, so it would mean something is seriously wrong
-            var room = _roomDataService.Rooms.First(x => x.Id == _roomId);
+            var room = _roomDataService.Rooms.First(x => x.Id == roomId);
             // The dates can't be null, otherwise CanConfirm would've disabled the button
-            var maxOccupants = room.MaxOccupantsWithinDates((DateOnly)_checkInDate, (DateOnly)_checkOutDate, _booking);
+            var maxOccupants = room.MaxOccupantsWithinDates((DateOnly)_checkInDate!, (DateOnly)_checkOutDate!, _booking);
             if (maxOccupants >= room.MaxGuests)
             {
                 MessageBox.Show("This room is full at least on some of the dates.\nThe booking cannot be created.", "Max capacity reached", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -161,8 +189,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _booking = new Booking();
                 _roomDataService.Bookings.Add(_booking);
             }
-            _booking.GuestId = _guestId;
-            _booking.RoomId = _roomId;
+            _booking.GuestId = guestId;
+            _booking.RoomId = roomId;
             _booking.CheckInDate = (DateOnly)_checkInDate;
             _booking.CheckOutDate = (DateOnly)_checkOutDate;
 
@@ -170,14 +198,32 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _roomDataService.UpdateBookingData();
 
             // Close the dialog
-            _parentWindow.Close();
+            CloseOnConfirmAction?.Invoke();
         }
 
-        private void InitializeRoomNames()
+        private void InitializeNames()
         {
+            foreach (var guest in _guestDataService.Guests)
+            {
+                // Add the id to the actual guest name to avoid bugs due to guests with the same name
+                GuestNames.Add((guest.Name ?? "ERROR: Guest name not found.") + " (#" + guest.Id + ")");
+            }
+
             foreach (var room in _roomDataService.Rooms)
             {
-                RoomNames.Add(room.Name);
+                // Room names already have their id
+                RoomNames.Add(room.Name ?? "ERROR: Room name not found.");
+            }
+
+            if (_initialGuestId != -1)
+            {
+                _guestName = _guestDataService.Guests.FirstOrDefault(x => x.Id == _initialGuestId)?.Name;
+                _guestName += " (#" + _initialGuestId + ")";
+            }
+
+            if (_initialRoomId != -1)
+            {
+                _roomName = _roomDataService.Rooms.FirstOrDefault(x => x.Id == _initialRoomId)?.Name;
             }
         }
     }

@@ -8,17 +8,21 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View
     public partial class BookingDetails : Window
     {
         private readonly BookingDetailsViewModel _viewModel;
-        public BookingDetails(IRoomDataService roomDataService, string headerText, int guestId, int roomId, Booking? booking = null)
+        public BookingDetails(IGuestDataService guestDataService, IRoomDataService roomDataService, 
+            string headerText, bool isGuestSelectable, bool isRoomSelectable, int guestId, int roomId, Booking? booking)
         {
-            Owner = Window.GetWindow(App.Current.MainWindow) as MainWindow;
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
-            _viewModel = new BookingDetailsViewModel(roomDataService, this, headerText, guestId, roomId, booking);
+            _viewModel = new BookingDetailsViewModel(guestDataService, roomDataService,
+                headerText, isGuestSelectable, isRoomSelectable, guestId, roomId, booking);
             DataContext = _viewModel;
+
+            _viewModel.CloseOnConfirmAction = () => DialogResult = true;
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            DialogResult = false; // closes the window
         }
     }
 }
