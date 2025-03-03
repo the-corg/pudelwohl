@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -337,7 +337,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "Edit Booking", SelectedGuest.Id, SelectedBooking);
+            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "Edit Booking", SelectedGuest.Id, -1, SelectedBooking);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();
@@ -359,7 +359,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedGuest is null)
                 return;
 
-            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "New Booking", SelectedGuest.Id);
+            BookingDetails bookingDetails = new BookingDetails(_roomDataService, "New Booking", SelectedGuest.Id, -1);
             // Dim main window before showing the modal window, then restore it back
             MainWindow.Opacity = 0.4;
             bookingDetails.ShowDialog();

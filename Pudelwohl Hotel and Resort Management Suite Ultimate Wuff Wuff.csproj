@@ -11,39 +11,31 @@
 
   <ItemGroup>
     <None Remove="Assets\icon.png" />
-    <None Remove="Data\Bookings.csv" />
-    <None Remove="Data\Daily Menus and Food IDs.csv" />
-    <None Remove="Data\Dogs and Menu Options.csv" />
-    <None Remove="Data\Dogs and Services.csv" />
-    <None Remove="Data\Dogs.csv" />
-    <None Remove="Data\Meal Options.csv" />
-    <None Remove="Data\Rooms.csv" />
-    <None Remove="Data\Services.csv" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\DataFiles\Bookings.csv">
+    <Content Include="DataProviders\DemoDataFiles\Bookings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Daily Menus and Food IDs.csv">
+    <Content Include="DataProviders\DemoDataFiles\Daily Menus and Food IDs.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Dogs and Menu Options.csv">
+    <Content Include="DataProviders\DemoDataFiles\Dogs and Menu Options.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Dogs and Services.csv">
+    <Content Include="DataProviders\DemoDataFiles\Dogs and Services.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Dogs.csv">
+    <Content Include="DataProviders\DemoDataFiles\Dogs.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Meal Options.csv">
+    <Content Include="DataProviders\DemoDataFiles\Meal Options.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Rooms.csv">
+    <Content Include="DataProviders\DemoDataFiles\Rooms.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\DataFiles\Services.csv">
+    <Content Include="DataProviders\DemoDataFiles\Services.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

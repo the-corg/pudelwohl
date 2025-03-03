@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
-namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders
+namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders
 {
     /*public interface IDailyMenuDataProvider
     {
@@ -14,7 +14,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
         {
             var newList = new List<DailyMenu>();
 
-            using (var reader = File.OpenText("Data/DataFiles/DailyMenus.csv"))
+            using (var reader = File.OpenText("DataProviders/DemoDataFiles/DailyMenus.csv"))
             {
                 var fileText = await reader.ReadToEndAsync();
                 var lines = fileText.Split(Environment.NewLine);

@@ -1,10 +1,10 @@
-﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataProviders;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 
-namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.DataServices
+namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data
 {
     public interface IRoomDataService
     {
@@ -12,7 +12,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
         ObservableCollection<Booking> Bookings { get; }
         DateOnly OccupancyDate { get; set; }
         string FreeRoomsToday { get; }
-        Action? FreeRoomsUpdated { get; set; } 
+        Action? FreeRoomsUpdated { get; set; }
         void UpdateBookingData();
         Task LoadAsync();
     }
@@ -31,7 +31,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Data.Da
         public ObservableCollection<Booking> Bookings { get; } = new();
 
         // Used in RoomsViewModel for Binding with the DatePicker above the rooms ListView
-        public DateOnly OccupancyDate { get; set ; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly OccupancyDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         // Used in MainViewModel to show the number of free rooms (and the occupied rooms) in the status bar
         public string FreeRoomsToday
