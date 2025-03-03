@@ -10,6 +10,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         ObservableCollection<RoomViewModel> Rooms { get; }
         ObservableCollection<Booking> Bookings { get; }
+        ListCollectionView BookingsForGuest { get; }
+        ListCollectionView BookingsForRoom { get; }
         DateOnly OccupancyDate { get; set; }
         string FreeRoomsToday { get; }
         Action? FreeRoomsUpdated { get; set; }
@@ -25,10 +27,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         {
             _roomDataProvider = roomDataProvider;
             _bookingDataProvider = bookingDataProvider;
+            BookingsForGuest = new ListCollectionView(Bookings);
+            BookingsForRoom = new ListCollectionView(Bookings);
         }
 
         public ObservableCollection<RoomViewModel> Rooms { get; } = new();
         public ObservableCollection<Booking> Bookings { get; } = new();
+        public ListCollectionView BookingsForGuest { get; }
+        public ListCollectionView BookingsForRoom { get; }
 
         // Used in RoomsViewModel for Binding with the DatePicker above the rooms ListView
         public DateOnly OccupancyDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
@@ -78,7 +84,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             // Update the room occupancy colors on the Rooms tab
             CollectionViewSource.GetDefaultView(Rooms).Refresh();
             // Update Bookings on the Guests tab
-            CollectionViewSource.GetDefaultView(Bookings).Refresh();
+            BookingsForGuest.Refresh();
+            // Update Bookings on the Rooms tab
+            BookingsForRoom.Refresh();
         }
 
         public async Task LoadAsync()

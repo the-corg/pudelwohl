@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
+             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View" 
+             xmlns:mvvm="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -93,10 +94,63 @@
             </StackPanel>
             <Rectangle Grid.Row="1" Fill="{StaticResource DogBrown}"/>
             <ScrollViewer Grid.Row="2">
-                <StackPanel>
-                    <Label Content="Bookings:"/>
-                    <TextBlock Foreground="{StaticResource DogDark}" Margin="5 0" Text="{Binding SelectedRoom.BookingsString, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-                </StackPanel>
+                <ItemsControl Foreground="{StaticResource DogDark}" ItemsSource="{Binding BookingsCollectionView}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CheckOutDate, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource DogLight}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CheckOutDate, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource DogBrown}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataTemplate.Resources>
+                            <Border BorderBrush="{StaticResource DogBrown}" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Vertical">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="76"/>
+                                            <ColumnDefinition Width="16"/>
+                                            <ColumnDefinition Width="76"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{mvvm:CultureAwareBinding Path=CheckInDate, StringFormat=d}"/>
+                                        <TextBlock Grid.Column="1" Text="–" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Column="2" Text="{mvvm:CultureAwareBinding Path=CheckOutDate, StringFormat=d}" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                    <TextBlock HorizontalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource GuestIdConverter}" ConverterParameter="Name" >
+                                                <Binding Path="GuestId"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.GuestDataService"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource GuestIdConverter}" ConverterParameter="Breed" >
+                                                <Binding Path="GuestId"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.GuestDataService"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </ScrollViewer>
         </Grid>
     </Grid>

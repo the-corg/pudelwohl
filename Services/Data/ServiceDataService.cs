@@ -2,6 +2,7 @@
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data
 {
@@ -9,6 +10,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         ObservableCollection<ServiceViewModel> Services { get; }
         ObservableCollection<ServiceBooking> ServiceBookings { get; }
+        ListCollectionView ServiceBookingsForGuest { get; }
+        ListCollectionView ServiceBookingsForService { get; }
         Task LoadAsync();
     }
     public class ServiceDataService : BaseDataService, IServiceDataService
@@ -20,10 +23,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         {
             _serviceDataProvider = serviceDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
+            ServiceBookingsForGuest = new ListCollectionView(ServiceBookings);
+            ServiceBookingsForService = new ListCollectionView(ServiceBookings);
         }
 
         public ObservableCollection<ServiceViewModel> Services { get; } = new();
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
+        public ListCollectionView ServiceBookingsForGuest { get; }
+        public ListCollectionView ServiceBookingsForService { get; }
 
         public async Task LoadAsync()
         {

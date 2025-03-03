@@ -20,10 +20,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IBookingDialogService _bookingDialogService;
         private readonly IMessageService _messageService;
 
-        // ICollectionView objects for filtering and sorting of the corresponding collections
-        private ICollectionView BookingsCollectionView { get; set; }
-        private ICollectionView ServiceBookingsCollectionView { get; set; }
-
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
             IServiceDataService serviceDataService, IBookingDialogService bookingDialogService, IMessageService messageService)
         {
@@ -47,16 +43,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditBookingCommand = new DelegateCommand(execute => EditBooking(), canExecute => CanEditBooking());
             RemoveBookingCommand = new DelegateCommand(execute => RemoveBooking(), canExecute => CanRemoveBooking());
             _selectedMenuDate = DateOnly.FromDateTime(DateTime.Now);
-
-            BookingsCollectionView = CollectionViewSource.GetDefaultView(Bookings);
-            // Filter the bookings list according to the selected guest
+            
+            BookingsCollectionView = roomDataService.BookingsForGuest;
+            // Filter bookings based on the selected guest
             BookingsCollectionView.Filter =
                 booking => (SelectedGuest is not null) && (((Booking)booking).GuestId == SelectedGuest.Id);
-            // And sort it by check-in date
+            // And sort them by check-in date
             BookingsCollectionView.SortDescriptions.Add(new SortDescription("CheckInDate", ListSortDirection.Ascending));
 
-            ServiceBookingsCollectionView = CollectionViewSource.GetDefaultView(ServiceBookings);
-            // Filter the service bookings list according to the selected guest
+            ServiceBookingsCollectionView = serviceDataService.ServiceBookingsForGuest;
+            // Filter service bookings based on the selected guest
             ServiceBookingsCollectionView.Filter =
                 serviceBooking => (SelectedGuest is not null) && (((ServiceBooking)serviceBooking).GuestId == SelectedGuest.Id);
             // And sort it by date, then by start time
@@ -64,6 +60,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
+        public ListCollectionView BookingsCollectionView { get; }
+        public ListCollectionView ServiceBookingsCollectionView {  get; }
         public ObservableCollection<GuestViewModel> Guests { get; }
         public ObservableCollection<Booking> Bookings { get; }
         public ObservableCollection<ServiceBooking> ServiceBookings { get; }

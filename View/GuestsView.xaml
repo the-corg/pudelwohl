@@ -182,7 +182,16 @@
                         <Button Grid.Column="1" Content="Edit" Command="{Binding EditBookingCommand}"/>
                         <Button Grid.Column="2" Content="🗑️" Command="{Binding RemoveBookingCommand}"/>
                     </Grid>
-                    <ListView Grid.Row="2" ItemsSource="{Binding Bookings}" SelectedItem="{Binding SelectedBooking, Mode=TwoWay}" >
+                    <ListView Grid.Row="2" ItemsSource="{Binding BookingsCollectionView}" SelectedItem="{Binding SelectedBooking, Mode=TwoWay}" >
+                        <ListView.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CheckOutDate, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource DogLight}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -223,7 +232,16 @@
                         <Button Content="Book" Margin="5 0" Width="80" Height="30"/>
                         <Button Content="Cancel" Margin="5 0"  Width="80" Height="30"/>
                     </StackPanel>
-                    <ListView Grid.Row="2" ItemsSource="{Binding ServiceBookings}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
+                    <ListView Grid.Row="2" ItemsSource="{Binding ServiceBookingsCollectionView}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
+                        <ListView.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Date, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource DogLight}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

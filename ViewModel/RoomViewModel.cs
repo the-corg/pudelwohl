@@ -15,13 +15,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         public int Id => _model.Id;
-
         public string? Name => _model.Name;
-
         public string Type => _model.Type;
-
         public string? Description => _model.Description;
-
         public int MaxGuests => _model.MaxGuests;
 
         public bool IsFull
@@ -44,7 +40,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return (occupants >= MaxGuests);
             }
         }
-
         public bool IsFree
         {
             get
@@ -64,36 +59,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return true;
             }
         }
-
-        // TODO!
-        /*
-        public string? BookingsString
-        {
-            get
-            {
-                if (Bookings.Count == 0)
-                {
-                    return "None";
-                }
-
-                var sortedBookings = Bookings.OrderBy(x => x.CheckInDate).ToList();
-
-                string result = "";
-                foreach (var booking in sortedBookings)
-                {
-                    if (booking.CheckOutDate < DateTime.Today)
-                    {
-                        result += "(PAST BOOKING) ";
-                    }
-                    var guest = GuestsViewModel.Guests.First(x => x.Id == booking.GuestId);
-                    result += $"{booking.CheckInDate.ToLongDateString()} - {booking.CheckOutDate.ToLongDateString()}:\n        {guest.Name} ({guest.Breed})\n\n";
-                }
-
-                result = result.Substring(0, result.Length - 2); // delete the last two line breaks
-
-                return result;
-            }
-        }*/
 
         public int MaxOccupantsWithinDates(DateOnly checkInDate, DateOnly checkOutDate, Booking? bookingToIgnore = null)
         {
