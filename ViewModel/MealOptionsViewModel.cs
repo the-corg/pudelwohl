@@ -63,6 +63,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedMealOption is null)
                 return;
 
+            // TODO: Check if this was selected by a guest today or on a future date and ask the user
+            // don't ask about past meals, they are unimportant
+
             MealOptions.Remove(SelectedMealOption);
             SelectedMealOption = null;
         }

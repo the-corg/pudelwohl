@@ -58,7 +58,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 if (freeRooms < Rooms.Count)
                 {
                     // Part of the string that shows the IDs of the occupied rooms
-                    occupiedRooms = occupiedRooms.Substring(0, occupiedRooms.Length - 2); // Delete the last ", "
+                    occupiedRooms = occupiedRooms[..^2]; // Delete the last ", "
                     result += ".  Occupied room";
                     if (Rooms.Count - freeRooms > 1)
                         result += "s"; // Make rooms plural. Take that, localization engineers!
