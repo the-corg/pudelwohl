@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
         d:DataContext="{d:DesignInstance Type=viewmodel:BookingDetailsViewModel}"
         mc:Ignorable="d"
-        Title="BookingDetails" Height="360" Width="280"
+        Title="BookingDetails" Height="380" Width="280"
         FontSize="16" ResizeMode="NoResize" WindowStyle="ToolWindow"
         WindowStartupLocation="CenterOwner">
     <Grid>

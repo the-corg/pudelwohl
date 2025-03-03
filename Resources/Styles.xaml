@@ -176,6 +176,7 @@
 
     <Style TargetType="ComboBox">
         <Setter Property="Foreground" Value="{StaticResource DogDark}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -189,7 +190,7 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="{StaticResource DogBeigeDark}" BorderBrush="{StaticResource DogBrown}" BorderThickness="1" />
-                                        <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource DogLight}"  BorderBrush="{StaticResource DogBrown}" BorderThickness="0,0,1,0" />
+                                        <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource DogLight}"  BorderBrush="{StaticResource DogMedium}" BorderThickness="0" />
                                         <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
                                     </Grid>
                                     <ControlTemplate.Triggers>
@@ -198,6 +199,12 @@
                                         </Trigger>
                                         <Trigger Property="ToggleButton.IsChecked" Value="true">
                                             <Setter TargetName="Border" Property="Background" Value="{StaticResource DogMediumLight}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DogLight}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter TargetName="Border" Property="Background" Value="{StaticResource DogBeige}" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -214,6 +221,11 @@
                             </Grid>
                         </Popup>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{StaticResource DogMedium}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
