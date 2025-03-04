@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.MVVM;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 
@@ -133,7 +133,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
             // If guest was selecteble, parse GuestName (which includes the id - see InitializeNames())
-            int guestId = IsGuestSelectable ? int.Parse(GuestName!.Split("#").Last()) : _initialGuestId;
+            int guestId = IsGuestSelectable ? int.Parse(GuestName!.Split("#").Last()[..^1]) : _initialGuestId;
 
             // If room was selectable, parse RoomName (room names always start with RoomId)
             int roomId = IsRoomSelectable ? int.Parse(RoomName!.Split()[0]) : _initialRoomId;

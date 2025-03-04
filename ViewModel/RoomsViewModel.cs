@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -10,13 +12,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     {
         private RoomViewModel? _selectedRoom;
         private readonly IRoomDataService _roomDataService;
+        private readonly IBookingDialogService _bookingDialogService;
 
-        public RoomsViewModel(IRoomDataService roomDataService)
+        public RoomsViewModel(IRoomDataService roomDataService, IBookingDialogService bookingDialogService)
         {
             _roomDataService = roomDataService;
+            _bookingDialogService = bookingDialogService;
             Rooms = roomDataService.Rooms;
             Bookings = roomDataService.Bookings;
             roomDataService.OccupancyDate = DateOnly.FromDateTime(DateTime.Now);
+
+            AddBookingCommand = new DelegateCommand(execute => AddBooking());
 
             BookingsCollectionView = roomDataService.BookingsForRoom;
             // Filter bookings based on the selected room
@@ -25,9 +31,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // And sort it by check-in date, then check-out date
             BookingsCollectionView.SortDescriptions.Add(new SortDescription("CheckInDate", ListSortDirection.Ascending));
             BookingsCollectionView.SortDescriptions.Add(new SortDescription("CheckOutDate", ListSortDirection.Ascending));
+
+            // Composite collection to show on the Rooms tab, with an Add button after the bookings
+            BookingsCompositeCollection = new CompositeCollection
+            {
+                    new CollectionContainer { Collection = BookingsCollectionView },
+                    new Booking { RoomId = -1 } // Fake item for the Add button
+            };
         }
 
+        public DelegateCommand AddBookingCommand { get; }
         public ListCollectionView BookingsCollectionView { get; }
+        public CompositeCollection BookingsCompositeCollection { get; }
         public ObservableCollection<RoomViewModel> Rooms { get; }
         public ObservableCollection<Booking> Bookings { get; }
 
@@ -62,6 +77,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         // Used for hiding the room details when no room is selected
         public bool IsRoomSelected => SelectedRoom is not null;
+
+        private void AddBooking()
+        {
+            if (SelectedRoom is null)
+                return;
+
+            _bookingDialogService.ShowBookingDialog("New Booking", true, false, -1, SelectedRoom.Id);
+        }
 
     }
 }
