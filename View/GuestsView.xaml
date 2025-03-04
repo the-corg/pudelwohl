@@ -229,10 +229,14 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Services" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Book" Margin="5 0" Width="80" Height="30"/>
-                        <Button Content="Cancel" Margin="5 0"  Width="80" Height="30"/>
-                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Add" Height="30" Command="{Binding AddServiceBookingCommand}"/>
+                        <Button Grid.Column="1" Content="🗑️" Command="{Binding RemoveServiceBookingCommand}"/>
+                    </Grid>
                     <ListView Grid.Row="2" ItemsSource="{Binding ServiceBookingsCollectionView}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
                         <ListView.Resources>
                             <Style TargetType="ListViewItem">

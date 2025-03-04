@@ -4,5 +4,10 @@
     {
         public required string StartTime { get; set; }
         public required string EndTime { get; set; }
+
+        public override string ToString()
+        {
+            return StartTime + " – " + EndTime;
+        }
     }
 }

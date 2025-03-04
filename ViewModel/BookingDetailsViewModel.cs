@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
@@ -113,8 +112,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public ObservableCollection<string> GuestNames { get; } = new();
-        public ObservableCollection<string> RoomNames { get; } = new();
+        public List<string> GuestNames { get; } = new();
+        public List<string> RoomNames { get; } = new();
 
         public DelegateCommand ConfirmCommand { get; }
 
@@ -170,7 +169,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // This would crash intentionally if no room is found.
             // Rooms can't be deleted, so it would mean something is seriously wrong
             var room = _roomDataService.Rooms.First(x => x.Id == roomId);
-            // The dates can't be null, otherwise CanConfirm would've disabled the button
+            // The dates can't be null - already checked at the start
             var maxOccupants = room.MaxOccupantsWithinDates((DateOnly)_checkInDate!, (DateOnly)_checkOutDate!, _booking);
             if (maxOccupants >= room.MaxGuests)
             {
@@ -204,22 +203,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void InitializeNames()
         {
-            foreach (var guest in _guestDataService.Guests)
-            {
-                // Add the id to the actual guest name to avoid bugs due to guests with the same name
-                GuestNames.Add((guest.Name ?? "ERROR: Guest name not found.") + " (#" + guest.Id + ")");
-            }
+            GuestNames.AddRange(_guestDataService.Guests.Select(x => x.ToString()));
 
-            foreach (var room in _roomDataService.Rooms)
-            {
-                // Room names already have their id
-                RoomNames.Add(room.Name ?? "ERROR: Room name not found.");
-            }
+            RoomNames.AddRange(_roomDataService.Rooms.Select(x => x.Name!));
 
             if (_initialGuestId != -1)
             {
-                _guestName = _guestDataService.Guests.FirstOrDefault(x => x.Id == _initialGuestId)?.Name;
-                _guestName += " (#" + _initialGuestId + ")";
+                _guestName = _guestDataService.Guests.FirstOrDefault(x => x.Id == _initialGuestId)?.ToString();
             }
 
             if (_initialRoomId != -1)

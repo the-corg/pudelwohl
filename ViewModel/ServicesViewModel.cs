@@ -13,11 +13,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private ServiceViewModel? _selectedService;
         private TimeSlot? _selectedTimeSlot;
         private readonly IServiceDataService _serviceDataService;
+        private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
 
-        public ServicesViewModel(IServiceDataService serviceDataService, IMessageService messageService)
+        public ServicesViewModel(IServiceDataService serviceDataService, 
+            IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
         {
             _serviceDataService = serviceDataService;
+            _serviceBookingDialogService = serviceBookingDialogService;
             _messageService = messageService;
             Services = serviceDataService.Services;
             AddCommand = new DelegateCommand(execute => Add());
@@ -140,7 +143,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             if (!CanBookService())
                 return;
-            SelectedTimeSlot = null;
+
+            _serviceBookingDialogService.ShowServiceBookingDialog(true, false, false, -1, SelectedService!.Id, SelectedTimeSlot!.StartTime);
         }
 
         // For booking without a fixed time slot
@@ -149,7 +153,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedService is null)
                 return;
 
-            //_bookingDialogService.ShowBookingDialog("New Booking", true, false, -1, SelectedRoom.Id);
+            _serviceBookingDialogService.ShowServiceBookingDialog(true, false, true, -1, SelectedService.Id, null);
         }
+
     }
 }

@@ -19,14 +19,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IGuestDataService _guestDataService;
         private readonly IRoomDataService _roomDataService;
         private readonly IBookingDialogService _bookingDialogService;
+        private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
 
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
-            IServiceDataService serviceDataService, IBookingDialogService bookingDialogService, IMessageService messageService)
+            IServiceDataService serviceDataService, IBookingDialogService bookingDialogService,
+            IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
         {
             _guestDataService = guestDataService;
             _roomDataService = roomDataService;
             _bookingDialogService = bookingDialogService;
+            _serviceBookingDialogService = serviceBookingDialogService;
             _messageService = messageService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
@@ -44,6 +47,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             AddBookingCommand = new DelegateCommand(execute => AddBooking());
             EditBookingCommand = new DelegateCommand(execute => EditBooking(), canExecute => CanEditBooking());
             RemoveBookingCommand = new DelegateCommand(execute => RemoveBooking(), canExecute => CanRemoveBooking());
+            AddServiceBookingCommand = new DelegateCommand(execute => AddServiceBooking());
+            RemoveServiceBookingCommand = new DelegateCommand(execute => RemoveServiceBooking(), canExecute => CanRemoveServiceBooking());
             _selectedMenuDate = DateOnly.FromDateTime(DateTime.Now);
             
             BookingsCollectionView = roomDataService.BookingsForGuest;
@@ -112,9 +117,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _selectedServiceBooking = value;
                 OnPropertyChanged();
-                // TODO!
-                //RemoveServiceBookingCommand.OnCanExecuteChanged();
-                //EditServiceBookingCommand.OnCanExecuteChanged();
+                RemoveServiceBookingCommand.OnCanExecuteChanged();
             }
         }
 
@@ -250,6 +253,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand AddBookingCommand { get; }
         public DelegateCommand EditBookingCommand { get; }
         public DelegateCommand RemoveBookingCommand { get; }
+        public DelegateCommand AddServiceBookingCommand { get; }
+        public DelegateCommand RemoveServiceBookingCommand { get; }
 
         private void Add()
         {
@@ -350,6 +355,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return;
 
             _bookingDialogService.ShowBookingDialog("New Booking", false, true, SelectedGuest.Id, -1);
+        }
+
+        private bool CanRemoveServiceBooking() => SelectedGuest is not null && SelectedServiceBooking is not null;
+        private void RemoveServiceBooking()
+        {
+            if (SelectedGuest is null || SelectedServiceBooking is null)
+                return;
+
+            ServiceBookings.Remove(SelectedServiceBooking);
+            SelectedServiceBooking = null;
+        }
+
+        private void AddServiceBooking()
+        {
+            if (SelectedGuest is null)
+                return;
+
+            _serviceBookingDialogService.ShowServiceBookingDialog(false, true, true, SelectedGuest.Id, -1, null);
         }
 
     }

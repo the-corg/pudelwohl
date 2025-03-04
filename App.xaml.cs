@@ -47,6 +47,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             // Other Services
             services.AddTransient<IMessageService, MessageService>();
             services.AddSingleton<IBookingDialogService, BookingDialogService>();
+            services.AddSingleton<IServiceBookingDialogService, ServiceBookingDialogService>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

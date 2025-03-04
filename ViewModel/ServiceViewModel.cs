@@ -104,6 +104,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        public int DurationMinutes => _model.DurationMinutes;
+
         public string? StartTime
         {
             get => _model.StartTime;
@@ -171,5 +173,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
         }
+
+        public override string ToString()
+        {
+            return _model.Name + " (#" + _model.Id + ")";
+        }
+
     }
 }
