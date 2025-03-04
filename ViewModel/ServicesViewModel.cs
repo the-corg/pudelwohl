@@ -42,7 +42,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public bool IsServiceSelected => SelectedService is not null;
 
         public DelegateCommand AddCommand { get; }
-
         public DelegateCommand RemoveCommand { get; }
 
         private void Add()

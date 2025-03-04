@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
@@ -8,13 +9,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServiceViewModel : ViewModelBase
     {
         private readonly Service _model;
-        //private readonly IServiceDataService _serviceDataService;
 
         public ServiceViewModel(Service model, IServiceDataService serviceDataService)
         {
             _model = model;
-            // TODO
-            //_serviceDataService = serviceDataService;
+            CalculateTimeSlots();
         }
 
         public int Id => _model.Id;
@@ -27,7 +26,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_model.Name == value)
                     return;
 
-                _model.Name = value;
+                _model.Name = value!;
                 OnPropertyChanged();
             }
         }
@@ -48,11 +47,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                if (_model.DurationMinutes is null)
+                if (_model.DurationMinutes < 1)
                     return null;
+
                 int hours = (int)_model.DurationMinutes / 60;
                 int minutes = (int)_model.DurationMinutes % 60;
                 string result = "";
+
                 if (hours > 0)
                 {
                     result += hours.ToString();
@@ -66,28 +67,22 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                         result += " ";
                     }
                 }
+
                 if (minutes > 0)
                 {
                     result += minutes.ToString();
                     result += " minutes";
                 }
+
                 return result;
             }
             set
             {
                 int intValue = 0;
-                if (value is null)
-                {
-                    intValue = 1; // ERROR
-                }
-                else
+                if (value is not null)
                 {
                     var split = value.Split(' ');
-                    if (split.Length != 2 && split.Length != 4)
-                    {
-                        intValue = 1; // ERROR
-                    }
-                    else
+                    if (split.Length == 2 || split.Length == 4)
                     {
                         intValue = int.Parse(split[0]);
                         if (split[1].StartsWith("hour"))
@@ -100,8 +95,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                         }
                     }
                 }
+                if (_model.DurationMinutes == intValue)
+                    return;
+
                 _model.DurationMinutes = intValue;
                 OnPropertyChanged();
+                CalculateTimeSlots();
             }
         }
 
@@ -110,16 +109,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.StartTime;
             set
             {
-                if (value is null)
-                {
-                    ArrayList arrayList = Application.Current.FindResource("startTimes") as ArrayList;
-                    _model.StartTime = arrayList[0] as string;
-                }
-                else
-                {
-                    _model.StartTime = value;
-                }
+                if (_model.StartTime == value)
+                    return;
+
+                _model.StartTime = value;
                 OnPropertyChanged();
+                CalculateTimeSlots();
             }
         }
         public string? EndTime
@@ -127,17 +122,54 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get => _model.EndTime;
             set
             {
-                if (value is null)
-                {
-                    ArrayList arrayList = Application.Current.FindResource("endTimes") as ArrayList;
-                    _model.EndTime = arrayList[arrayList.Count - 1] as string;
-                }
-                else
-                {
-                    _model.EndTime = value;
-                }
+                if (_model.EndTime == value)
+                    return;
+
+                _model.EndTime = value;
                 OnPropertyChanged();
+                CalculateTimeSlots();
             }
+        }
+
+        public ObservableCollection<TimeSlot> TimeSlots { get; } = new();
+
+        private void CalculateTimeSlots()
+        {
+            TimeSlots.Clear();
+
+            if (_model.DurationMinutes < 1)
+            {
+                // Impossible to create time slots
+                return;
+            }
+
+            if (StartTime is null)
+            {
+                // Using the earliest start time as the default one
+                var arrayList = (ArrayList)Application.Current.FindResource("startTimes");
+                StartTime = arrayList[0] as string;
+            }
+
+            if (EndTime is null)
+            {
+                // Using the latest end time as the default one
+                var arrayList = (ArrayList)Application.Current.FindResource("endTimes");
+                EndTime = arrayList[arrayList.Count - 1] as string;
+            }
+
+            TimeOnly start = TimeOnly.Parse(StartTime!);
+            TimeOnly end = TimeOnly.Parse(EndTime!);
+
+            while (start < end)
+            {
+                var tmpEnd = start.AddMinutes(_model.DurationMinutes);
+                if (tmpEnd > end)
+                    break;
+                var newTimeSlot = new TimeSlot() { StartTime = start.ToString("HH:mm"), EndTime = tmpEnd.ToString("HH:mm") };
+                TimeSlots.Add(newTimeSlot);
+                start = tmpEnd;
+            }
+
         }
     }
 }

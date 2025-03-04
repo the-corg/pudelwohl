@@ -49,7 +49,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -59,12 +59,23 @@
                     <Button Grid.Column="1" Content="🗑️" />
                 </Grid>
 
-                <ListView Grid.Row="1">
-                    <ListViewItem Content="First"/>
-                    <ListViewItem Content="Second"/>
-                    <ListViewItem Content="Third"/>
-                    <ListViewItem Content="Last"/>
+                <ListView Grid.Row="1" ItemsSource="{Binding SelectedService.TimeSlots}" SelectedItem="{Binding SelectedTimeSlot, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="48"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="48"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding StartTime}" />
+                                <TextBlock Grid.Column="1" Text="–" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding EndTime}" HorizontalAlignment="Right" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
+
             </Grid>
 
             <GridSplitter Grid.Column="1" />

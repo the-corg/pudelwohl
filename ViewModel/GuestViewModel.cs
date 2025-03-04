@@ -24,9 +24,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (value == _model.Name)
                     return;
 
-                _model.Name = value;
+                _model.Name = value!;
                 OnPropertyChanged();
-                // TODO! RoomsViewModel.BookingsChanged();
+                _guestDataService.RoomDataService.UpdateBookingData();
             }
         }
 
@@ -40,7 +40,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Breed = value;
                 OnPropertyChanged();
-                // TODO! RoomsViewModel.BookingsChanged();
+                _guestDataService.RoomDataService.UpdateBookingData();
             }
         }
         public bool IsGenderMaleButtonChecked

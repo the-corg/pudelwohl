@@ -8,6 +8,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         ObservableCollection<GuestViewModel> Guests { get; }
         bool IsArchiveHidden { get; set; }
+        IRoomDataService RoomDataService { get; }
         Task LoadAsync();
     }
 
@@ -15,13 +16,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         private readonly IGuestDataProvider _guestDataProvider;
 
-        public GuestDataService(IGuestDataProvider guestDataProvider)
+
+        public GuestDataService(IGuestDataProvider guestDataProvider, IRoomDataService roomDataService)
         {
             _guestDataProvider = guestDataProvider;
+            RoomDataService = roomDataService;
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; } = new();
         public bool IsArchiveHidden { get; set; } = true;
+        public IRoomDataService RoomDataService { get; }
 
         public async Task LoadAsync()
         {

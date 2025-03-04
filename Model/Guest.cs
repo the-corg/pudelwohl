@@ -3,7 +3,7 @@
     public class Guest
     {
         public int Id { get; set; } = NextId;
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public string? Breed { get; set; }
         public Gender Gender { get; set; }
         public string? CoatColor { get; set; }
@@ -12,7 +12,6 @@
         public EarFloppiness EarFloppiness { get; set; }
         public string? SpecialRequests { get; set; }
         public bool IsArchived { get; set; }
-
 
         // Private static field and property for automatic ID assignment
         private static int _nextId = 0;
