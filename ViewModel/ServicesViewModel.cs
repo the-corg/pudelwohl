@@ -3,12 +3,15 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class ServicesViewModel : ViewModelBase
     {
         private ServiceViewModel? _selectedService;
+        private TimeSlot? _selectedTimeSlot;
         private readonly IServiceDataService _serviceDataService;
         private readonly IMessageService _messageService;
 
@@ -19,9 +22,28 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             Services = serviceDataService.Services;
             AddCommand = new DelegateCommand(execute => Add());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
+            BookServiceCommand = new DelegateCommand(execute => BookService(), canExecute => CanBookService());
+            AddServiceBookingCommand = new DelegateCommand(execute => AddServiceBooking());
+
+            ServiceBookingsCollectionView = serviceDataService.ServiceBookingsForService;
+            // Filter service bookings based on the selected service
+            ServiceBookingsCollectionView.Filter = 
+                serviceBooking => (SelectedService is not null) && (((ServiceBooking)serviceBooking).ServiceId == SelectedService.Id);
+            // And sort it by date, then by start time
+            ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+            ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
+
+            // Composite collection to show on the Services tab, with an Add button after the bookings
+            ServiceBookingsCompositeCollection = new CompositeCollection
+            {
+                    new CollectionContainer { Collection = ServiceBookingsCollectionView },
+                    new ServiceBooking { ServiceId = -1 } // Fake item for the Add button
+            };
         }
 
         public ObservableCollection<ServiceViewModel> Services { get; }
+        public ListCollectionView ServiceBookingsCollectionView { get; }
+        public CompositeCollection ServiceBookingsCompositeCollection { get; }
 
         public ServiceViewModel? SelectedService
         {
@@ -35,14 +57,44 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsServiceSelected));
                 RemoveCommand.OnCanExecuteChanged();
+                ServiceBookingsCollectionView.Refresh();
             }
         }
 
         // Used for hiding the service details when no service is selected
         public bool IsServiceSelected => SelectedService is not null;
 
+        public TimeSlot? SelectedTimeSlot
+        {
+            get => _selectedTimeSlot;
+            set
+            {
+                if (_selectedTimeSlot == value)
+                    return;
+
+                _selectedTimeSlot = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsTimeSlotSelected));
+                OnPropertyChanged(nameof(GuestForSelectedTimeSlot));
+                BookServiceCommand.OnCanExecuteChanged();
+            }
+        }
+        public bool IsTimeSlotSelected => SelectedTimeSlot is not null;
+
+        public string? GuestForSelectedTimeSlot
+        {
+            get
+            {
+                if (SelectedService is null || SelectedTimeSlot is null)
+                    return null;
+                return "TEST!!";
+            }
+        }
+
         public DelegateCommand AddCommand { get; }
         public DelegateCommand RemoveCommand { get; }
+        public DelegateCommand BookServiceCommand { get; }
+        public DelegateCommand AddServiceBookingCommand { get; }
 
         private void Add()
         {
@@ -82,5 +134,22 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             SelectedService = null;
         }
 
+        // For booking with a fixed time slot
+        private bool CanBookService() => SelectedService is not null && SelectedTimeSlot is not null;
+        private void BookService()
+        {
+            if (!CanBookService())
+                return;
+            SelectedTimeSlot = null;
+        }
+
+        // For booking without a fixed time slot
+        private void AddServiceBooking()
+        {
+            if (SelectedService is null)
+                return;
+
+            //_bookingDialogService.ShowBookingDialog("New Booking", true, false, -1, SelectedRoom.Id);
+        }
     }
 }

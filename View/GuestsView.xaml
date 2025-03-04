@@ -245,7 +245,7 @@
                         </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel>
                                     <TextBlock>
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource ServiceIdNameConverter}">
@@ -254,9 +254,11 @@
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
-                                    <TextBlock Text=" ("/>
-                                    <TextBlock Text="{mvvm:CultureAwareBinding Path=Date, StringFormat=d}" />
-                                    <TextBlock Text=")"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{mvvm:CultureAwareBinding Path=Date, StringFormat=d}" />
+                                        <TextBlock Grid.Column="1" Text=" at "/>
+                                        <TextBlock Grid.Column="2" Text="{Binding StartTime}" />
+                                    </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

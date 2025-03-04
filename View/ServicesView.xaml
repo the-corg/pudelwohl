@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
+             xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View" xmlns:mvvm="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -39,7 +39,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "10*" MinWidth="150"/>
                 <ColumnDefinition Width = "6"/>
-                <ColumnDefinition Width = "20*" MinWidth="300"/>
+                <ColumnDefinition Width = "30*" MinWidth="300"/>
             </Grid.ColumnDefinitions>
 
             <!-- Time Slots -->
@@ -49,15 +49,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Button Content="Book" />
-                    <Button Grid.Column="1" Content="🗑️" />
-                </Grid>
+                <Button Content="Book" Command="{Binding BookServiceCommand}" />
 
                 <ListView Grid.Row="1" ItemsSource="{Binding SelectedService.TimeSlots}" SelectedItem="{Binding SelectedTimeSlot, Mode=TwoWay}">
                     <ListView.ItemTemplate>
@@ -83,9 +75,9 @@
 
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="6"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
 
                 <ScrollViewer>
@@ -96,7 +88,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="15"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
@@ -120,8 +112,10 @@
                         <Label Grid.Row="4" Content="End Time: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
                         <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedService.EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource endTimes}}"/>
 
-                        <Label Grid.Row="6" Grid.ColumnSpan="2" Content="Selected time slot booked for:" HorizontalAlignment="Left" />
-
+                        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Label Content="Selected time slot booked for:" />
+                            <Label Content="{Binding GuestForSelectedTimeSlot, Mode=OneWay}"/>
+                        </StackPanel>
 
                     </Grid>
                 </ScrollViewer>
@@ -129,10 +123,95 @@
                 <GridSplitter Grid.Row="1" />
                 <Label Grid.Row="1" Content="＝" Foreground="{StaticResource DogBrown}" VerticalAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Top" FontSize="18" IsHitTestVisible="False" Padding="0" Margin="0 -10 0 0"/>
 
+                <!-- Bookings for the selected service -->
                 <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     <Label Content="All bookings for the service:"/>
+                    <ScrollViewer Grid.Row="2">
+                        <ItemsControl Foreground="{StaticResource DogDark}" ItemsSource="{Binding ServiceBookingsCompositeCollection}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.Resources>
+                                        <!-- Template for a normal service booking -->
+                                        <DataTemplate x:Key="ServiceBookingItemTemplate">
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Date, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource DogLight}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Date, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
+                                                            <Setter Property="Foreground" Value="{StaticResource DogBrown}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataTemplate.Resources>
+                                            <Border BorderBrush="{StaticResource DogBrown}" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
+                                                <Grid Height="70">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition MinWidth="74"/>
+                                                            <ColumnDefinition MinWidth="22"/>
+                                                            <ColumnDefinition MinWidth="39"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{mvvm:CultureAwareBinding Path=Date, StringFormat=d}" />
+                                                        <TextBlock Grid.Column="1" Text=" at " HorizontalAlignment="Center"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding StartTime}" HorizontalAlignment="Right" />
+                                                    </Grid>
+                                                    <TextBlock HorizontalAlignment="Center" Grid.Row="1">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource GuestIdConverter}" ConverterParameter="Name" >
+                                                                <Binding Path="GuestId"/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.GuestDataService"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock HorizontalAlignment="Center" Grid.Row="2">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource GuestIdConverter}" ConverterParameter="Breed" >
+                                                                <Binding Path="GuestId"/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.GuestDataService"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                        <!-- Template for the "Add" button -->
+                                        <DataTemplate x:Key="AddServiceBookingButtonTemplate">
+                                            <Border BorderBrush="{StaticResource DogBrown}" BorderThickness="1" Margin="5" CornerRadius="5">
+                                                <Button Content="➕ Add"                                     
+                                                        Command="{Binding DataContext.AddServiceBookingCommand, RelativeSource={RelativeSource AncestorType=ScrollViewer}}" 
+                                                        Width="145" Height="80" />
+                                            </Border>
+                                        </DataTemplate>
+                                        <mvvm:ServiceBookingTemplateSelector x:Key="ServiceBookingTemplateSelector" 
+                                                  ServiceBookingTemplate="{StaticResource ServiceBookingItemTemplate}" 
+                                                  AddButtonTemplate="{StaticResource AddServiceBookingButtonTemplate}" />
+                                    </DataTemplate.Resources>
+                                    <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource ServiceBookingTemplateSelector}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
-
             </Grid>
         </Grid>
     </Grid>

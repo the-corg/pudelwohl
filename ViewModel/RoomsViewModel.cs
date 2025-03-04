@@ -19,7 +19,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _roomDataService = roomDataService;
             _bookingDialogService = bookingDialogService;
             Rooms = roomDataService.Rooms;
-            Bookings = roomDataService.Bookings;
             roomDataService.OccupancyDate = DateOnly.FromDateTime(DateTime.Now);
 
             AddBookingCommand = new DelegateCommand(execute => AddBooking());
@@ -44,7 +43,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ListCollectionView BookingsCollectionView { get; }
         public CompositeCollection BookingsCompositeCollection { get; }
         public ObservableCollection<RoomViewModel> Rooms { get; }
-        public ObservableCollection<Booking> Bookings { get; }
 
         public RoomViewModel? SelectedRoom
         {
