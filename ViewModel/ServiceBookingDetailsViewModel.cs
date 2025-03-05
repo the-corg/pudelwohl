@@ -3,7 +3,6 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
-using System.Windows;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
@@ -110,8 +109,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand ConfirmCommand { get; }
 
 
-        // Make the Confirm button inactive if one of the dates or the service are missing,
-        // or the check-out date is earlier than today, or the check-out date is earlier than the check-in date
+        // Make the Confirm button inactive if some info is missing or the date is in the past
         private bool CanConfirm() => !(Date is null || GuestName is null || 
             ServiceName is null || TimeSlot is null || Date < DateOnly.FromDateTime(DateTime.Now));
         private void Confirm()
@@ -221,11 +219,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _serviceName = _serviceDataService.Services.FirstOrDefault(x => x.Id == _initialServiceId)?.ToString();
                 ResetTimeSlots();
 
-                // TODO: if (_initialStartTime is not null)
-                //{
-                    // TODO:
-                  //  _serviceName = _serviceDataService.Services.FirstOrDefault(x => x.Id == _initialServiceId)?.Name;
-                //}
+                if (_initialStartTime is not null)
+                {
+                    _timeSlot = TimeSlots.FirstOrDefault(x => x.Split()[0] == _initialStartTime);
+                }
             }
         }
     }

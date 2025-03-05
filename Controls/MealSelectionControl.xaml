@@ -10,23 +10,11 @@
         <StackPanel>
             <Label Content="{Binding Meal, RelativeSource={RelativeSource AncestorType=local:MealSelectionControl}}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
             <Label Content="Option 1:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0">
-                <ComboBoxItem Content="first"/>
-                <ComboBoxItem Content="2nd"/>
-                <ComboBoxItem Content="third"/>
-            </ComboBox>
+            <ComboBox Margin="16 0 16 0"/>
             <Label Content="Option 2:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0">
-                <ComboBoxItem Content="first"/>
-                <ComboBoxItem Content="2nd"/>
-                <ComboBoxItem Content="third"/>
-            </ComboBox>
+            <ComboBox Margin="16 0 16 0"/>
             <Label Content="Option 3:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0">
-                <ComboBoxItem Content="first"/>
-                <ComboBoxItem Content="2nd"/>
-                <ComboBoxItem Content="third"/>
-            </ComboBox>
+            <ComboBox Margin="16 0 16 0"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

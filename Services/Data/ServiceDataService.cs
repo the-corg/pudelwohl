@@ -12,6 +12,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         ObservableCollection<ServiceBooking> ServiceBookings { get; }
         ListCollectionView ServiceBookingsForGuest { get; }
         ListCollectionView ServiceBookingsForService { get; }
+        IMessageService MessageService { get; }
         Task LoadAsync();
     }
     public class ServiceDataService : BaseDataService, IServiceDataService
@@ -19,10 +20,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private readonly IServiceDataProvider _serviceDataProvider;
         private readonly IServiceBookingDataProvider _serviceBookingDataProvider;
 
-        public ServiceDataService(IServiceDataProvider serviceDataProvider, IServiceBookingDataProvider serviceBookingDataProvider)
+        public ServiceDataService(IServiceDataProvider serviceDataProvider, 
+            IServiceBookingDataProvider serviceBookingDataProvider, IMessageService messageService)
         {
             _serviceDataProvider = serviceDataProvider;
             _serviceBookingDataProvider = serviceBookingDataProvider;
+            MessageService = messageService;
             ServiceBookingsForGuest = new ListCollectionView(ServiceBookings);
             ServiceBookingsForService = new ListCollectionView(ServiceBookings);
         }
@@ -31,6 +34,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public ObservableCollection<ServiceBooking> ServiceBookings { get; } = new();
         public ListCollectionView ServiceBookingsForGuest { get; }
         public ListCollectionView ServiceBookingsForService { get; }
+        public IMessageService MessageService { get; }
 
         public async Task LoadAsync()
         {

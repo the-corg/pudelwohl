@@ -9,10 +9,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class ServiceViewModel : ViewModelBase
     {
         private readonly Service _model;
+        private readonly IServiceDataService _serviceDataService;
 
         public ServiceViewModel(Service model, IServiceDataService serviceDataService)
         {
             _model = model;
+            _serviceDataService = serviceDataService;
             CalculateTimeSlots();
         }
 
@@ -28,6 +30,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Name = value!;
                 OnPropertyChanged();
+                _serviceDataService.ServiceBookingsForGuest.Refresh();
             }
         }
 
@@ -98,9 +101,22 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_model.DurationMinutes == intValue)
                     return;
 
+                if (_model.DurationMinutes < intValue)
+                {
+                    // TODO
+                    // If new duration causes overlap of existing active bookings for the same service, forbid it
+                    //var sBookingsForThisService = 
+
+                    // If new duration causes overlap of existing active bookings for the same guest, forbid it
+                    //foreach (var guest in _serviceDataService.Gues)
+
+                }
+
                 _model.DurationMinutes = intValue;
                 OnPropertyChanged();
                 CalculateTimeSlots();
+
+                
             }
         }
 
@@ -114,6 +130,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_model.StartTime == value)
                     return;
 
+                // If the change causes existing service bookings (except those in the past) to fall out of range, prohibit it
+                var newTime = TimeOnly.Parse(value!);
+                foreach (var serviceBooking in _serviceDataService.ServiceBookings)
+                {
+                    if (serviceBooking.ServiceId == Id && 
+                        serviceBooking.Date >= DateOnly.FromDateTime(DateTime.Now) && 
+                        TimeOnly.Parse(serviceBooking.StartTime!) < newTime)
+                    {
+                        _serviceDataService.MessageService.ShowMessage($"Sorry, the new start time (" + value! + ") would cause the start time of an active service booking ("+ serviceBooking.StartTime! + ") to fall out of range.");
+                        return;
+                    }
+                }
+
                 _model.StartTime = value;
                 OnPropertyChanged();
                 CalculateTimeSlots();
@@ -126,6 +155,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 if (_model.EndTime == value)
                     return;
+
+                // If the change causes existing service bookings (except those in the past) to fall out of range, prohibit it
+                var newTime = TimeOnly.Parse(value!);
+                foreach (var serviceBooking in _serviceDataService.ServiceBookings)
+                {
+                    if (serviceBooking.ServiceId == Id &&
+                        serviceBooking.Date >= DateOnly.FromDateTime(DateTime.Now) &&
+                        TimeOnly.Parse(serviceBooking.StartTime!).AddMinutes(DurationMinutes) > newTime)
+                    {
+                        _serviceDataService.MessageService.ShowMessage($"Sorry, the new end time (" + value! + ") would cause the end time of an active service booking (" + TimeOnly.Parse(serviceBooking.StartTime!).AddMinutes(DurationMinutes).ToString("HH:mm") + ") to fall out of range.");
+                        return;
+                    }
+                }
 
                 _model.EndTime = value;
                 OnPropertyChanged();
