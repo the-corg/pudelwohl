@@ -8,17 +8,29 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class MealOptionDetailsViewModel : ViewModelBase
     {
         private readonly string _headerText;
-        private readonly string _mealOptionName;
-        private readonly string? _initialMealOptionName;
         private readonly IMealDataService _mealDataService;
-        private readonly IMessageService _messageService;
 
-        public MealOptionDetailsViewModel(IMealDataService mealDataService, 
-            IMessageService messageService, string headerText)
+        private MealOptionViewModel? _mealOption;
+        private string _mealOptionName = "";
+        private bool _isBreakfast;
+        private bool _isLunch;
+        private bool _isSnack;
+        private bool _isDinner;
+
+        public MealOptionDetailsViewModel(IMealDataService mealDataService, string headerText, MealOptionViewModel? mealOption)
         {
             _mealDataService = mealDataService;
-            _messageService = messageService;
             _headerText = headerText;
+            _mealOption = mealOption;
+            if (mealOption is not null )
+            {
+                // This is an Edit
+                _mealOptionName = mealOption.Name!;
+                _isBreakfast = mealOption.IsBreakfast;
+                _isLunch = mealOption.IsLunch;
+                _isSnack = mealOption.IsSnack;
+                _isDinner = mealOption.IsDinner;
+            }
 
             ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
         }
@@ -27,7 +39,65 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public string HeaderText => _headerText;
 
-        public string MealOptionName {  get; set; }
+        public string MealOptionName
+        {
+            get => _mealOptionName;
+            set
+            {
+                _mealOptionName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
+
+        public bool IsBreakfast
+        {
+            get => _isBreakfast;
+            set
+            {
+                _isBreakfast = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
+
+        public bool IsLunch
+        {
+            get => _isLunch;
+            set
+            {
+                _isLunch = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
+
+        public bool IsSnack
+        {
+            get => _isSnack;
+            set
+            {
+                _isSnack = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
+
+        public bool IsDinner
+        {
+            get => _isDinner;
+            set
+            {
+                _isDinner = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
+                ConfirmCommand.OnCanExecuteChanged();
+            }
+        }
 
         public DelegateCommand ConfirmCommand { get; }
 
@@ -36,33 +106,40 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             get
             {
                 string result = "";
-                if (MealOptionName is null)
-                    result += "The name cannot be empty";
+                if (string.IsNullOrEmpty(MealOptionName))
+                    result += "The name cannot be empty\n\n";
+                if (!(IsBreakfast || IsLunch || IsSnack || IsDinner))
+                    result += "Please select at least one of the checkboxes\n\n";
 
+                if (result.Length > 0)
+                    result = result[..^2];
                 return result;
             }
         }
 
         // Make the Confirm button inactive if the name is empty
-        private bool CanConfirm() => MealOptionName is not null;
+        private bool CanConfirm() => (!string.IsNullOrEmpty(MealOptionName)) && (IsBreakfast || IsLunch || IsSnack || IsDinner);
         private void Confirm()
         {
             // Race condition check - UI is not guaranteed to check CanConfirm immediately before Confirm
-            if (MealOptionName is null)
+            if (!CanConfirm())
             {
                 ConfirmCommand.OnCanExecuteChanged();
                 return;
             }
 
-            // TODO:
-
-            // All checks done. Add the mealOption now
-            var mealOption = new MealOption()
+            if (_mealOption is null)
             {
-                Name = MealOptionName
-            };
+                _mealOption = new MealOptionViewModel(new MealOption() { Name = MealOptionName });
+                _mealDataService.MealOptions.Add(_mealOption);
+            }
+            _mealOption.Name = MealOptionName;
+            _mealOption.IsBreakfast = IsBreakfast;
+            _mealOption.IsLunch = IsLunch;
+            _mealOption.IsSnack = IsSnack;
+            _mealOption.IsDinner = IsDinner;
 
-            _mealDataService.MealOptions.Add(new MealOptionViewModel(mealOption, _mealDataService));
+            _mealDataService.SortedMealOptions.Refresh();
 
             // Close the dialog
             CloseOnConfirmAction?.Invoke();

@@ -34,7 +34,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public async Task LoadAsync()
         {
             var mealOptions = await _mealOptionDataProvider.GetAllAsync();
-            LoadCollection(MealOptions, mealOptions, mealOption => new MealOptionViewModel(mealOption, this));
+            LoadCollection(MealOptions, mealOptions, mealOption => new MealOptionViewModel(mealOption));
         }
 
     }

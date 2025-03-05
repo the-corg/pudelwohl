@@ -4,6 +4,7 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 using System.Windows.Data;
 using System.Windows;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
@@ -11,10 +12,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     {
         private MealOptionViewModel? _selectedMealOption;
         private readonly IMealDataService _mealDataService;
+        private readonly IMealOptionDialogService _mealOptionDialogService;
 
-        public MealOptionsViewModel(IMealDataService mealDataService)
+        public MealOptionsViewModel(IMealDataService mealDataService, IMealOptionDialogService mealOptionDialogService)
         {
             _mealDataService = mealDataService;
+            _mealOptionDialogService = mealOptionDialogService;
             MealOptions = _mealDataService.MealOptions;
             MealOptionCollectionView = _mealDataService.SortedMealOptions;
             AddCommand = new DelegateCommand(execute => Add());
@@ -47,10 +50,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         private void Add()
         {
-            var mealOption = new MealOption { Name = "NEW MEAL OPTION" };
-            var viewModel = new MealOptionViewModel(mealOption, _mealDataService);
-            MealOptions.Add(viewModel);
-            SelectedMealOption = viewModel;
+            _mealOptionDialogService.ShowMealOptionDialog("New Meal Option");
         }
 
         private bool CanEdit() => SelectedMealOption is not null;
@@ -59,7 +59,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedMealOption is null)
                 return;
 
-            SelectedMealOption.Name = "!" + SelectedMealOption.Name;
+            _mealOptionDialogService.ShowMealOptionDialog("Edit Meal Option", SelectedMealOption);
         }
 
         private bool CanRemove() => SelectedMealOption is not null;

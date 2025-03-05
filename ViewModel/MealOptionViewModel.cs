@@ -6,12 +6,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     public class MealOptionViewModel : ViewModelBase
     {
         private readonly MealOption _model;
-        private readonly IMealDataService _mealDataService;
 
-        public MealOptionViewModel(MealOption model, IMealDataService mealDataService)
+        public MealOptionViewModel(MealOption model)
         {
             _model = model;
-            _mealDataService = mealDataService;
         }
 
         public int Id => _model.Id;
@@ -24,7 +22,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_model.Name == value)
                     return;
 
-                _model.Name = value;
+                _model.Name = value!;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(DisplayName));
             }
@@ -42,6 +40,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.IsBreakfast = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
         public bool IsLunch
@@ -54,6 +53,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.IsLunch = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
         public bool IsSnack
@@ -66,6 +66,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.IsSnack = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
         public bool IsDinner
@@ -78,6 +79,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.IsDinner = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
 
