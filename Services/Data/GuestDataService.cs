@@ -1,6 +1,7 @@
 ﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data
 {
@@ -8,27 +9,33 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         ObservableCollection<GuestViewModel> Guests { get; }
         bool IsArchiveHidden { get; set; }
-        IRoomDataService RoomDataService { get; }
-        IServiceDataService ServiceDataService { get; }
+        void UpdateOnGuestDataChange();
         Task LoadAsync();
+        
     }
-
+ 
     public class GuestDataService : BaseDataService, IGuestDataService
     {
         private readonly IGuestDataProvider _guestDataProvider;
+        private readonly ListCollectionView _bookingsForRoom;
+        private readonly ListCollectionView _serviceBookingsForService;
 
 
         public GuestDataService(IGuestDataProvider guestDataProvider, IRoomDataService roomDataService, IServiceDataService serviceDataService)
         {
             _guestDataProvider = guestDataProvider;
-            RoomDataService = roomDataService;
-            ServiceDataService = serviceDataService;
+            _bookingsForRoom = roomDataService.BookingsForRoom;
+            _serviceBookingsForService = serviceDataService.ServiceBookingsForService;
         }
 
         public ObservableCollection<GuestViewModel> Guests { get; } = new();
         public bool IsArchiveHidden { get; set; } = true;
-        public IRoomDataService RoomDataService { get; }
-        public IServiceDataService ServiceDataService { get; }
+
+        public void UpdateOnGuestDataChange()
+        {
+            _bookingsForRoom.Refresh();
+            _serviceBookingsForService.Refresh();
+        }
 
         public async Task LoadAsync()
         {

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
@@ -10,11 +11,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
     {
         private readonly Service _model;
         private readonly IServiceDataService _serviceDataService;
+        private readonly IMessageService _messageService;
 
         public ServiceViewModel(Service model, IServiceDataService serviceDataService)
         {
             _model = model;
             _serviceDataService = serviceDataService;
+            _messageService = serviceDataService.MessageService;
             CalculateTimeSlots();
         }
 
@@ -101,22 +104,72 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_model.DurationMinutes == intValue)
                     return;
 
+                // If the new duration is longer, it might cause overlapping time slots for this service or for a guest 
                 if (_model.DurationMinutes < intValue)
                 {
-                    // TODO
-                    // If new duration causes overlap of existing active bookings for the same service, forbid it
-                    //var sBookingsForThisService = 
+                    var today = DateOnly.FromDateTime(DateTime.Now);
+                    // Find all service bookings that are not in the past
+                    var allActive = _serviceDataService.ServiceBookings.Where(x => x.Date >= today).ToList();
+                    if (allActive.Count > 1) // If there's only one, it can't overlap with anything
+                    {
+                        // Check if new duration causes overlap of existing active bookings for the same service
+                        var sBookingsForThisService = allActive.Where(x => x.ServiceId == Id).ToList();
+                        if (sBookingsForThisService.Count > 1)
+                        {
+                            for (int i = 0; i < sBookingsForThisService.Count - 1; i++) // Not checking the last one, it has no pair
+                            {
+                                var startTime1 = TimeOnly.Parse(sBookingsForThisService[i].StartTime!);
+                                var endTime1 = startTime1.AddMinutes(intValue);
+                                for (int j = i + 1; j < sBookingsForThisService.Count; j++)
+                                {
+                                    if (sBookingsForThisService[i].Date != sBookingsForThisService[j].Date)
+                                        continue;
 
-                    // If new duration causes overlap of existing active bookings for the same guest, forbid it
-                    //foreach (var guest in _serviceDataService.Gues)
+                                    // Found two active service bookings for the same service on the same date, checking overlap
+                                    var startTime2 = TimeOnly.Parse(sBookingsForThisService[j].StartTime!);
+                                    var endTime2 = startTime2.AddMinutes(intValue);
+                                    if (startTime1 < endTime2 && startTime2 < endTime1)
+                                    {
+                                        _messageService.ShowMessage($"Sorry, the new longer duration would cause an overlap between at least two existing active service bookings for this service.");
+                                        return;
+                                    }
+                                }
+                            }
+                        }
 
+                        // Check if new duration causes overlap of existing active bookings for the same guest
+                        for (int i = 0; i < allActive.Count - 1; i++) // Not checking the last one, it has no pair
+                        {
+                            for (int j = i + 1; j < allActive.Count; j++)
+                            {
+                                if (allActive[j].GuestId != allActive[i].GuestId || allActive[j].Date != allActive[i].Date)
+                                    continue;
+                                if (allActive[j].ServiceId != Id && allActive[i].ServiceId != Id)
+                                    continue; // the service being changed is not one of the pair
+
+                                // Found two active service bookings for the same guest on the same date,
+                                // at least one of which is for the service being changed. Checking overlap
+                                var startTime1 = TimeOnly.Parse(allActive[i].StartTime!);
+                                var endTime1 = startTime1.AddMinutes(allActive[i].ServiceId == Id ? intValue :
+                                    _serviceDataService.Services.First(x => x.Id == allActive[i].ServiceId).DurationMinutes);
+
+                                var startTime2 = TimeOnly.Parse(allActive[j].StartTime!);
+                                var endTime2 = startTime2.AddMinutes(allActive[j].ServiceId == Id ? intValue :
+                                    _serviceDataService.Services.First(x => x.Id == allActive[j].ServiceId).DurationMinutes);
+
+                                if (startTime1 < endTime2 && startTime2 < endTime1)
+                                {
+                                    _messageService.ShowMessage($"Sorry, the new longer duration would cause an overlap between at least two existing active service bookings for a client.");
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 _model.DurationMinutes = intValue;
                 OnPropertyChanged();
                 CalculateTimeSlots();
-
-                
             }
         }
 
@@ -132,13 +185,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 // If the change causes existing service bookings (except those in the past) to fall out of range, prohibit it
                 var newTime = TimeOnly.Parse(value!);
+                var today = DateOnly.FromDateTime(DateTime.Now);
                 foreach (var serviceBooking in _serviceDataService.ServiceBookings)
                 {
-                    if (serviceBooking.ServiceId == Id && 
-                        serviceBooking.Date >= DateOnly.FromDateTime(DateTime.Now) && 
+                    if (serviceBooking.ServiceId == Id &&
+                        serviceBooking.Date >= today &&
                         TimeOnly.Parse(serviceBooking.StartTime!) < newTime)
                     {
-                        _serviceDataService.MessageService.ShowMessage($"Sorry, the new start time (" + value! + ") would cause the start time of an active service booking ("+ serviceBooking.StartTime! + ") to fall out of range.");
+                        _messageService.ShowMessage($"Sorry, the new start time (" + value! +
+                            ") would cause the start time of an active service booking (" + serviceBooking.StartTime! +
+                            ") to fall out of range.");
                         return;
                     }
                 }
@@ -158,13 +214,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 // If the change causes existing service bookings (except those in the past) to fall out of range, prohibit it
                 var newTime = TimeOnly.Parse(value!);
+                var today = DateOnly.FromDateTime(DateTime.Now);
                 foreach (var serviceBooking in _serviceDataService.ServiceBookings)
                 {
-                    if (serviceBooking.ServiceId == Id &&
-                        serviceBooking.Date >= DateOnly.FromDateTime(DateTime.Now) &&
-                        TimeOnly.Parse(serviceBooking.StartTime!).AddMinutes(DurationMinutes) > newTime)
+                    var sBookingEndTime = TimeOnly.Parse(serviceBooking.StartTime!).AddMinutes(DurationMinutes);
+                    if (serviceBooking.ServiceId == Id && serviceBooking.Date >= today && sBookingEndTime > newTime)
                     {
-                        _serviceDataService.MessageService.ShowMessage($"Sorry, the new end time (" + value! + ") would cause the end time of an active service booking (" + TimeOnly.Parse(serviceBooking.StartTime!).AddMinutes(DurationMinutes).ToString("HH:mm") + ") to fall out of range.");
+                        _messageService.ShowMessage($"Sorry, the new end time (" + value! +
+                            ") would cause the end time of an active service booking (" +
+                            sBookingEndTime.ToString("HH:mm") + ") to fall out of range.");
                         return;
                     }
                 }

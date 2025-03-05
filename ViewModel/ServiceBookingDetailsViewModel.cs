@@ -110,7 +110,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
 
         // Make the Confirm button inactive if some info is missing or the date is in the past
-        private bool CanConfirm() => !(Date is null || GuestName is null || 
+        private bool CanConfirm() => !(Date is null || GuestName is null ||
             ServiceName is null || TimeSlot is null || Date < DateOnly.FromDateTime(DateTime.Now));
         private void Confirm()
         {
@@ -138,10 +138,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             TimeOnly startTime = TimeOnly.Parse(timeSlotSplit[0]);
             TimeOnly endTime = TimeOnly.Parse(timeSlotSplit[2]);
 
-            // Check if the guest has a serviceBooking for this date
+            // Check overlapping
             foreach (var sBooking in _serviceDataService.ServiceBookings)
             {
-                if (sBooking.GuestId != guestId || sBooking.Date != _date)
+                if (sBooking.Date != _date)
                     continue;
 
                 var serviceToCheck = _serviceDataService.Services.FirstOrDefault(x => x.Id == sBooking.ServiceId);
@@ -151,33 +151,26 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 var sBookingStartTime = TimeOnly.Parse(sBooking.StartTime!);
                 var sBookingEndTime = sBookingStartTime.AddMinutes(serviceToCheck.DurationMinutes);
 
-                // Check if the time slot overlaps
-                if (sBookingStartTime < endTime && sBookingEndTime > startTime)
+                // Check if the guest has an overlapping booked time slot
+                if (sBooking.GuestId == guestId && sBookingStartTime < endTime && sBookingEndTime > startTime)
                 {
                     _messageService.ShowMessage("This time slot overlaps with another service booked for this guest!");
                     return;
                 }
-            }
-
-            // Check if the service is booked for this time slot already
-            foreach (var sBooking in _serviceDataService.ServiceBookings)
-            {
-                if (sBooking.ServiceId != serviceId || sBooking.Date != _date)
-                    continue;
-
-                // Check if the time slot overlaps
-                if (sBooking.StartTime == startTimeString)
+                // Check if the service has an overlapping booked time slot
+                if (sBooking.ServiceId == serviceId && sBookingStartTime < endTime && sBookingEndTime > startTime)
                 {
-                    _messageService.ShowMessage("This time slot is already booked for this service!");
+                    _messageService.ShowMessage("This time slot overlaps with another time slot booked for this service!");
                     return;
                 }
             }
 
             // All checks done. Add the serviceBooking now
-            var serviceBooking = new ServiceBooking() { 
-                GuestId = guestId, 
-                ServiceId = serviceId, 
-                Date = (DateOnly)_date!, 
+            var serviceBooking = new ServiceBooking()
+            {
+                GuestId = guestId,
+                ServiceId = serviceId,
+                Date = (DateOnly)_date!,
                 StartTime = startTimeString
             };
 
@@ -191,7 +184,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             TimeSlots.Clear();
             if (ServiceName is null)
-                return; 
+                return;
 
             int serviceId = _initialServiceId == -1 ? int.Parse(ServiceName!.Split("#").Last()[..^1]) : _initialServiceId;
 
