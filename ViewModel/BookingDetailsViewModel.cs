@@ -52,7 +52,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
         }
 
-        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing window
+        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
 
         public string HeaderText => _headerText;
 
@@ -66,6 +66,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _checkInDate = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -80,6 +81,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _checkOutDate = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -94,6 +96,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     return;
                 _guestName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -108,6 +111,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     return;
                 _roomName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -117,6 +121,33 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public DelegateCommand ConfirmCommand { get; }
 
+        public string ButtonDisabledReason
+        {
+            get
+            {
+                string result = "";
+
+                if (CheckOutDate is null)
+                    result += "Please select a date for check-out.\n\n";
+                else if (CheckOutDate < DateOnly.FromDateTime(DateTime.Now))
+                    result += "Please select a check-out date that is not in the past.\n\n";
+
+                if (CheckInDate is null)
+                    result += "Please select a date for check-in.\n\n";
+                else if (CheckOutDate is not null && CheckInDate > CheckOutDate)
+                    result += "Please select such dates that check-out doesn't have to happen before check-in.\n\n";
+
+                if (GuestName is null)
+                    result += "Please select a guest.\n\n";
+                if (RoomName is null)
+                    result += "Please select a room.\n\n";
+
+                if (result.Length > 0)
+                    result = result[..^2];
+                
+                return result;
+            }
+        }
 
         // Make the Confirm button inactive if one of the dates or the room are missing,
         // or the check-out date is earlier than today, or the check-out date is earlier than the check-in date

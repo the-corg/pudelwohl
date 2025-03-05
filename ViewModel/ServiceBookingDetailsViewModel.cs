@@ -41,7 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
         }
 
-        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing window
+        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
 
         public string HeaderText => _headerText;
 
@@ -55,6 +55,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _date = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -69,6 +70,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     return;
                 _guestName = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -84,6 +86,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _serviceName = value;
                 ResetTimeSlots();
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -98,6 +101,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     return;
                 _timeSlot = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ButtonDisabledReason));
                 ConfirmCommand.OnCanExecuteChanged();
             }
         }
@@ -108,6 +112,30 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public DelegateCommand ConfirmCommand { get; }
 
+        public string ButtonDisabledReason
+        {
+            get
+            {
+                string result = "";
+
+                if (Date is null)
+                    result += "Please select a date.\n\n";
+                else if (Date < DateOnly.FromDateTime(DateTime.Now))
+                    result += "Please select a date that is not in the past.\n\n";
+
+                if (TimeSlot is null)
+                    result += "Please select a time slot.\n\n";
+                if (GuestName is null)
+                    result += "Please select a guest.\n\n";
+                if (ServiceName is null)
+                    result += "Please select a service.\n\n";
+
+                if (result.Length > 0)
+                    result = result[..^2];
+
+                return result;
+            }
+        }
 
         // Make the Confirm button inactive if some info is missing or the date is in the past
         private bool CanConfirm() => !(Date is null || GuestName is null ||
