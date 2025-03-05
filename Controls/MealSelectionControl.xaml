@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer >
+    <ScrollViewer>
         <StackPanel>
             <Label Content="{Binding Meal, RelativeSource={RelativeSource AncestorType=local:MealSelectionControl}}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
             <Label Content="Option 1:" Margin="16 0 16 0"/>

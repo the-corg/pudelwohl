@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Width="360">
+    <Grid MinWidth="400">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
@@ -22,6 +22,6 @@
             <Button Grid.Column="2" Content="Remove" Command="{Binding RemoveCommand}"/>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay}" DisplayMemberPath="Name"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding MealOptionCollectionView}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay}" DisplayMemberPath="DisplayName" />
     </Grid>
 </UserControl>

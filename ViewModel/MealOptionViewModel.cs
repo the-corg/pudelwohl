@@ -1,15 +1,17 @@
 ﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class MealOptionViewModel : ViewModelBase
     {
         private readonly MealOption _model;
+        private readonly IMealDataService _mealDataService;
 
-        public MealOptionViewModel(MealOption model, MainViewModel mainViewModel)
+        public MealOptionViewModel(MealOption model, IMealDataService mealDataService)
         {
             _model = model;
-            _ = mainViewModel;
+            _mealDataService = mealDataService;
         }
 
         public int Id => _model.Id;
@@ -24,8 +26,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Name = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
+
+        public string? DisplayName => this.ToString();
 
         public bool IsBreakfast
         { 
@@ -74,6 +79,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _model.IsDinner = value;
                 OnPropertyChanged();
             }
+        }
+
+        public override string ToString()
+        {
+            string result = "[";
+            result += IsBreakfast ? "Ｂ" : "－";
+            result += IsLunch ? "Ｌ" : "－";
+            result += IsSnack ? "Ｓ" : "－";
+            result += IsDinner ? "Ｄ" : "－";
+            result += "] " + _model.Name;
+            return result;
         }
 
     }

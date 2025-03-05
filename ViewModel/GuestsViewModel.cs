@@ -17,7 +17,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string _viewArchiveButtonText = "View Archive";
         private DateOnly _selectedMenuDate;
         private readonly IGuestDataService _guestDataService;
-        private readonly IRoomDataService _roomDataService;
         private readonly IBookingDialogService _bookingDialogService;
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
@@ -27,7 +26,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
         {
             _guestDataService = guestDataService;
-            _roomDataService = roomDataService;
             _bookingDialogService = bookingDialogService;
             _serviceBookingDialogService = serviceBookingDialogService;
             _messageService = messageService;

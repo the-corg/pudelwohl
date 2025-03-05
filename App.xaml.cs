@@ -27,7 +27,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             services.AddSingleton<GuestsViewModel>();
             services.AddSingleton<RoomsViewModel>();
             services.AddSingleton<ServicesViewModel>();
-            //services.AddSingleton<MealOptionsViewModel>();
+            services.AddSingleton<MealOptionsViewModel>();
 
             // Data Providers
             services.AddTransient<IGuestDataProvider, GuestDataProvider>();
@@ -42,7 +42,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             services.AddSingleton<IGuestDataService, GuestDataService>();
             services.AddSingleton<IRoomDataService, RoomDataService>();
             services.AddSingleton<IServiceDataService, ServiceDataService>();
-            //services.AddSingleton<IMenuDataService, MenuDataService>();
+            services.AddSingleton<IMealDataService, MealDataService>();
 
             // Other Services
             services.AddTransient<IMessageService, MessageService>();

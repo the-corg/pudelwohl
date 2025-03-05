@@ -1,23 +1,28 @@
 ﻿using System.Collections.ObjectModel;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data;
+using System.Windows.Data;
+using System.Windows;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
     public class MealOptionsViewModel : ViewModelBase
     {
         private MealOptionViewModel? _selectedMealOption;
-        private readonly MainViewModel _mainViewModel;
+        private readonly IMealDataService _mealDataService;
 
-        public MealOptionsViewModel(MainViewModel mainViewModel)
+        public MealOptionsViewModel(IMealDataService mealDataService)
         {
-            MealOptions = mainViewModel.MealOptions;
+            _mealDataService = mealDataService;
+            MealOptions = _mealDataService.MealOptions;
+            MealOptionCollectionView = _mealDataService.SortedMealOptions;
             AddCommand = new DelegateCommand(execute => Add());
             EditCommand = new DelegateCommand(execute => Edit(), canExecute => CanEdit());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
-            _mainViewModel = mainViewModel;
         }
 
+        public ListCollectionView MealOptionCollectionView { get; }
         public ObservableCollection<MealOptionViewModel> MealOptions { get; }
 
         public MealOptionViewModel? SelectedMealOption
@@ -43,7 +48,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private void Add()
         {
             var mealOption = new MealOption { Name = "NEW MEAL OPTION" };
-            var viewModel = new MealOptionViewModel(mealOption, _mainViewModel);
+            var viewModel = new MealOptionViewModel(mealOption, _mealDataService);
             MealOptions.Add(viewModel);
             SelectedMealOption = viewModel;
         }
