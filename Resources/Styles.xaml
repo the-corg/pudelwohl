@@ -178,6 +178,7 @@
     <Style TargetType="ComboBox">
         <Setter Property="Foreground" Value="{StaticResource DogDark}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="MinHeight" Value="28"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">

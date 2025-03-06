@@ -21,6 +21,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             AddCommand = new DelegateCommand(execute => Add());
             EditCommand = new DelegateCommand(execute => Edit(), canExecute => CanEdit());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
+
+            BreakfastViewModel = new("Breakfast", _mealDataService);
+            LunchViewModel = new("Lunch", _mealDataService);
+            SnackViewModel = new("Snack", _mealDataService);
+            DinnerViewModel = new("Dinner", _mealDataService);
         }
 
         public ListCollectionView MealOptionCollectionView { get; }
@@ -40,6 +45,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 EditCommand.OnCanExecuteChanged();
             }
         }
+
+        public MealSelectionViewModel BreakfastViewModel { get; }
+        public MealSelectionViewModel LunchViewModel { get; }
+        public MealSelectionViewModel SnackViewModel { get; }
+        public MealSelectionViewModel DinnerViewModel { get; }
 
         public DelegateCommand AddCommand { get; }
         public DelegateCommand EditCommand { get; }

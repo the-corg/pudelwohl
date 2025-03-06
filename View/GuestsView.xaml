@@ -137,7 +137,7 @@
                         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SelectedGuest.FavoriteToy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <Label Grid.Row="6" Content="Ear Floppiness: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
-                        <ComboBox Grid.Row="6" Grid.Column="1" SelectedItem="{Binding SelectedGuest.EarFloppiness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding EarFloppinessValues}" />
+                        <ComboBox Grid.Row="6" Grid.Column="1" SelectedItem="{Binding SelectedGuest.EarFloppiness, Mode=TwoWay}" ItemsSource="{Binding EarFloppinessValues}" />
 
                         <Label Grid.Row="7" Content=" Special Requests: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
                         <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding SelectedGuest.SpecialRequests, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -276,13 +276,13 @@
                         <Label Content="Cuisine" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
                         <DatePicker SelectedDate="{Binding SelectedMenuDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" HorizontalAlignment="Center"/>
                         <Label Content="Breakfast" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0"  SelectedItem="{Binding BreakfastOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Margin="5 0" ItemsSource="{Binding BreakfastMealOptions}" SelectedItem="{Binding BreakfastOption, Mode=TwoWay}"/>
                         <Label Content="Lunch" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding LunchOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Margin="5 0" SelectedItem="{Binding LunchOption, Mode=TwoWay}"/>
                         <Label Content="Snack" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding SnackOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Margin="5 0" SelectedItem="{Binding SnackOption, Mode=TwoWay}"/>
                         <Label Content="Dinner" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding DinnerOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Margin="5 0" SelectedItem="{Binding DinnerOption, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
