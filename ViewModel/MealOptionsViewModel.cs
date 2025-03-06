@@ -11,12 +11,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private MealOptionViewModel? _selectedMealOption;
         private readonly IMealDataService _mealDataService;
         private readonly IMealOptionDialogService _mealOptionDialogService;
+        private readonly IMessageService _messageService;
         private readonly List<MealSelectionViewModel> _selectors = new();
 
-        public MealOptionsViewModel(IMealDataService mealDataService, IMealOptionDialogService mealOptionDialogService)
+        public MealOptionsViewModel(IMealDataService mealDataService, 
+            IMealOptionDialogService mealOptionDialogService, IMessageService messageService)
         {
             _mealDataService = mealDataService;
             _mealOptionDialogService = mealOptionDialogService;
+            _messageService = messageService;
             MealOptions = _mealDataService.MealOptions;
             MealOptionCollectionView = _mealDataService.SortedMealOptions;
             AddCommand = new DelegateCommand(execute => Add());

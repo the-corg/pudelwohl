@@ -13,27 +13,38 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private GuestViewModel? _selectedGuest;
         private Booking? _selectedBooking;
         private ServiceBooking? _selectedServiceBooking;
+        private GuestMenu? _currentGuestMenu;
         private string _archiveButtonText = "Archive";
         private string _viewArchiveButtonText = "View Archive";
         private DateOnly _selectedMenuDate;
+        private string?[] _breakfastOptions = new string?[3];
+        private string?[] _lunchOptions = new string?[3];
+        private string?[] _snackOptions = new string?[3];
+        private string?[] _dinnerOptions = new string?[3];
+        private string? _selectedBreakfastOption;
+        private string? _selectedLunchOption;
+        private string? _selectedSnackOption;
+        private string? _selectedDinnerOption;
         private readonly IGuestDataService _guestDataService;
         private readonly IBookingDialogService _bookingDialogService;
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
+        private readonly IMealDataService _mealDataService;
         private readonly IMessageService _messageService;
 
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
             IServiceDataService serviceDataService, IBookingDialogService bookingDialogService,
-            IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
+            IServiceBookingDialogService serviceBookingDialogService, IMealDataService mealDataService,
+            IMessageService messageService)
         {
             _guestDataService = guestDataService;
             _bookingDialogService = bookingDialogService;
             _serviceBookingDialogService = serviceBookingDialogService;
+            _mealDataService = mealDataService;
             _messageService = messageService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
             ServiceBookings = serviceDataService.ServiceBookings;
-            //TODO
-            //GuestMenus = mainViewModel.GuestMenus;
+            GuestMenus = mealDataService.GuestMenus;
 
             // Add() and others are parameterless but ICommand wants methods with one parameter
             // One approach: add a dummy parameter. Leads to awkward manual calls: Archive(null)
@@ -63,6 +74,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // And sort it by date, then by start time
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
+
+            mealDataService.GuestMenuUpdated = UpdateGuestMenuOptions;
         }
 
         public ListCollectionView BookingsCollectionView { get; }
@@ -70,7 +83,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ObservableCollection<GuestViewModel> Guests { get; }
         public ObservableCollection<Booking> Bookings { get; }
         public ObservableCollection<ServiceBooking> ServiceBookings { get; }
-        public ObservableCollection<GuestMenu> GuestMenus { get; }
+        public Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; }
 
         public GuestViewModel? SelectedGuest
         {
@@ -87,6 +100,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 ArchiveCommand.OnCanExecuteChanged();
                 BookingsCollectionView.Refresh();
                 ServiceBookingsCollectionView.Refresh();
+                UpdateGuestMenuOptions();
             }
         }
 
@@ -133,55 +147,82 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _selectedMenuDate = value;
                 OnPropertyChanged();
+                UpdateGuestMenuOptions();
             }
         }
 
-        //TODO!
-        /*
-        public string? BreakfastOption
+        public string?[] BreakfastOptions => _breakfastOptions;
+        public string?[] LunchOptions => _lunchOptions;
+        public string?[] SnackOptions => _snackOptions;
+        public string?[] DinnerOptions => _dinnerOptions;
+
+        public string? SelectedBreakfastOption
         {
-            get
-            {
-                if (SelectedGuest is null)
-                {
-                    return null;
-                }
-                foreach (GuestMenu guestMenu in SelectedGuest.GuestMenus)
-                {
-                    if (guestMenu.Date == SelectedMenuDate)
-                    {
-                        if (guestMenu.Breakfast.Length == 0)
-                            return null;
-                        return "Option " + guestMenu.Breakfast;
-                    }
-                }
-                return null;
-            }
+            get => _selectedBreakfastOption;
             set
             {
-                if (value is null || SelectedGuest is null)
+                if (_selectedBreakfastOption == value) 
                     return;
-                // TODO: Add check for value == old value
-                bool dateFound = false;
-                foreach (GuestMenu guestMenu in SelectedGuest.GuestMenus)
-                {
-                    if (guestMenu.Date == SelectedMenuDate)
-                    {
-                        guestMenu.Breakfast = value.Split()[1];
-                        dateFound = true;
-                        break;
-                    }
-                }
-                if (!dateFound)
-                {
-                    GuestMenu g = new GuestMenu();
-                    g.Date = SelectedMenuDate;
-                    g.Breakfast = value.Split()[1];
-                    SelectedGuest.GuestMenus.Add(g);
-                }
+
+                _selectedBreakfastOption = value;
                 OnPropertyChanged();
+
+                if (_currentGuestMenu is null)
+                    return;
+                _currentGuestMenu.Breakfast = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
             }
-        }*/
+        }
+
+        public string? SelectedLunchOption
+        {
+            get => _selectedLunchOption;
+            set
+            {
+                if (_selectedLunchOption == value)
+                    return;
+
+                _selectedLunchOption = value;
+                OnPropertyChanged();
+
+                if (_currentGuestMenu is null)
+                    return;
+                _currentGuestMenu.Lunch = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+            }
+        }
+
+        public string? SelectedSnackOption
+        {
+            get => _selectedSnackOption;
+            set
+            {
+                if (_selectedSnackOption == value)
+                    return;
+
+                _selectedSnackOption = value;
+                OnPropertyChanged();
+
+                if (_currentGuestMenu is null)
+                    return;
+                _currentGuestMenu.Snack = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+            }
+        }
+
+        public string? SelectedDinnerOption
+        {
+            get => _selectedDinnerOption;
+            set
+            {
+                if (_selectedDinnerOption == value)
+                    return;
+
+                _selectedDinnerOption = value;
+                OnPropertyChanged();
+
+                if (_currentGuestMenu is null)
+                    return;
+                _currentGuestMenu.Dinner = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+            }
+        }
 
         public bool IsArchiveHidden
         {
@@ -302,11 +343,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
             // GuestMenus are not important, delete them without asking the user
-            
-            //TODO
-            /*for (int i = GuestMenus.Count - 1; i >= 0; i--)
-                if (GuestMenus[i].GuestId == SelectedGuest.Id)
-                    GuestMenus.RemoveAt(i);*/
+            foreach (var key in GuestMenus.Keys.ToList())
+            {
+                if (key.Item2 == SelectedGuest.Id)
+                {
+                    GuestMenus.Remove(key);
+                }
+            }
 
             Guests.Remove(SelectedGuest);
             SelectedGuest = null;
@@ -373,5 +416,61 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _serviceBookingDialogService.ShowServiceBookingDialog(false, true, true, SelectedGuest.Id, -1, null);
         }
 
+        public void UpdateGuestMenuOptions()
+        {
+            if (SelectedGuest is null)
+                return;
+            _breakfastOptions = new string?[3];
+            _lunchOptions = new string?[3];
+            _snackOptions = new string?[3];
+            _dinnerOptions = new string?[3];
+            if (_mealDataService.DailyMenus.TryGetValue(_selectedMenuDate, out DailyMenu? dailyMenu))
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    string? mealName = dailyMenu.Menu[i] == 0 ? null :
+                        _mealDataService.GetMealOptionById(dailyMenu.Menu[i])?.NameWithId;
+                    switch (i)
+                    {
+                        case 0: case 1: case 2:
+                            _breakfastOptions[i] = mealName;
+                            break;
+                        case 3: case 4: case 5:
+                            _lunchOptions[i - 3] = mealName;
+                            break;
+                        case 6: case 7: case 8:
+                            _snackOptions[i - 6] = mealName;
+                            break;
+                        case 9: case 10: case 11:
+                            _dinnerOptions[i - 9] = mealName;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            if (!GuestMenus.TryGetValue((_selectedMenuDate, SelectedGuest.Id), out _currentGuestMenu))
+            {
+                _currentGuestMenu = new GuestMenu()
+                {
+                    Date = _selectedMenuDate,
+                    GuestId = SelectedGuest.Id
+                };
+                GuestMenus.Add((_selectedMenuDate, SelectedGuest.Id), _currentGuestMenu);
+            }
+            _selectedBreakfastOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Breakfast)?.NameWithId;
+            _selectedLunchOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Lunch)?.NameWithId;
+            _selectedSnackOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Snack)?.NameWithId;
+            _selectedDinnerOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Dinner)?.NameWithId;
+            OnPropertyChanged(nameof(BreakfastOptions));
+            OnPropertyChanged(nameof(LunchOptions));
+            OnPropertyChanged(nameof(SnackOptions));
+            OnPropertyChanged(nameof(DinnerOptions));
+            OnPropertyChanged(nameof(SelectedBreakfastOption));
+            OnPropertyChanged(nameof(SelectedLunchOption));
+            OnPropertyChanged(nameof(SelectedSnackOption));
+            OnPropertyChanged(nameof(SelectedDinnerOption));
+        }
     }
 }

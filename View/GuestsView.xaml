@@ -276,13 +276,13 @@
                         <Label Content="Cuisine" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
                         <DatePicker SelectedDate="{Binding SelectedMenuDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}" HorizontalAlignment="Center"/>
                         <Label Content="Breakfast" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" ItemsSource="{Binding BreakfastMealOptions}" SelectedItem="{Binding BreakfastOption, Mode=TwoWay}"/>
+                        <ComboBox Margin="5 0" ItemsSource="{Binding BreakfastOptions}" SelectedItem="{Binding SelectedBreakfastOption, Mode=TwoWay}"/>
                         <Label Content="Lunch" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding LunchOption, Mode=TwoWay}"/>
+                        <ComboBox Margin="5 0" ItemsSource="{Binding LunchOptions}" SelectedItem="{Binding SelectedLunchOption, Mode=TwoWay}"/>
                         <Label Content="Snack" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding SnackOption, Mode=TwoWay}"/>
+                        <ComboBox Margin="5 0" ItemsSource="{Binding SnackOptions}" SelectedItem="{Binding SelectedSnackOption, Mode=TwoWay}"/>
                         <Label Content="Dinner" Padding="5 5 5 2"/>
-                        <ComboBox Margin="5 0" SelectedItem="{Binding DinnerOption, Mode=TwoWay}"/>
+                        <ComboBox Margin="5 0" ItemsSource="{Binding DinnerOptions}" SelectedItem="{Binding SelectedDinnerOption, Mode=TwoWay}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

@@ -68,12 +68,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public void UpdateOptions()
         {
-            for (int i = 0; i <3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var mealOptionId = _mealDataService.DailyMenuForSelectedDate?.Menu[_menuIndexOffset + i];
                 if (mealOptionId is null)
                     continue;
-                _selectedOption[i] = _mealDataService.MealOptions.FirstOrDefault(x => x.Id == mealOptionId!);
+                _selectedOption[i] = _mealDataService.GetMealOptionById((int)mealOptionId);
             }
             OnPropertyChanged(nameof(SelectedOption1));
             OnPropertyChanged(nameof(SelectedOption2));
@@ -87,6 +87,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 menu.Menu[_menuIndexOffset + optionNumber] = id;
             }
+            _mealDataService.UpdateMenus();
         }
 
     }
