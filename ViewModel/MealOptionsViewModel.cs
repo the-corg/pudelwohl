@@ -11,6 +11,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private MealOptionViewModel? _selectedMealOption;
         private readonly IMealDataService _mealDataService;
         private readonly IMealOptionDialogService _mealOptionDialogService;
+        private readonly List<MealSelectionViewModel> _selectors = new();
 
         public MealOptionsViewModel(IMealDataService mealDataService, IMealOptionDialogService mealOptionDialogService)
         {
@@ -26,6 +27,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             LunchViewModel = new("Lunch", _mealDataService, _mealDataService.MealOptionsForLunch, 3);
             SnackViewModel = new("Snack", _mealDataService, _mealDataService.MealOptionsForSnack, 6);
             DinnerViewModel = new("Dinner", _mealDataService, _mealDataService.MealOptionsForDinner, 9);
+            _selectors.Add(BreakfastViewModel);
+            _selectors.Add(LunchViewModel);
+            _selectors.Add(SnackViewModel);
+            _selectors.Add(DinnerViewModel);
+            _mealDataService.DailyMenuUpdated = UpdateSelectors;
         }
 
         public DateOnly MenuDate
@@ -38,6 +44,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _mealDataService.MenuDate = value;
                 OnPropertyChanged();
+                UpdateSelectors();
             }
         }
 
@@ -94,6 +101,12 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             MealOptions.Remove(SelectedMealOption);
             SelectedMealOption = null;
+        }
+
+        private void UpdateSelectors()
+        {
+            foreach (var selector in _selectors)
+                selector.UpdateOptions();
         }
 
     }

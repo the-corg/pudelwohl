@@ -10,11 +10,14 @@
         <StackPanel>
             <Label Content="{Binding MealName}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DogBrown}"/>
             <Label Content="Option 1:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption1, Mode=TwoWay}" DisplayMemberPath="NameWithId"/>
+            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption1, Mode=TwoWay}" 
+                      IsSynchronizedWithCurrentItem="False"/>
             <Label Content="Option 2:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption2, Mode=TwoWay}" DisplayMemberPath="NameWithId"/>
+            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption2, Mode=TwoWay}" 
+                      IsSynchronizedWithCurrentItem="False"/>
             <Label Content="Option 3:" Margin="16 0 16 0"/>
-            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption3, Mode=TwoWay}" DisplayMemberPath="NameWithId"/>
+            <ComboBox Margin="16 0 16 0" ItemsSource="{Binding MealOptions}" SelectedItem="{Binding SelectedOption3, Mode=TwoWay}" 
+                      IsSynchronizedWithCurrentItem="False"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

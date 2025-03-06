@@ -20,6 +20,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         IMessageService MessageService { get; }
         DateOnly MenuDate { get; set; }
         DailyMenu? DailyMenuForSelectedDate { get; }
+        Action? DailyMenuUpdated { get; set; }
         Task LoadAsync();
     }
     public class MealDataService : BaseDataService, IMealDataService
@@ -28,7 +29,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private readonly IDailyMenuDataProvider _dailyMenuDataProvider;
         private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
-        private DateOnly _menuDate;
+        private DateOnly _menuDate = DateOnly.FromDateTime(DateTime.Now);
         private DailyMenu? _dailyMenuForSelectedDate;
 
         public MealDataService(IMealOptionDataProvider mealOptionDataProvider, IDailyMenuDataProvider dailyMenuDataProvider,
@@ -89,6 +90,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public DailyMenu? DailyMenuForSelectedDate => _dailyMenuForSelectedDate;
 
+        public Action? DailyMenuUpdated { get; set; }
+
         public async Task LoadAsync()
         {
             var mealOptions = await _mealOptionDataProvider.GetAllAsync();
@@ -100,8 +103,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 foreach (var dailyMenu in dailyMenuList)
                     DailyMenus.Add(dailyMenu.Date, dailyMenu);
             }
-            // Setting this only after loading all daily menus - initializes the daily menu for the selected date
+            // Calling local setter after loading all daily menus - initializes the daily menu for the selected date
             MenuDate = DateOnly.FromDateTime(DateTime.Now);
+            MealOptions.CollectionChanged += (s, e) => DailyMenuUpdated?.Invoke();
+            DailyMenuUpdated?.Invoke();
 
             var guestMenuList = await _guestMenuDataProvider.GetAllAsync();
             if (GuestMenus.Count == 0 && guestMenuList is not null)
