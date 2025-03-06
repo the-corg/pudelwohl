@@ -18,6 +18,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="31"/>
                 <RowDefinition Height="1"/>
+                <RowDefinition Height="31"/>
+                <RowDefinition Height="1"/>
                 <RowDefinition/>
                 <RowDefinition Height="1"/>
                 <RowDefinition/>
@@ -28,16 +30,22 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <DatePicker Grid.ColumnSpan="3" SelectedDate="{x:Static sys:DateTime.Today}" HorizontalAlignment="Center" Width="160"/>
+            <DatePicker Grid.Row="2" Grid.ColumnSpan="3" SelectedDate="{x:Static sys:DateTime.Today}" HorizontalAlignment="Center" Width="160"/>
 
+            <Label Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0 -1 0 0"
+                   Content="Create the daily menu by assigning options for each meal. You can then select meals from these options on the Guests tab"/>
+
+            <!-- Separators -->
             <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Fill="{StaticResource DogBrown}"/>
             <Rectangle Grid.Row="3" Grid.ColumnSpan="3" Fill="{StaticResource DogBrown}"/>
-            <Rectangle Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Fill="{StaticResource DogBrown}"/>
-
-            <controls:MealSelectionControl Grid.Row="2" Grid.Column="0" Meal="Breakfast" />
-            <controls:MealSelectionControl Grid.Row="2" Grid.Column="2" Meal="Lunch" />
-            <controls:MealSelectionControl Grid.Row="4" Grid.Column="0" Meal="Snack" />
-            <controls:MealSelectionControl Grid.Row="4" Grid.Column="2" Meal="Dinner" />
+            <Rectangle Grid.Row="4" Grid.Column="1" Grid.RowSpan="3" Fill="{StaticResource DogBrown}"/>
+            <Rectangle Grid.Row="5" Grid.ColumnSpan="3" Fill="{StaticResource DogBrown}"/>
+            
+            <!-- Daily Menu selection -->
+            <controls:MealSelectionControl Grid.Row="4" Grid.Column="0" Meal="Breakfast" />
+            <controls:MealSelectionControl Grid.Row="4" Grid.Column="2" Meal="Lunch" />
+            <controls:MealSelectionControl Grid.Row="6" Grid.Column="0" Meal="Snack" />
+            <controls:MealSelectionControl Grid.Row="6" Grid.Column="2" Meal="Dinner" />
 
         </Grid>
 
