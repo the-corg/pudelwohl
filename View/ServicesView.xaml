@@ -114,8 +114,16 @@
                         <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedService.EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource endTimes}}"/>
 
                         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
-                            <Label Content="Selected time slot booked for:" />
-                            <Label Content="{Binding GuestForSelectedTimeSlot, Mode=OneWay}"/>
+                            <Label Content="Selected time slot is booked today for:" Height="32"/>
+                            <Label Height="32">
+                                <Label.Content>
+                                    <MultiBinding Converter="{StaticResource GuestIdConverter}" ConverterParameter="Name" >
+                                        <Binding Path="GuestForSelectedTimeSlot"/>
+                                        <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="DataContext.GuestDataService"/>
+                                    </MultiBinding>
+                                </Label.Content>
+                            </Label>
+
                         </StackPanel>
 
                     </Grid>

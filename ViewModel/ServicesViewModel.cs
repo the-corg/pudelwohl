@@ -16,7 +16,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
 
-        public ServicesViewModel(IServiceDataService serviceDataService, 
+        public ServicesViewModel(IServiceDataService serviceDataService,
             IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
         {
             _serviceDataService = serviceDataService;
@@ -30,7 +30,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             ServiceBookingsCollectionView = serviceDataService.ServiceBookingsForService;
             // Filter service bookings based on the selected service
-            ServiceBookingsCollectionView.Filter = 
+            ServiceBookingsCollectionView.Filter =
                 serviceBooking => (SelectedService is not null) && (((ServiceBooking)serviceBooking).ServiceId == SelectedService.Id);
             // And sort it by date, then by start time
             ServiceBookingsCollectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
@@ -42,6 +42,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     new CollectionContainer { Collection = ServiceBookingsCollectionView },
                     new ServiceBooking { ServiceId = -1 } // Fake item for the Add button
             };
+
+            serviceDataService.ServiceBookings.CollectionChanged += (s, e) => OnPropertyChanged(nameof(GuestForSelectedTimeSlot));
         }
 
         public ObservableCollection<ServiceViewModel> Services { get; }
@@ -84,13 +86,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
         public bool IsTimeSlotSelected => SelectedTimeSlot is not null;
 
-        public string? GuestForSelectedTimeSlot
+        public int? GuestForSelectedTimeSlot
         {
             get
             {
                 if (SelectedService is null || SelectedTimeSlot is null)
                     return null;
-                return "TEST!!";
+
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                var serviceBooking = _serviceDataService.ServiceBookings.FirstOrDefault(
+                    x => x.Date == today && x.ServiceId == SelectedService.Id && x.StartTime == SelectedTimeSlot.StartTime);
+
+                return serviceBooking?.GuestId;
             }
         }
 

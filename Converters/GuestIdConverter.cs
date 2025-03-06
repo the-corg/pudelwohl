@@ -9,6 +9,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values[0] is null) return "nobody";
             // This check is needed to run the app in Debug mode
             if (values[0] == DependencyProperty.UnsetValue) return "Error: UnsetValue was sent to GuestIdNameConverter";
             var id = (int)(values[0]);
