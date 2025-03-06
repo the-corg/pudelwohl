@@ -27,10 +27,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        public string? DisplayName => this.ToString();
+        public string? DisplayName
+        {
+            get
+            {
+                string result = "[";
+                result += IsBreakfast ? "Ｂ" : "－";
+                result += IsLunch ? "Ｌ" : "－";
+                result += IsSnack ? "Ｓ" : "－";
+                result += IsDinner ? "Ｄ" : "－";
+                result += "] " + _model.Name;
+                return result;
+            }
+        }
+
+        public string? NameWithId => ToString();
 
         public bool IsBreakfast
-        { 
+        {
             get => _model.IsBreakfast;
             set
             {
@@ -84,13 +98,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public override string ToString()
         {
-            string result = "[";
-            result += IsBreakfast ? "Ｂ" : "－";
-            result += IsLunch ? "Ｌ" : "－";
-            result += IsSnack ? "Ｓ" : "－";
-            result += IsDinner ? "Ｄ" : "－";
-            result += "] " + _model.Name;
-            return result;
+            return _model.Name + " (#" + _model.Id + ")";
         }
 
     }

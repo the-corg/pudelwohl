@@ -11,10 +11,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
     {
         ObservableCollection<MealOptionViewModel> MealOptions { get; }
         ListCollectionView SortedMealOptions { get; }
+        ListCollectionView MealOptionsForBreakfast { get; }
+        ListCollectionView MealOptionsForLunch { get; }
+        ListCollectionView MealOptionsForSnack { get; }
+        ListCollectionView MealOptionsForDinner { get; }
         Dictionary<DateOnly, DailyMenu> DailyMenus { get; }
         Dictionary<DateOnly, Dictionary<int, GuestMenu>> GuestMenus { get; }
         IMessageService MessageService { get; }
         DateOnly MenuDate { get; set; }
+        DailyMenu? DailyMenuForSelectedDate { get; }
         Task LoadAsync();
     }
     public class MealDataService : BaseDataService, IMealDataService
@@ -23,6 +28,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private readonly IDailyMenuDataProvider _dailyMenuDataProvider;
         private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
+        private DateOnly _menuDate;
+        private DailyMenu? _dailyMenuForSelectedDate;
+
         public MealDataService(IMealOptionDataProvider mealOptionDataProvider, IDailyMenuDataProvider dailyMenuDataProvider,
             IGuestMenuDataProvider guestMenuDataProvider, IMessageService messageService)
         {
@@ -30,19 +38,56 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             _dailyMenuDataProvider = dailyMenuDataProvider;
             _guestMenuDataProvider = guestMenuDataProvider;
             MessageService = messageService;
+
             SortedMealOptions = new ListCollectionView(MealOptions);
             SortedMealOptions.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            MealOptionsForBreakfast = new ListCollectionView(MealOptions);
+            MealOptionsForBreakfast.Filter = option => ((MealOptionViewModel)option).IsBreakfast;
+            MealOptionsForBreakfast.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            MealOptionsForLunch = new ListCollectionView(MealOptions);
+            MealOptionsForLunch.Filter = option => ((MealOptionViewModel)option).IsLunch;
+            MealOptionsForLunch.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            MealOptionsForSnack = new ListCollectionView(MealOptions);
+            MealOptionsForSnack.Filter = option => ((MealOptionViewModel)option).IsSnack;
+            MealOptionsForSnack.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+            MealOptionsForDinner = new ListCollectionView(MealOptions);
+            MealOptionsForDinner.Filter = option => ((MealOptionViewModel)option).IsDinner;
+            MealOptionsForDinner.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         }
 
         public ObservableCollection<MealOptionViewModel> MealOptions { get; } = new();
         public ListCollectionView SortedMealOptions { get; }
+
+        public ListCollectionView MealOptionsForBreakfast { get; }
+        public ListCollectionView MealOptionsForLunch { get; }
+        public ListCollectionView MealOptionsForSnack { get; }
+        public ListCollectionView MealOptionsForDinner { get; }
+
         public Dictionary<DateOnly, DailyMenu> DailyMenus { get; } = new();
         public Dictionary<DateOnly, Dictionary<int, GuestMenu>> GuestMenus { get; } = new();
 
         public IMessageService MessageService { get; }
 
         // Used in MealOptionsViewModel for Binding with the DatePicker above the daily menu
-        public DateOnly MenuDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly MenuDate
+        {
+            get => _menuDate;
+            set
+            {
+                _menuDate = value;
+                if (!DailyMenus.TryGetValue(_menuDate, out _dailyMenuForSelectedDate))
+                {
+                    _dailyMenuForSelectedDate = new DailyMenu() 
+                    {
+                        Date = MenuDate,
+                        Menu = new int[12]
+                    };
+                    DailyMenus.Add(_menuDate, _dailyMenuForSelectedDate);
+                }
+            }
+        }
+
+        public DailyMenu? DailyMenuForSelectedDate => _dailyMenuForSelectedDate;
 
         public async Task LoadAsync()
         {
@@ -55,6 +100,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 foreach (var dailyMenu in dailyMenuList)
                     DailyMenus.Add(dailyMenu.Date, dailyMenu);
             }
+            // Setting this only after loading all daily menus - initializes the daily menu for the selected date
+            MenuDate = DateOnly.FromDateTime(DateTime.Now);
 
             var guestMenuList = await _guestMenuDataProvider.GetAllAsync();
             if (GuestMenus.Count == 0 && guestMenuList is not null)

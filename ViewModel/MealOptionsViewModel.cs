@@ -22,10 +22,23 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             EditCommand = new DelegateCommand(execute => Edit(), canExecute => CanEdit());
             RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
 
-            BreakfastViewModel = new("Breakfast", _mealDataService);
-            LunchViewModel = new("Lunch", _mealDataService);
-            SnackViewModel = new("Snack", _mealDataService);
-            DinnerViewModel = new("Dinner", _mealDataService);
+            BreakfastViewModel = new("Breakfast", _mealDataService, _mealDataService.MealOptionsForBreakfast, 0);
+            LunchViewModel = new("Lunch", _mealDataService, _mealDataService.MealOptionsForLunch, 3);
+            SnackViewModel = new("Snack", _mealDataService, _mealDataService.MealOptionsForSnack, 6);
+            DinnerViewModel = new("Dinner", _mealDataService, _mealDataService.MealOptionsForDinner, 9);
+        }
+
+        public DateOnly MenuDate
+        {
+            get => _mealDataService.MenuDate;
+            set
+            {
+                if (_mealDataService.MenuDate == value)
+                    return;
+
+                _mealDataService.MenuDate = value;
+                OnPropertyChanged();
+            }
         }
 
         public ListCollectionView MealOptionCollectionView { get; }

@@ -127,18 +127,21 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return;
             }
 
-            if (_mealOption is null)
+            if (_mealOption is not null)
             {
-                _mealOption = new MealOptionViewModel(new MealOption() { Name = MealOptionName });
-                _mealDataService.MealOptions.Add(_mealOption);
+                // To easily refresh all derived collection views
+                _mealDataService.MealOptions.Remove(_mealOption);
             }
+
+            _mealOption ??= new MealOptionViewModel(new MealOption() { Name = "" });
+
             _mealOption.Name = MealOptionName;
             _mealOption.IsBreakfast = IsBreakfast;
             _mealOption.IsLunch = IsLunch;
             _mealOption.IsSnack = IsSnack;
             _mealOption.IsDinner = IsDinner;
 
-            _mealDataService.SortedMealOptions.Refresh();
+            _mealDataService.MealOptions.Add(_mealOption);
 
             // Close the dialog
             CloseOnConfirmAction?.Invoke();

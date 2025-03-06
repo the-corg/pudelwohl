@@ -76,17 +76,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public Action? FreeRoomsUpdated { get; set; }
 
-        // Called on Bookings.CollectionChanged but also manually when a booking is edited
+        // Called on Bookings.CollectionChanged
         public void UpdateBookingData()
         {
             // Update FreeRoomsToday in the status bar
             FreeRoomsUpdated?.Invoke();
             // Update the room occupancy colors on the Rooms tab
             CollectionViewSource.GetDefaultView(Rooms).Refresh();
-            // Update Bookings on the Guests tab
-            BookingsForGuest.Refresh();
-            // Update Bookings on the Rooms tab
-            BookingsForRoom.Refresh();
         }
 
         public async Task LoadAsync()

@@ -215,18 +215,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
             // All checks done. Add or edit the booking now
-            if (_booking is null)
+            if (_booking is not null)
             {
-                _booking = new Booking();
-                _roomDataService.Bookings.Add(_booking);
+                // To easily refresh all derived collection views
+                _roomDataService.Bookings.Remove(_booking);
             }
+            _booking ??= new Booking();
+            
             _booking.GuestId = guestId;
             _booking.RoomId = roomId;
             _booking.CheckInDate = (DateOnly)_checkInDate;
             _booking.CheckOutDate = (DateOnly)_checkOutDate;
 
-            // Call manually to make the service update data in response to an Edit of a booking
-            _roomDataService.UpdateBookingData();
+            _roomDataService.Bookings.Add(_booking);
 
             // Close the dialog
             CloseOnConfirmAction?.Invoke();

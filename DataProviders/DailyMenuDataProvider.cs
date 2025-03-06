@@ -24,10 +24,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                            select new DailyMenu
                            {
                                Date = DateOnly.Parse(split[0]),
-                               Breakfast = [int.Parse(split[1]), int.Parse(split[2]), int.Parse(split[3])],
-                               Lunch = [int.Parse(split[4]), int.Parse(split[5]), int.Parse(split[6])],
-                               Snack = [int.Parse(split[7]), int.Parse(split[8]), int.Parse(split[9])],
-                               Dinner = [int.Parse(split[10]), int.Parse(split[11]), int.Parse(split[12])]
+                               Menu = split.Skip(1).Select(x => int.Parse(x)).ToArray()
                            };
                 newList.AddRange(data);
             }

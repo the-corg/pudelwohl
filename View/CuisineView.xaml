@@ -29,7 +29,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <DatePicker Grid.Row="2" Grid.ColumnSpan="3" SelectedDate="{x:Static sys:DateTime.Today}" HorizontalAlignment="Center" Width="160"/>
+            <DatePicker Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="160" 
+                        SelectedDate="{Binding MenuDate, Mode=TwoWay, Converter={StaticResource DateOnlyDateTimeConverter}}"/>
 
             <Label Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0 -1 0 0"
                    Content="Create the daily menu by assigning options for each meal. You can then select meals from these options on the Guests tab"/>
