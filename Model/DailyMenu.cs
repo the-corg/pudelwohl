@@ -3,6 +3,9 @@
     public class DailyMenu
     {
         public DateOnly Date { get; set; }
-        public int[] MealOptionId { get; set; } = new int[12];
+        public required int[] Breakfast { get; set; }
+        public required int[] Lunch { get; set; }
+        public required int[] Snack { get; set; }
+        public required int[] Dinner { get; set; }
     }
 }

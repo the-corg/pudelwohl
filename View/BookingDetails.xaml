@@ -54,7 +54,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Content="Confirm" Margin="10 0" Command="{Binding ConfirmCommand}" ToolTip="{Binding ButtonDisabledReason}"/>
-            <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="10 0" Click="btnCancel_Click" />
+            <Button Grid.Column="1" IsCancel="true" Content="Cancel" Margin="10 0" Click="btnCancel_Click" />
         </Grid>
     </Grid>
 </Window>

@@ -25,10 +25,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                            {
                                Date = DateOnly.Parse(split[0]),
                                GuestId = int.Parse(split[1]),
-                               Breakfast = split[2],
-                               Lunch = split[3],
-                               Snack = split[4],
-                               Dinner = split[5]
+                               Breakfast = (split[2].Length > 0) ? int.Parse(split[2]) : 0,
+                               Lunch = (split[3].Length > 0) ? int.Parse(split[3]) : 0,
+                               Snack = (split[4].Length > 0) ? int.Parse(split[4]) : 0,
+                               Dinner = (split[5].Length > 0) ? int.Parse(split[5]) : 0
                            };
                 newList.AddRange(data);
             }
