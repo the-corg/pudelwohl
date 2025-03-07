@@ -8,4 +8,5 @@
     <converters:MenuOptionConverter x:Key="MenuOptionConverter" />
     <converters:DateOnlyDateTimeConverter x:Key="DateOnlyDateTimeConverter" />
     <converters:IsDateInThePastConverter x:Key="IsDateInThePastConverter" />
+    <converters:TextClippingConverter x:Key="TextClippingConverter" />
 </ResourceDictionary>

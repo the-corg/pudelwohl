@@ -121,7 +121,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public DelegateCommand ConfirmCommand { get; }
 
-        public string ButtonDisabledReason
+        public string? ButtonDisabledReason
         {
             get
             {
@@ -142,10 +142,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (RoomName is null)
                     result += "Please select a room.\n\n";
 
-                if (result.Length > 0)
-                    result = result[..^2];
-                
-                return result;
+                return result.Length > 0 ? result[..^2] : null;
             }
         }
 
