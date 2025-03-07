@@ -189,11 +189,25 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
-                        <ToggleButton Grid.Column="2" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                        <ToggleButton Grid.Column="2" Focusable="false" ToolTipService.InitialShowDelay="300" 
+                                      IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.ToolTip>
                                 <ToolTip Placement="Relative" Height="28" Padding="5 0 5 0" SnapsToDevicePixels="True" FontSize="16"
                                          DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                          Content="{Binding SelectedItem}">
+                                    <ToolTip.Style>
+                                        <Style TargetType="ToolTip">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToolTip">
+                                                        <Border Background="{StaticResource DogLight}" Visibility="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ToolTip}, Converter={StaticResource TextClippingConverter}}" >
+                                                            <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource DogDark}" />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ToolTip.Style>
                                 </ToolTip>
                             </ToggleButton.ToolTip>
                             <ToggleButton.Template>
@@ -222,19 +236,15 @@
                                 </ControlTemplate>
                             </ToggleButton.Template>
                         </ToggleButton>
-                        <!--<ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectedItem }" ContentTemplate="{TemplateBinding ItemTemplate }" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="6 3 3 3"  />
-                        <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}"/>-->
-
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="7*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Name="ContentSite" Content="{TemplateBinding SelectedItem}" VerticalAlignment="Center" 
-                                          HorizontalAlignment="Stretch" ClipToBounds="True" ContentTemplate="{TemplateBinding ItemTemplate }" 
+                                          HorizontalAlignment="Stretch" ContentTemplate="{TemplateBinding ItemTemplate}" 
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="6 3 3 3" IsHitTestVisible="False"/>
                         </Grid>
-
                         <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                             <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder" Background="{StaticResource DogLight}" />
