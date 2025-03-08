@@ -99,8 +99,26 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             if (SelectedMealOption is null)
                 return;
 
-            // TODO: Check if this was selected by a guest today or on a future date and ask the user
-            // don't ask about past meals, they are unimportant
+            // Count how many times this was selected for daily menus and guests today or in the future
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            int numberOfDailyMenus = _mealDataService.DailyMenus.Where(
+                x => x.Key >= today && x.Value.Menu.Contains(SelectedMealOption.Id)).Count();
+            int numberOfGuestMenus = _mealDataService.GuestMenus.Where(
+                x => x.Key.Item1 >= today && (x.Value.Breakfast == SelectedMealOption.Id || x.Value.Lunch == SelectedMealOption.Id || 
+                x.Value.Snack == SelectedMealOption.Id || x.Value.Dinner == SelectedMealOption.Id)).Count();
+
+            if (numberOfDailyMenus > 0 || numberOfGuestMenus > 0)
+            {
+                string message = $"This meal option is selected for {numberOfDailyMenus} active daily menu" + 
+                    (numberOfDailyMenus != 1 ? "s" : "") + 
+                    $" and {numberOfGuestMenus} active guest menu" + (numberOfGuestMenus != 1 ? "s" : "") +
+                    $".\n\nAre you sure you want to delete the meal option?";
+
+                if (!_messageService.ShowConfirmation(message))
+                    return;
+
+                _mealDataService.RemoveMealOptionFromMenus(SelectedMealOption.Id, true, true, true, true);
+            }
 
             MealOptions.Remove(SelectedMealOption);
             SelectedMealOption = null;

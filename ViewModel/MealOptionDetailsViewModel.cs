@@ -129,6 +129,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             {
                 // To easily refresh all derived collection views
                 _mealDataService.MealOptions.Remove(_mealOption);
+                // If it was allowed for some of the meals and not allowed anymore, remove it from menus for these meals
+                _mealDataService.RemoveMealOptionFromMenus(_mealOption.Id, _mealOption.IsBreakfast && !IsBreakfast,
+                    _mealOption.IsLunch && !IsLunch, _mealOption.IsSnack && !IsSnack, _mealOption.IsDinner && !IsDinner);
             }
 
             _mealOption ??= new MealOptionViewModel(new MealOption() { Name = "" });

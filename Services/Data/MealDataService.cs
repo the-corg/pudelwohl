@@ -22,6 +22,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         Action? DailyMenuUpdated { get; set; }
         Action? GuestMenuUpdated { get; set; }
         MealOptionViewModel? GetMealOptionById(int id);
+        void RemoveMealOptionFromMenus(int mealOptionId, bool deleteBreakfast, bool deleteLunch, bool deleteSnack, bool deleteDinner);
         void UpdateMenus();
         Task LoadAsync();
     }
@@ -77,7 +78,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 _menuDate = value;
                 if (!DailyMenus.TryGetValue(_menuDate, out _dailyMenuForSelectedDate))
                 {
-                    _dailyMenuForSelectedDate = new DailyMenu() 
+                    _dailyMenuForSelectedDate = new DailyMenu()
                     {
                         Date = MenuDate,
                         Menu = new int[12]
@@ -95,6 +96,32 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public MealOptionViewModel? GetMealOptionById(int id)
         {
             return MealOptions.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void RemoveMealOptionFromMenus(int mealOptionId, bool deleteBreakfast, bool deleteLunch, bool deleteSnack, bool deleteDinner)
+        {
+            foreach (var menu in DailyMenus.Values)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if ((menu.Menu[i] == mealOptionId) && 
+                        ((deleteBreakfast && i < 3) || (deleteLunch && i >= 3 && i < 6) ||
+                        (deleteSnack && i >= 6 && i < 9) || (deleteDinner && i >= 9))) 
+                        menu.Menu[i] = 0;
+                }
+            }
+
+            foreach (var menu in GuestMenus.Values)
+            {
+                if (deleteBreakfast && menu.Breakfast == mealOptionId)
+                    menu.Breakfast = 0;
+                if (deleteLunch && menu.Lunch == mealOptionId)
+                    menu.Lunch = 0;
+                if (deleteSnack && menu.Snack == mealOptionId)
+                    menu.Snack = 0;
+                if (deleteDinner && menu.Dinner == mealOptionId)
+                    menu.Dinner = 0;
+            }
         }
 
         public void UpdateMenus()
