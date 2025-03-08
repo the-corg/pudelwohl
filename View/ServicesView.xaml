@@ -113,7 +113,8 @@
                         <Label Grid.Row="4" Content="End Time: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
                         <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedService.EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource endTimes}}"/>
 
-                        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" 
+                                    Visibility="{Binding IsTimeSlotSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Label Content="Selected time slot is booked today for:" Height="32"/>
                             <Label Height="32">
                                 <Label.Content>
