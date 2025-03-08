@@ -192,22 +192,19 @@
                         <ToggleButton Grid.Column="2" Focusable="false" ToolTipService.InitialShowDelay="300" 
                                       IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.ToolTip>
-                                <ToolTip Placement="Relative" Height="28" Padding="5 0 5 0" SnapsToDevicePixels="True" FontSize="16"
+                                <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself) led to either tooltip not showing due to ToggleButton being not interactable  -->
+                                <ToolTip Placement="Relative" Height="{TemplateBinding ActualHeight}" SnapsToDevicePixels="True" FontSize="16"
                                          DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                         Content="{Binding SelectedItem}">
-                                    <ToolTip.Style>
-                                        <Style TargetType="ToolTip">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="ToolTip">
-                                                        <Border Background="{StaticResource DogLight}" Visibility="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ToolTip}, Converter={StaticResource TextClippingConverter}}" >
-                                                            <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource DogDark}" />
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </ToolTip.Style>
+                                         Content="{Binding Text}"> <!-- Binding to SelectedItem here led to ToolTip's Width=0 for non-string objects -->
+                                    <ToolTip.Template>
+                                        <ControlTemplate TargetType="ToolTip">
+                                            <Border Background="{StaticResource DogLight}" Padding="5 3 5 0" CornerRadius="2" BorderBrush="{StaticResource DogBrown}" BorderThickness="1"
+                                                    Visibility="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ToolTip}, Converter={StaticResource TextClippingConverter}}" >
+                                                <!-- Setting this Visibility Binding on the tooltip itself led to the converter not being called (or at least not called each time on mouse hover) -->
+                                                <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource DogDark}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ToolTip.Template>
                                 </ToolTip>
                             </ToggleButton.ToolTip>
                             <ToggleButton.Template>
@@ -217,9 +214,9 @@
                                             <ColumnDefinition Width="7*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="{StaticResource DogBeigeDark}" BorderBrush="{StaticResource DogBrown}" BorderThickness="1" />
-                                        <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource DogLight}"  BorderBrush="{StaticResource DogMedium}" BorderThickness="0" />
-                                        <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                        <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" Background="{StaticResource DogBeigeDark}" BorderBrush="{StaticResource DogBrown}" BorderThickness="1" SnapsToDevicePixels="True"/>
+                                        <Border Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" Background="{StaticResource DogLight}"  BorderBrush="{StaticResource DogMedium}" BorderThickness="0" SnapsToDevicePixels="True"/>
+                                        <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" SnapsToDevicePixels="True"/>
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="ToggleButton.IsMouseOver" Value="true">
@@ -242,7 +239,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Name="ContentSite" Content="{TemplateBinding SelectedItem}" VerticalAlignment="Center" 
-                                          HorizontalAlignment="Stretch" ContentTemplate="{TemplateBinding ItemTemplate}" 
+                                          HorizontalAlignment="Stretch" ContentTemplate="{TemplateBinding ItemTemplate}" SnapsToDevicePixels="True"
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="6 3 3 3" IsHitTestVisible="False"/>
                         </Grid>
                         <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">

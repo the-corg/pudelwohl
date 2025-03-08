@@ -13,7 +13,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is null)
-                return Visibility.Visible;
+                return Visibility.Collapsed;
 
             if (value is ToggleButton)
             {
@@ -22,10 +22,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
                 var textblock = ExtensionMethods.GetVisualChildOfType<TextBlock>(contentPresenter);
                 if (textblock is not null)
                 {
-                    if (textblock.ActualWidth > contentPresenter!.ActualWidth + 2)
-                    {
-                        return Visibility.Visible;
-                    }
+                    // if the text in the TextBlock is longer than the width of the container where it is being shown,
+                    // then display the tooltip with the full text. Hide the tooltip otherwise.
+                    return (textblock.ActualWidth) > (contentPresenter!.ActualWidth + 2) ? 
+                        Visibility.Visible : Visibility.Collapsed;
                 }   
             }
             return Visibility.Collapsed;
