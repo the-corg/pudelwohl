@@ -42,5 +42,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             var guests = await _guestDataProvider.GetAllAsync();
             LoadCollection(Guests, guests, guest => new GuestViewModel(guest, this));
         }
+
+        public async Task SaveDataAsync()
+        {
+            await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+        }
     }
 }

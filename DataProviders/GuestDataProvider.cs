@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.Json;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders
@@ -6,10 +7,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
     public interface IGuestDataProvider
     {
         Task<IEnumerable<Guest>?> GetAllAsync();
+
+        Task SaveAsync(IEnumerable<Guest> guests);
     }
 
     public class GuestDataProvider : IGuestDataProvider
     {
+        private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "guests.dat");
+
         public async Task<IEnumerable<Guest>?> GetAllAsync()
         {
             var newList = new List<Guest>();
@@ -38,6 +43,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
             }
             Guest.CalculateNextId(newList);
             return newList;
+        }
+
+        public async Task SaveAsync(IEnumerable<Guest> guests)
+        {
+            // TODO: Remove JsonSerializerOptions after debugging (no need to write indented)
+            string json = JsonSerializer.Serialize(guests, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(_filePath, json);
         }
     }
 }
