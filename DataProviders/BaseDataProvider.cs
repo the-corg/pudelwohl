@@ -6,6 +6,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
     public abstract class BaseDataProvider<T>
         where T : class
     {
+        private static readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
         protected static readonly string _appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Pudelwohl");
         protected static readonly string _filePath = Path.Combine(_appDataFolder, typeof(T).Name + "s.dat");
 
@@ -24,8 +25,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
 
         public async Task SaveAsync(IEnumerable<T> collection)
         {
-            // TODO: Remove JsonSerializerOptions after debugging (no need to write indented)
-            string json = JsonSerializer.Serialize(collection, new JsonSerializerOptions { WriteIndented = true });
+            string json = JsonSerializer.Serialize(collection, jsonSerializerOptions);
             await File.WriteAllTextAsync(_filePath, json);
         }
     }
