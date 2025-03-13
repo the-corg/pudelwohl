@@ -21,7 +21,7 @@
 
         // Calculate the next ID based on the maximum of all IDs.
         // Works only once, should be called after initial data loading
-        public static void CalculateNextId(List<Guest> guests)
+        public static void CalculateNextId(IEnumerable<Guest> guests)
         {
             if (nextIdAlreadyCalculated) 
                 return;

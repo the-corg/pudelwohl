@@ -1,21 +1,17 @@
 ﻿using System.IO;
-using System.Text.Json;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders
 {
     public interface IGuestDataProvider
     {
-        Task<IEnumerable<Guest>?> GetAllAsync();
-
+        Task<IEnumerable<Guest>?> LoadAsync();
         Task SaveAsync(IEnumerable<Guest> guests);
     }
 
-    public class GuestDataProvider : IGuestDataProvider
+    public class GuestDataProvider : BaseDataProvider<Guest>, IGuestDataProvider
     {
-        private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "guests.dat");
-
-        public async Task<IEnumerable<Guest>?> GetAllAsync()
+        protected override async Task<IEnumerable<Guest>?> LoadInitialDataFromCsvAsync()
         {
             var newList = new List<Guest>();
 
@@ -31,25 +27,20 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                                Id = int.Parse(split[0]),
                                Name = split[1],
                                Breed = split[2],
-                               Gender = (Gender)Enum.Parse(typeof(Gender), split[3]),
+                               Gender = Enum.Parse<Gender>(split[3]),
                                CoatColor = split[4],
                                DateOfBirth = DateOnly.Parse(split[5]),
                                FavoriteToy = split[6],
-                               EarFloppiness = (EarFloppiness)Enum.Parse(typeof(EarFloppiness), split[7]),
+                               EarFloppiness = Enum.Parse<EarFloppiness>(split[7]),
                                SpecialRequests = split[8],
                                IsArchived = bool.Parse(split[9])
                            };
                 newList.AddRange(data);
             }
-            Guest.CalculateNextId(newList);
+            // Save everything to AppData\Local\Pudelwohl
+            Directory.CreateDirectory(_appDataFolder);
+            await SaveAsync(newList);
             return newList;
-        }
-
-        public async Task SaveAsync(IEnumerable<Guest> guests)
-        {
-            // TODO: Remove JsonSerializerOptions after debugging (no need to write indented)
-            string json = JsonSerializer.Serialize(guests, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync(_filePath, json);
         }
     }
 }

@@ -49,9 +49,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // Add() and others are parameterless but ICommand wants methods with one parameter
             // One approach: add a dummy parameter. Leads to awkward manual calls: Archive(null)
             // Better approach: pass a lambda that takes a parameter and simply calls the method.
-            AddCommand = new DelegateCommand(execute => Add());
-            RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
-            ArchiveCommand = new DelegateCommand(execute => Archive(), canExecute => CanArchive());
+            AddCommand = new DelegateCommand(async execute => await Add());
+            RemoveCommand = new DelegateCommand(async execute => await Remove(), canExecute => CanRemove());
+            ArchiveCommand = new DelegateCommand(async execute => await Archive(), canExecute => CanArchive());
             ViewArchiveCommand = new DelegateCommand(execute => ViewArchive());
             AddBookingCommand = new DelegateCommand(execute => AddBooking());
             EditBookingCommand = new DelegateCommand(execute => EditBooking(), canExecute => CanEditBooking());
@@ -295,17 +295,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand AddServiceBookingCommand { get; }
         public DelegateCommand RemoveServiceBookingCommand { get; }
 
-        private void Add()
+        private async Task Add()
         {
             var guest = new Guest { Name = "NEW GUEST" };
             var viewModel = new GuestViewModel(guest, _guestDataService);
             Guests.Add(viewModel);
             SelectedGuest = viewModel;
             IsArchiveHidden = true;
+            await _guestDataService.SaveDataAsync();
         }
 
         private bool CanRemove() => SelectedGuest is not null;
-        private void Remove()
+        private async Task Remove()
         {
             if (SelectedGuest is null)
                 return;
@@ -353,16 +354,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             Guests.Remove(SelectedGuest);
             SelectedGuest = null;
+            await _guestDataService.SaveDataAsync();
         }
 
         private bool CanArchive() => SelectedGuest is not null;
-        private void Archive()
+        private async Task Archive()
         {
             if (SelectedGuest is null)
                 return;
 
             SelectedGuest.IsArchived = !SelectedGuest.IsArchived;
             SelectedGuest = null;
+            await _guestDataService.SaveDataAsync();
         }
 
         private void ViewArchive()

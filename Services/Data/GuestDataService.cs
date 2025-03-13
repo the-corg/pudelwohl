@@ -1,4 +1,5 @@
 ﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
@@ -11,7 +12,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         bool IsArchiveHidden { get; set; }
         void UpdateOnGuestDataChange();
         Task LoadAsync();
-        
+        Task SaveDataAsync();
     }
  
     public class GuestDataService : BaseDataService, IGuestDataService
@@ -39,7 +40,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public async Task LoadAsync()
         {
-            var guests = await _guestDataProvider.GetAllAsync();
+            var guests = await _guestDataProvider.LoadAsync();
+            if (guests is null)
+                return;
+            Guest.CalculateNextId(guests);
             LoadCollection(Guests, guests, guest => new GuestViewModel(guest, this));
         }
 
