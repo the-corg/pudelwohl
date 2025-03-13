@@ -79,7 +79,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         public ListCollectionView BookingsCollectionView { get; }
-        public ListCollectionView ServiceBookingsCollectionView {  get; }
+        public ListCollectionView ServiceBookingsCollectionView { get; }
         public ObservableCollection<GuestViewModel> Guests { get; }
         public ObservableCollection<Booking> Bookings { get; }
         public ObservableCollection<ServiceBooking> ServiceBookings { get; }

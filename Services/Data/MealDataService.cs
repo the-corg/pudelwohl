@@ -25,6 +25,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         void RemoveMealOptionFromMenus(int mealOptionId, bool deleteBreakfast, bool deleteLunch, bool deleteSnack, bool deleteDinner);
         void UpdateMenus();
         Task LoadAsync();
+        Task SaveDataAsync();
+        void DebouncedSave();
     }
     public class MealDataService : BaseDataService, IMealDataService
     {
@@ -34,6 +36,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         private DateOnly _menuDate = DateOnly.FromDateTime(DateTime.Now);
         private DailyMenu? _dailyMenuForSelectedDate;
+
+        private readonly SemaphoreSlim _saveLock = new(1, 1);
 
         public MealDataService(IMealOptionDataProvider mealOptionDataProvider, IDailyMenuDataProvider dailyMenuDataProvider,
             IGuestMenuDataProvider guestMenuDataProvider, IMessageService messageService)
@@ -68,6 +72,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public Dictionary<DateOnly, DailyMenu> DailyMenus { get; } = new();
         public Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; } = new();
+
+        protected override CancellationTokenSource DebounceCts { get; set; } = new();
 
         // Used in MealOptionsViewModel for Binding with the DatePicker above the daily menu
         public DateOnly MenuDate
@@ -153,6 +159,23 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             MenuDate = DateOnly.FromDateTime(DateTime.Now);
             MealOptions.CollectionChanged += (s, e) => UpdateMenus();
             UpdateMenus();
+        }
+
+        public override async Task SaveDataAsync()
+        {
+            // Prevent multiple saves from running at the same time
+            await _saveLock.WaitAsync();
+            try
+            {
+                // Cancel any pending debounced save
+                DebounceCts.Cancel();
+
+                // TODO await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+            }
+            finally
+            {
+                _saveLock.Release();
+            }
         }
 
     }

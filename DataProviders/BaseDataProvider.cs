@@ -25,6 +25,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
 
         public async Task SaveAsync(IEnumerable<T> collection)
         {
+            Directory.CreateDirectory(_appDataFolder); // Ensure that the folder exists
             string json = JsonSerializer.Serialize(collection, jsonSerializerOptions);
             await File.WriteAllTextAsync(_filePath, json);
         }

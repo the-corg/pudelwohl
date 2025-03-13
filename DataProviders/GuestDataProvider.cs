@@ -38,7 +38,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                 newList.AddRange(data);
             }
             // Save everything to AppData\Local\Pudelwohl
-            Directory.CreateDirectory(_appDataFolder);
             await SaveAsync(newList);
             return newList;
         }

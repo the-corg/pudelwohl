@@ -17,11 +17,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         Action? FreeRoomsUpdated { get; set; }
         void UpdateBookingData();
         Task LoadAsync();
+        Task SaveDataAsync();
+        void DebouncedSave();
     }
     public class RoomDataService : BaseDataService, IRoomDataService
     {
         private readonly IRoomDataProvider _roomDataProvider;
         private readonly IBookingDataProvider _bookingDataProvider;
+
+        private readonly SemaphoreSlim _saveLock = new(1, 1);
 
         public RoomDataService(IRoomDataProvider roomDataProvider, IBookingDataProvider bookingDataProvider)
         {
@@ -35,6 +39,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public ObservableCollection<Booking> Bookings { get; } = new();
         public ListCollectionView BookingsForGuest { get; }
         public ListCollectionView BookingsForRoom { get; }
+
+        protected override CancellationTokenSource DebounceCts { get; set; } = new();
 
         // Used in RoomsViewModel for Binding with the DatePicker above the rooms ListView
         public DateOnly OccupancyDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
@@ -97,6 +103,23 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             // to prevent a ton of events while populating the collection
             Bookings.CollectionChanged += (s, e) => UpdateBookingData();
             UpdateBookingData();
+        }
+
+        public override async Task SaveDataAsync()
+        {
+            // Prevent multiple saves from running at the same time
+            await _saveLock.WaitAsync();
+            try
+            {
+                // Cancel any pending debounced save
+                DebounceCts.Cancel();
+
+                // TODO await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+            }
+            finally
+            {
+                _saveLock.Release();
+            }
         }
 
     }

@@ -26,6 +26,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Name = value!;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
                 _guestDataService.UpdateOnGuestDataChange();
             }
         }
@@ -40,6 +41,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Breed = value;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
                 _guestDataService.UpdateOnGuestDataChange();
             }
         }
@@ -51,6 +53,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (value) 
                     _model.Gender = Model.Gender.Male;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
 
@@ -62,6 +65,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (value) 
                     _model.Gender = Model.Gender.Female;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
 
@@ -73,6 +77,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (value) 
                     _model.Gender = Model.Gender.Other;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
 
@@ -86,6 +91,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.CoatColor = value;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
         public DateOnly? DateOfBirth
@@ -98,6 +104,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.DateOfBirth = value;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
         public string? FavoriteToy
@@ -110,6 +117,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.FavoriteToy = value;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
         public string? EarFloppiness
@@ -127,6 +135,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 {
                     _model.EarFloppiness = Model.EarFloppiness.Unknown;
                     OnPropertyChanged();
+                    _guestDataService.DebouncedSave();
                 }
                 else
                 {
@@ -136,6 +145,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                     {
                         _model.EarFloppiness = Enum.Parse<EarFloppiness>(newValue);
                         OnPropertyChanged();
+                        _guestDataService.DebouncedSave();
                     }
                 }
             }
@@ -150,6 +160,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.SpecialRequests = value;
                 OnPropertyChanged();
+                _guestDataService.DebouncedSave();
             }
         }
 
