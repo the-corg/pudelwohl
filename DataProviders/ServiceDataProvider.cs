@@ -5,12 +5,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
 {
     public interface IServiceDataProvider
     {
-        Task<IEnumerable<Service>?> GetAllAsync();
+        Task<IEnumerable<Service>?> LoadAsync();
+        Task SaveAsync(IEnumerable<Service> services);
     }
 
-    public class ServiceDataProvider : IServiceDataProvider
+    public class ServiceDataProvider : BaseDataProvider<Service>, IServiceDataProvider
     {
-        public async Task<IEnumerable<Service>?> GetAllAsync()
+        protected override async Task<IEnumerable<Service>?> LoadInitialDataFromCsvAsync()
         {
             var newList = new List<Service>();
 
@@ -32,7 +33,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                            };
                 newList.AddRange(data);
             }
-            Service.CalculateNextId(newList);
+            // Save everything to AppData\Local\Pudelwohl
+            await SaveAsync(newList);
             return newList;
         }
     }

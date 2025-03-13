@@ -49,8 +49,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public async Task SaveDataAsync()
         {
             await Task.WhenAll(
-                _guestDataService.SaveDataAsync()
-                // TODO Add all 3 other services here
+                _guestDataService.SaveDataAsync(),
+                _roomDataService.SaveDataAsync(),
+                _serviceDataService.SaveDataAsync(),
+                _mealDataService.SaveDataAsync()
                 );
         }
     }

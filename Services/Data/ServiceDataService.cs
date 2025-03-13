@@ -44,10 +44,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public async Task LoadAsync()
         {
-            var services = await _serviceDataProvider.GetAllAsync();
+            var services = await _serviceDataProvider.LoadAsync();
+            if (services is null)
+                return;
+            Service.CalculateNextId(services);
             LoadCollection(Services, services, service => new ServiceViewModel(service, this));
 
-            var serviceBookings = await _serviceBookingDataProvider.GetAllAsync();
+            var serviceBookings = await _serviceBookingDataProvider.LoadAsync();
             LoadCollection(ServiceBookings, serviceBookings);
         }
 
@@ -60,7 +63,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 // Cancel any pending debounced save
                 DebounceCts.Cancel();
 
-                // TODO await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+                await _serviceDataProvider.SaveAsync(Services.Select(x => x.GetService()));
+                await _serviceBookingDataProvider.SaveAsync(ServiceBookings);
             }
             finally
             {

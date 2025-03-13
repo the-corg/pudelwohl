@@ -93,10 +93,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public async Task LoadAsync()
         {
-            var rooms = await _roomDataProvider.GetAllAsync();
+            var rooms = await _roomDataProvider.LoadAsync();
             LoadCollection(Rooms, rooms, room => new RoomViewModel(room, this));
 
-            var bookings = await _bookingDataProvider.GetAllAsync();
+            var bookings = await _bookingDataProvider.LoadAsync();
             LoadCollection(Bookings, bookings);
 
             // Add this handler only after the bookings have been loaded
@@ -114,7 +114,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 // Cancel any pending debounced save
                 DebounceCts.Cancel();
 
-                // TODO await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+                await _bookingDataProvider.SaveAsync(Bookings);
+                // No need to save Rooms because they never change
             }
             finally
             {

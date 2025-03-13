@@ -273,7 +273,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
         }
-
+        public Service GetService()
+        {
+            return _model;
+        }
         public override string ToString()
         {
             return _model.Name + " (#" + _model.Id + ")";

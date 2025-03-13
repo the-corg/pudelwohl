@@ -5,12 +5,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
 {
     public interface IMealOptionDataProvider
     {
-        Task<IEnumerable<MealOption>?> GetAllAsync();
+        Task<IEnumerable<MealOption>?> LoadAsync();
+        Task SaveAsync(IEnumerable<MealOption> mealOptions);
     }
 
-    public class MealOptionDataProvider : IMealOptionDataProvider
+    public class MealOptionDataProvider : BaseDataProvider<MealOption>, IMealOptionDataProvider
     {
-        public async Task<IEnumerable<MealOption>?> GetAllAsync()
+        protected override async Task<IEnumerable<MealOption>?> LoadInitialDataFromCsvAsync()
         {
             var newList = new List<MealOption>();
 
@@ -32,7 +33,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
                            };
                 newList.AddRange(data);
             }
-            MealOption.CalculateNextId(newList);
+            // Save everything to AppData\Local\Pudelwohl
+            await SaveAsync(newList);
             return newList;
         }
     }

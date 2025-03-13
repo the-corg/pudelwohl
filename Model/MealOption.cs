@@ -16,7 +16,7 @@
         private static bool nextIdAlreadyCalculated = false;
         // Calculate the next ID based on the maximum of all IDs.
         // Works only once, should be called after initial data loading
-        public static void CalculateNextId(List<MealOption> mealOptions)
+        public static void CalculateNextId(IEnumerable<MealOption> mealOptions)
         {
             if (nextIdAlreadyCalculated)
                 return;

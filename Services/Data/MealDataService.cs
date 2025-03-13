@@ -138,17 +138,20 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public async Task LoadAsync()
         {
-            var mealOptions = await _mealOptionDataProvider.GetAllAsync();
+            var mealOptions = await _mealOptionDataProvider.LoadAsync();
+            if (mealOptions is null)
+                return; 
+            MealOption.CalculateNextId(mealOptions);
             LoadCollection(MealOptions, mealOptions, mealOption => new MealOptionViewModel(mealOption));
 
-            var dailyMenuList = await _dailyMenuDataProvider.GetAllAsync();
+            var dailyMenuList = await _dailyMenuDataProvider.LoadAsync();
             if (DailyMenus.Count == 0 && dailyMenuList is not null)
             {
                 foreach (var dailyMenu in dailyMenuList)
                     DailyMenus.Add(dailyMenu.Date, dailyMenu);
             }
 
-            var guestMenuList = await _guestMenuDataProvider.GetAllAsync();
+            var guestMenuList = await _guestMenuDataProvider.LoadAsync();
             if (GuestMenus.Count == 0 && guestMenuList is not null)
             {
                 foreach (var guestMenu in guestMenuList)
@@ -170,7 +173,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
                 // Cancel any pending debounced save
                 DebounceCts.Cancel();
 
-                // TODO await _guestDataProvider.SaveAsync(Guests.Select(x => x.GetGuest()));
+                await _mealOptionDataProvider.SaveAsync(MealOptions.Select(x => x.GetMealOption()));
+                await _dailyMenuDataProvider.SaveAsync(DailyMenus.Values);
+                await _guestMenuDataProvider.SaveAsync(GuestMenus.Values);
             }
             finally
             {
