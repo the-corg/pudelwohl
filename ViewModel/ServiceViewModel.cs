@@ -33,6 +33,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Name = value!;
                 OnPropertyChanged();
+                _serviceDataService.DebouncedSave();
                 _serviceDataService.ServiceBookingsForGuest.Refresh();
             }
         }
@@ -47,6 +48,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.Description = value;
                 OnPropertyChanged();
+                _serviceDataService.DebouncedSave();
             }
         }
         public string? Duration
@@ -169,6 +171,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.DurationMinutes = intValue;
                 OnPropertyChanged();
+                _serviceDataService.DebouncedSave();
                 CalculateTimeSlots();
             }
         }
@@ -201,6 +204,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.StartTime = value;
                 OnPropertyChanged();
+                _serviceDataService.DebouncedSave();
                 CalculateTimeSlots();
             }
         }
@@ -229,6 +233,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
                 _model.EndTime = value;
                 OnPropertyChanged();
+                _serviceDataService.DebouncedSave();
                 CalculateTimeSlots();
             }
         }

@@ -49,7 +49,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
             InitializeNames();
-            ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
+            ConfirmCommand = new DelegateCommand(async execute => await Confirm(), canExecute => CanConfirm());
         }
 
         public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
@@ -150,7 +150,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         // or the check-out date is earlier than today, or the check-out date is earlier than the check-in date
         private bool CanConfirm() => !(CheckOutDate is null || CheckInDate is null || GuestName is null || RoomName is null ||
             CheckOutDate < DateOnly.FromDateTime(DateTime.Now) || CheckInDate > CheckOutDate);
-        private void Confirm()
+        private async Task Confirm()
         {
             // Race condition check - UI is not guaranteed to check CanConfirm immediately before Confirm
             if (!CanConfirm())
@@ -228,6 +228,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             // Close the dialog
             CloseOnConfirmAction?.Invoke();
+
+            await _roomDataService.SaveDataAsync();
         }
 
         private void InitializeNames()

@@ -26,9 +26,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private string? _selectedSnackOption;
         private string? _selectedDinnerOption;
         private readonly IGuestDataService _guestDataService;
+        private readonly IRoomDataService _roomDataService;
+        private readonly IServiceDataService _serviceDataService;
+        private readonly IMealDataService _mealDataService;
         private readonly IBookingDialogService _bookingDialogService;
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
-        private readonly IMealDataService _mealDataService;
         private readonly IMessageService _messageService;
 
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
@@ -37,9 +39,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             IMessageService messageService)
         {
             _guestDataService = guestDataService;
+            _roomDataService = roomDataService;
+            _serviceDataService = serviceDataService;
+            _mealDataService = mealDataService;
             _bookingDialogService = bookingDialogService;
             _serviceBookingDialogService = serviceBookingDialogService;
-            _mealDataService = mealDataService;
             _messageService = messageService;
             Guests = guestDataService.Guests;
             Bookings = roomDataService.Bookings;
@@ -55,9 +59,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             ViewArchiveCommand = new DelegateCommand(execute => ViewArchive());
             AddBookingCommand = new DelegateCommand(execute => AddBooking());
             EditBookingCommand = new DelegateCommand(execute => EditBooking(), canExecute => CanEditBooking());
-            RemoveBookingCommand = new DelegateCommand(execute => RemoveBooking(), canExecute => CanRemoveBooking());
+            RemoveBookingCommand = new DelegateCommand(async execute => await RemoveBooking(), canExecute => CanRemoveBooking());
             AddServiceBookingCommand = new DelegateCommand(execute => AddServiceBooking());
-            RemoveServiceBookingCommand = new DelegateCommand(execute => RemoveServiceBooking(), canExecute => CanRemoveServiceBooking());
+            RemoveServiceBookingCommand = new DelegateCommand(async execute => await RemoveServiceBooking(), canExecute => CanRemoveServiceBooking());
             _selectedMenuDate = DateOnly.FromDateTime(DateTime.Now);
             
             BookingsCollectionView = roomDataService.BookingsForGuest;
@@ -170,6 +174,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_currentGuestMenu is null)
                     return;
                 _currentGuestMenu.Breakfast = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+                _mealDataService.DebouncedSave();
             }
         }
 
@@ -187,6 +192,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_currentGuestMenu is null)
                     return;
                 _currentGuestMenu.Lunch = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+                _mealDataService.DebouncedSave();
             }
         }
 
@@ -204,6 +210,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_currentGuestMenu is null)
                     return;
                 _currentGuestMenu.Snack = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+                _mealDataService.DebouncedSave();
             }
         }
 
@@ -221,6 +228,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 if (_currentGuestMenu is null)
                     return;
                 _currentGuestMenu.Dinner = value is null ? 0 : int.Parse(value.Split("#").Last()[..^1]);
+                _mealDataService.DebouncedSave();
             }
         }
 
@@ -355,6 +363,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             Guests.Remove(SelectedGuest);
             SelectedGuest = null;
             await _guestDataService.SaveDataAsync();
+            await _roomDataService.SaveDataAsync();
+            await _serviceDataService.SaveDataAsync();
+            await _mealDataService.SaveDataAsync();
         }
 
         private bool CanArchive() => SelectedGuest is not null;
@@ -384,13 +395,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         private bool CanRemoveBooking() => SelectedGuest is not null && SelectedBooking is not null;
-        private void RemoveBooking()
+        private async Task RemoveBooking()
         {
             if (SelectedGuest is null || SelectedBooking is null)
                 return;
 
             Bookings.Remove(SelectedBooking);
             SelectedBooking = null;
+            await _roomDataService.SaveDataAsync();
         }
 
         private void AddBooking()
@@ -402,13 +414,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
 
         private bool CanRemoveServiceBooking() => SelectedGuest is not null && SelectedServiceBooking is not null;
-        private void RemoveServiceBooking()
+        private async Task RemoveServiceBooking()
         {
             if (SelectedGuest is null || SelectedServiceBooking is null)
                 return;
 
             ServiceBookings.Remove(SelectedServiceBooking);
             SelectedServiceBooking = null;
+            await _serviceDataService.SaveDataAsync();
         }
 
         private void AddServiceBooking()

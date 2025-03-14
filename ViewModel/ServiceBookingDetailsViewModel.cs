@@ -38,7 +38,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _initialStartTime = fixedStartTime;
 
             InitializeNames();
-            ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
+            ConfirmCommand = new DelegateCommand(async execute => await Confirm(), canExecute => CanConfirm());
         }
 
         public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
@@ -137,7 +137,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         // Make the Confirm button inactive if some info is missing or the date is in the past
         private bool CanConfirm() => !(Date is null || GuestName is null ||
             ServiceName is null || TimeSlot is null || Date < DateOnly.FromDateTime(DateTime.Now));
-        private void Confirm()
+        private async Task Confirm()
         {
             // Race condition check - UI is not guaranteed to check CanConfirm immediately before Confirm
             if (!CanConfirm())
@@ -200,9 +200,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             };
 
             _serviceDataService.ServiceBookings.Add(serviceBooking);
-
+            
             // Close the dialog
             CloseOnConfirmAction?.Invoke();
+
+            await _serviceDataService.SaveDataAsync();
         }
 
         private void ResetTimeSlots()

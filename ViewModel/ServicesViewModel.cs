@@ -23,8 +23,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _serviceBookingDialogService = serviceBookingDialogService;
             _messageService = messageService;
             Services = serviceDataService.Services;
-            AddCommand = new DelegateCommand(execute => Add());
-            RemoveCommand = new DelegateCommand(execute => Remove(), canExecute => CanRemove());
+            AddCommand = new DelegateCommand(async execute => await Add());
+            RemoveCommand = new DelegateCommand(async execute => await Remove(), canExecute => CanRemove());
             BookServiceCommand = new DelegateCommand(execute => BookService(), canExecute => CanBookService());
             AddServiceBookingCommand = new DelegateCommand(execute => AddServiceBooking());
 
@@ -106,16 +106,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public DelegateCommand BookServiceCommand { get; }
         public DelegateCommand AddServiceBookingCommand { get; }
 
-        private void Add()
+        private async Task Add()
         {
             var service = new Service { Name = "NEW SERVICE" };
             var viewModel = new ServiceViewModel(service, _serviceDataService);
             Services.Add(viewModel);
             SelectedService = viewModel;
+            await _serviceDataService.SaveDataAsync();
         }
 
         private bool CanRemove() => SelectedService is not null;
-        private void Remove()
+        private async Task Remove()
         {
             if (SelectedService is null)
                 return;
@@ -142,6 +143,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             Services.Remove(SelectedService);
             SelectedService = null;
+            await _serviceDataService.SaveDataAsync();
         }
 
         // For booking with a fixed time slot
