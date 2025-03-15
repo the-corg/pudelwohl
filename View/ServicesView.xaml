@@ -105,13 +105,13 @@
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedService.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <Label Grid.Row="2" Content="Duration: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center" />
-                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding SelectedService.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource durations}}" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding SelectedService.Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=10}" ItemsSource="{Binding Source={StaticResource durations}}"/>
 
                         <Label Grid.Row="3" Content="Start Time: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center" />
-                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedService.StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource startTimes}}"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedService.StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=10}" ItemsSource="{Binding Source={StaticResource startTimes}}"/>
 
                         <Label Grid.Row="4" Content="End Time: " HorizontalAlignment="Right" Padding="0" VerticalContentAlignment="Center"/>
-                        <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedService.EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource endTimes}}"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedService.EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=10}" ItemsSource="{Binding Source={StaticResource endTimes}}"/>
 
                         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" 
                                     Visibility="{Binding IsTimeSlotSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
