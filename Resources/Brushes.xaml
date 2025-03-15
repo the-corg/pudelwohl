@@ -20,6 +20,17 @@
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3Dd6cabc"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFd6cabc"/>
 
+    <!-- Colors for the Red-Yellow-Green ListViewItem style -->
+    <SolidColorBrush x:Key="Item.MouseOver.Background.Red" Color="#5FEE4B2B"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background.Yellow" Color="#5FFDDA0D"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background.Green" Color="#5F4CBB17"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background.Red" Color="#ADEE4B2B"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background.Yellow" Color="#ADFDDA0D"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background.Green" Color="#AD4CBB17"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background.Red" Color="#8DEE4B2B"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background.Yellow" Color="#8DFDDA0D"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background.Green" Color="#8D4CBB17"/>
+
     <!-- Not used
     <SolidColorBrush Color="#137013" x:Key="DogBrown"/>
     <SolidColorBrush Color="#569956" x:Key="DogMedium"/>
