@@ -31,6 +31,17 @@
     <SolidColorBrush x:Key="Item.SelectedInactive.Background.Yellow" Color="#8DFDDA0D"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background.Green" Color="#8D4CBB17"/>
 
+    <!-- Expander colors -->
+    <SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="#FF301e08"/>
+    <SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="#FF301e08"/>
+    <SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="#FF997a56"/>
+    <SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="#FFebe4dd"/>
+    <SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="#FF301e08"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="#FF704513"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="#FFebe4dd"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="#FF301e08"/>
+
     <!-- Not used
     <SolidColorBrush Color="#137013" x:Key="DogBrown"/>
     <SolidColorBrush Color="#569956" x:Key="DogMedium"/>
