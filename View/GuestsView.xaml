@@ -38,7 +38,6 @@
             <ListView Grid.Row="1" ItemsSource="{Binding Guests}" SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
                 <ListView.Style>
                     <Style TargetType="ListView">
-                        <Setter Property="Background" Value="White"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsArchiveHidden}" Value="False">
                                 <Setter Property="Background" Value="{StaticResource DogLight}" />
@@ -47,7 +46,7 @@
                     </Style>
                 </ListView.Style>
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                         <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
@@ -185,7 +184,7 @@
                     </Grid>
                     <ListView Grid.Row="2" ItemsSource="{Binding BookingsCollectionView}" SelectedItem="{Binding SelectedBooking, Mode=TwoWay}" >
                         <ListView.Resources>
-                            <Style TargetType="ListViewItem">
+                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CheckOutDate, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
                                         <Setter Property="Background" Value="{StaticResource DogLight}" />
@@ -239,7 +238,7 @@
                     </Grid>
                     <ListView Grid.Row="2" ItemsSource="{Binding ServiceBookingsCollectionView}" SelectedItem="{Binding SelectedServiceBooking, Mode=TwoWay}">
                         <ListView.Resources>
-                            <Style TargetType="ListViewItem">
+                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Date, Converter={StaticResource IsDateInThePastConverter}}" Value="True">
                                         <Setter Property="Background" Value="{StaticResource DogLight}" />

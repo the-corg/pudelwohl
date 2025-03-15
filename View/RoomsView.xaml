@@ -32,7 +32,7 @@
             <!-- List of Rooms colored by their occupance on the date selected in the datepicker above -->
             <ListView Grid.Row="2" ItemsSource="{Binding Rooms}" SelectedItem="{Binding SelectedRoom, Mode=TwoWay}" DisplayMemberPath="Name">
                 <ListView.Resources>
-                    <Style TargetType="ListViewItem">
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                         <Setter Property="Background" Value="{StaticResource NiceYellow}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsFull}" Value="True">
@@ -41,7 +41,7 @@
                             <DataTrigger Binding="{Binding IsFree}" Value="True">
                                 <Setter Property="Background" Value="{StaticResource NiceGreen}" />
                             </DataTrigger>
-                            <Trigger Property="IsMouseOver" Value="True">
+                            <!--<Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Opacity" Value="0.6"/>
                                 <Setter Property="Foreground" Value="Black"/>
                             </Trigger>
@@ -58,7 +58,7 @@
                                     <Setter Property="Opacity" Value="0.6"/>
                                     <Setter Property="Foreground" Value="Black"/>
                                 </MultiTrigger.Setters>
-                            </MultiTrigger>
+                            </MultiTrigger>-->
                         </Style.Triggers>
                     </Style>
                 </ListView.Resources>

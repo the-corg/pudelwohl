@@ -12,6 +12,14 @@
     <SolidColorBrush Color="#FDDA0D" x:Key="NiceYellow"/>
     <SolidColorBrush Color="#4CBB17" x:Key="NiceGreen"/>
 
+    <!-- Colors for the ListViewItem style -->
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F704513"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a8704513"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D704513"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF704513"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3Dd6cabc"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFd6cabc"/>
+
     <!-- Not used
     <SolidColorBrush Color="#137013" x:Key="DogBrown"/>
     <SolidColorBrush Color="#569956" x:Key="DogMedium"/>
