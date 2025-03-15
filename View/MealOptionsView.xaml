@@ -6,22 +6,20 @@
              xmlns:local="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid MinWidth="400">
+    <Grid MinWidth="400" MaxWidth="800">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button Content="Add" Height="30" Command="{Binding AddCommand}"/>
-            <Button Grid.Column="1" Content="Edit" Command="{Binding EditCommand}"/>
-            <Button Grid.Column="2" Content="Remove" Command="{Binding RemoveCommand}"/>
-        </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Add" Height="30" Command="{Binding AddCommand}"/>
+        <Button Grid.Column="1" Content="Edit" Command="{Binding EditCommand}"/>
+        <Button Grid.Column="2" Content="Remove" Command="{Binding RemoveCommand}"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding MealOptionCollectionView}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay}" DisplayMemberPath="DisplayName" />
+        <ListView Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding MealOptionCollectionView}" SelectedItem="{Binding SelectedMealOption, Mode=TwoWay}" DisplayMemberPath="DisplayName"/>
     </Grid>
 </UserControl>

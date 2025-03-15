@@ -30,7 +30,7 @@
                     <ColumnDefinition MinWidth="60"  />
                     <ColumnDefinition MinWidth="45"  />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnNew"  Content="New" Command="{Binding AddCommand}" />
+                <Button Content="New" Command="{Binding AddCommand}" />
                 <Button Grid.Column="1" Content="{Binding ArchiveButtonText}" Command="{Binding ArchiveCommand}" />
                 <Button Grid.Column="2" Content="🗑️" Command="{Binding RemoveCommand}" />
             </Grid>
