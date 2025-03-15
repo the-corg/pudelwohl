@@ -145,6 +145,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource DogMedium}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="3 0 0 0"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource DogMedium}"/>
     </Style>
 
     <Style TargetType="DatePicker">
