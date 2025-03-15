@@ -44,16 +44,16 @@
         <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="Meal Option Name:" />
         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding MealOptionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Viewbox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" Height="24">
-            <CheckBox Content="Breakfast" IsChecked="{Binding IsBreakfast, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            <CheckBox Content="Breakfast" IsChecked="{Binding IsBreakfast, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
         <Viewbox Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Height="24">
-            <CheckBox Content="Lunch" IsChecked="{Binding IsLunch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            <CheckBox Content="Lunch" IsChecked="{Binding IsLunch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
         <Viewbox Grid.Row="8" Grid.Column="2" HorizontalAlignment="Left" Height="24">
-            <CheckBox Content="Snack" IsChecked="{Binding IsSnack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            <CheckBox Content="Snack" IsChecked="{Binding IsSnack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
         <Viewbox Grid.Row="10" Grid.Column="2" HorizontalAlignment="Left" Height="24">
-            <CheckBox Content="Dinner" IsChecked="{Binding IsDinner, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            <CheckBox Content="Dinner" IsChecked="{Binding IsDinner, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
         <Grid Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
