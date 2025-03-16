@@ -5,6 +5,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers
 {
     public static class ExtensionMethods
     {
+        // Searches through the visual tree recursively and returns the first found child of type T
         public static T? GetVisualChildOfType<T>(this DependencyObject? dependencyObject)
         where T : DependencyObject
         {

@@ -7,6 +7,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
 {
     class GuestIdConverter : IMultiValueConverter
     {
+        // Returns the requested attribute for a Guest based on the Guest's id
+        // (the attribute is passed via @parameter as string) 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] is null) return "nobody";

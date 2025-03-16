@@ -7,9 +7,13 @@
         xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
         mc:Ignorable="d"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        SizeChanged="Window_SizeChanged" WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen"
+        SizeChanged="Window_SizeChanged"
+        WindowStyle="SingleBorderWindow" 
         Title="MainWindow" Icon="Assets/icon.png"
         Height="640" Width="1024">
+    <!-- Note: WindowStyle="NoStyle" leads to the window covering the taskbar when maximized -->
+    
 
     <!-- Remove the default window title bar -->
     <WindowChrome.WindowChrome>

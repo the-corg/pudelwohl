@@ -5,7 +5,6 @@
     <converters:RoomIdNameConverter x:Key="RoomIdNameConverter" />
     <converters:ServiceIdNameConverter x:Key="ServiceIdNameConverter" />
     <converters:GuestIdConverter x:Key="GuestIdConverter" />
-    <converters:MenuOptionConverter x:Key="MenuOptionConverter" />
     <converters:DateOnlyDateTimeConverter x:Key="DateOnlyDateTimeConverter" />
     <converters:IsDateInThePastConverter x:Key="IsDateInThePastConverter" />
     <converters:TextClippingConverter x:Key="TextClippingConverter" />

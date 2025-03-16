@@ -7,6 +7,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
 {
     class ServiceIdNameConverter : IMultiValueConverter
     {
+        // Returns the service based on its id
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             // This check is needed to run the app in Debug mode

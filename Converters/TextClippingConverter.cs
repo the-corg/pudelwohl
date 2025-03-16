@@ -9,7 +9,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
 {
     public class TextClippingConverter : IValueConverter
     {
-
+        // Makes ToolTip visible if the selected item does not fit completely in the combobox's ContentPresenter
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is null)
@@ -18,8 +18,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Convert
             if (value is ToggleButton)
             {
                 var combobox = (value as ToggleButton)?.TemplatedParent as ComboBox;
-                var contentPresenter = ExtensionMethods.GetVisualChildOfType<ContentPresenter>(combobox);
-                var textblock = ExtensionMethods.GetVisualChildOfType<TextBlock>(contentPresenter);
+                var contentPresenter = combobox.GetVisualChildOfType<ContentPresenter>();
+                var textblock = contentPresenter.GetVisualChildOfType<TextBlock>();
                 if (textblock is not null)
                 {
                     // if the text in the TextBlock is longer than the width of the container where it is being shown,
