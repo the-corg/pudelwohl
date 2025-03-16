@@ -1,4 +1,5 @@
 ﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
@@ -47,7 +48,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             var services = await _serviceDataProvider.LoadAsync();
             if (services is null)
                 return;
-            Service.CalculateNextId(services);
+            IdGenerator.Instance.CalculateMaxId(services);
             LoadCollection(Services, services, service => new ServiceViewModel(service, this));
 
             var serviceBookings = await _serviceBookingDataProvider.LoadAsync();

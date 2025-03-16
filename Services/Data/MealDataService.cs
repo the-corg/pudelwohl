@@ -1,4 +1,5 @@
 ﻿using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders;
+using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 using System.Collections.ObjectModel;
@@ -142,7 +143,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             var mealOptions = await _mealOptionDataProvider.LoadAsync();
             if (mealOptions is null)
                 return; 
-            MealOption.CalculateNextId(mealOptions);
+            IdGenerator.Instance.CalculateMaxId(mealOptions);
             LoadCollection(MealOptions, mealOptions, mealOption => new MealOptionViewModel(mealOption));
 
             var dailyMenuList = await _dailyMenuDataProvider.LoadAsync();
