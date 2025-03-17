@@ -5,27 +5,27 @@ This is my favorite demo project so far. It's a **dog hotel management system** 
 I'll write more about the technology below. First some screenshots:
 
 
-![Everything about a guest is gathered in one place, on the Guests tab.](https://gist.github.com/user-attachments/assets/e8df2985-4d3e-4ec5-b9ad-ce89f2c910b3)
+![Everything about a guest is gathered in one place, on the Guests tab.](docs/screenshots/Pudelwohl_screenshot1.png?raw=true)
 Everything about a guest is gathered in one place, on the Guests tab.
 
 ---
-![Rooms are color-coded according to their occupancy on the selected date. Select a room and you'll see all of its bookings.](https://gist.github.com/user-attachments/assets/df062dea-4ac3-48ff-9289-fa0800898ad0)
+![Rooms are color-coded according to their occupancy on the selected date. Select a room and you'll see all of its bookings.](docs/screenshots/Pudelwohl_screenshot2.png?raw=true)
 Rooms are color-coded according to their occupancy on the selected date. Select a room and you'll see all of its bookings.
 
 ---
-![The tab with on-site services, their time slots, bookings, and all the relevant information.](https://gist.github.com/user-attachments/assets/534574db-d14a-4e0d-999f-f282d780a00c)
+![The tab with on-site services, their time slots, bookings, and all the relevant information.](docs/screenshots/Pudelwohl_screenshot3.png?raw=true)
 The tab with on-site services, their time slots, bookings, and all the relevant information.
 
 --- 
-![A simple dialog for booking a service.](https://gist.github.com/user-attachments/assets/c2c3ee96-e56a-4fb5-a238-1be8e3db0605)
+![A simple dialog for booking a service.](docs/screenshots/Pudelwohl_screenshot4.png?raw=true)
 A simple dialog for booking a service.
 
 ---
-![The daily menu.](https://gist.github.com/user-attachments/assets/0744e99e-7991-4c70-8843-e055f3048f9d)
+![The daily menu.](docs/screenshots/Pudelwohl_screenshot5.png?raw=true)
 The daily menu.
 
 ---
-![When the panel with the meal options is expanded, the menu selection controls are resized to remain usable.](https://gist.github.com/user-attachments/assets/ef94cd8f-9303-43fe-8554-98c7099c47e8)
+![When the panel with the meal options is expanded, the menu selection controls are resized to remain usable.](docs/screenshots/Pudelwohl_screenshot6.png?raw=true)
 When the panel with the meal options is expanded, the menu selection controls are resized to remain usable.
 
 
@@ -89,17 +89,24 @@ The `ComboBox` control template with the vexatious tooltip I mentioned earlier t
 <ControlTemplate TargetType="ComboBox">
     <Grid>
         <ToggleButton Grid.Column="2" Focusable="false" ToolTipService.InitialShowDelay="300" 
-                        IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
             <ToggleButton.ToolTip>
-                <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself) led to either the tooltip not showing or the ToggleButton being not interactable depending on IsHitTestVisible -->
-                <ToolTip Placement="Relative" Height="{TemplateBinding ActualHeight}" SnapsToDevicePixels="True" FontSize="16"
-                            DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                            Content="{Binding Text}"> <!-- Binding to SelectedItem here led to ToolTip's Width=0 for non-string objects -->
+                <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself)
+                led to either the tooltip not showing or the ToggleButton being not interactable
+                depending on IsHitTestVisible -->
+                <ToolTip Placement="Relative" Height="{TemplateBinding ActualHeight}"
+                        SnapsToDevicePixels="True" FontSize="16"
+                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                        Content="{Binding Text}"> <!-- Binding to SelectedItem here led to ToolTip's
+                                                                                    Width=0 for non-string objects -->
                     <ToolTip.Template>
                         <ControlTemplate TargetType="ToolTip">
-                            <Border Background="{StaticResource DogLight}" Padding="5 3 5 0" CornerRadius="2" BorderBrush="{StaticResource DogBrown}" BorderThickness="1"
+                            <Border Background="{StaticResource DogLight}" Padding="5 3 5 0"
+                                    CornerRadius="2" BorderBrush="{StaticResource DogBrown}" BorderThickness="1"
                                     Visibility="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ToolTip}, Converter={StaticResource TextClippingConverter}}" >
-                                <!-- Setting this Visibility Binding on the tooltip itself led to the converter not being called (or at least not called each time on mouse hover) -->
+                                    <!-- Setting this Visibility Binding on the tooltip itself led to
+                                    the  converter not being called (or at least not called each time
+                                    on mouse hover) -->
                                 <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource DogDark}"/>
                             </Border>
                         </ControlTemplate>
