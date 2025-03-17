@@ -479,14 +479,17 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _selectedLunchOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Lunch)?.NameWithId;
             _selectedSnackOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Snack)?.NameWithId;
             _selectedDinnerOption = _mealDataService.GetMealOptionById(_currentGuestMenu.Dinner)?.NameWithId;
-            OnPropertyChanged(nameof(BreakfastOptions));
-            OnPropertyChanged(nameof(LunchOptions));
-            OnPropertyChanged(nameof(SnackOptions));
-            OnPropertyChanged(nameof(DinnerOptions));
             OnPropertyChanged(nameof(SelectedBreakfastOption));
             OnPropertyChanged(nameof(SelectedLunchOption));
             OnPropertyChanged(nameof(SelectedSnackOption));
             OnPropertyChanged(nameof(SelectedDinnerOption));
+
+            // Updating these earlier led to a bug where the combobox would set
+            // the selected option to null because it couldn't find it in the new list
+            OnPropertyChanged(nameof(BreakfastOptions));
+            OnPropertyChanged(nameof(LunchOptions));
+            OnPropertyChanged(nameof(SnackOptions));
+            OnPropertyChanged(nameof(DinnerOptions));
         }
     }
 }

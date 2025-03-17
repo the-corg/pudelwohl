@@ -15,7 +15,7 @@
         private readonly Dictionary<string, int> IdForClass = [];
 
 
-        private readonly Lock _lockObject = new();
+        private static readonly object _lockObject = new();
         // Increment (thread-safe) and return the next ID for class T
         public int GetNextId<T>()
             where T : IHasId

@@ -498,7 +498,7 @@
                         <ToggleButton Grid.Column="2" Focusable="false" ToolTipService.InitialShowDelay="300" 
                                       IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.ToolTip>
-                                <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself) led to either tooltip not showing due to ToggleButton being not interactable  -->
+                                <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself) led to either the tooltip not showing or the ToggleButton being not interactable depending on IsHitTestVisible -->
                                 <ToolTip Placement="Relative" Height="{TemplateBinding ActualHeight}" SnapsToDevicePixels="True" FontSize="16"
                                          DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                          Content="{Binding Text}"> <!-- Binding to SelectedItem here led to ToolTip's Width=0 for non-string objects -->
