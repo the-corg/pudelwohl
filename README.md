@@ -89,7 +89,8 @@ The `ComboBox` control template with the vexatious tooltip I mentioned earlier t
 <ControlTemplate TargetType="ComboBox">
     <Grid>
         <ToggleButton Grid.Column="2" Focusable="false" ToolTipService.InitialShowDelay="300" 
-                IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
+                IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,
+                    RelativeSource={RelativeSource TemplatedParent}}">
             <ToggleButton.ToolTip>
                 <!-- Attaching this tooltip to other objects below (e.g., ContentPresenter itself)
                 led to either the tooltip not showing or the ToggleButton being not interactable
@@ -98,16 +99,20 @@ The `ComboBox` control template with the vexatious tooltip I mentioned earlier t
                         SnapsToDevicePixels="True" FontSize="16"
                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                         Content="{Binding Text}"> <!-- Binding to SelectedItem here led to ToolTip's
-                                                                                    Width=0 for non-string objects -->
+                                                    Width=0 for non-string objects -->
                     <ToolTip.Template>
                         <ControlTemplate TargetType="ToolTip">
                             <Border Background="{StaticResource DogLight}" Padding="5 3 5 0"
-                                    CornerRadius="2" BorderBrush="{StaticResource DogBrown}" BorderThickness="1"
-                                    Visibility="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ToolTip}, Converter={StaticResource TextClippingConverter}}" >
+                                    CornerRadius="2" BorderBrush="{StaticResource DogBrown}"
+                                    BorderThickness="1"
+                                    Visibility="{Binding PlacementTarget,
+                                        RelativeSource={RelativeSource AncestorType=ToolTip},
+                                        Converter={StaticResource TextClippingConverter}}" >
                                     <!-- Setting this Visibility Binding on the tooltip itself led to
                                     the  converter not being called (or at least not called each time
                                     on mouse hover) -->
-                                <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource DogDark}"/>
+                                <TextBlock Text="{TemplateBinding Content}"
+                                        Foreground="{StaticResource DogDark}"/>
                             </Border>
                         </ControlTemplate>
                     </ToolTip.Template>
@@ -151,11 +156,11 @@ public sealed class IdGenerator
 
 
 ## Installation and Running
-#### Option 1: Download and Run (Windows 7+)
+### Option 1: Download and Run (Windows 7+)
 Download the latest release from the [GitHub Releases page](https://github.com/the-corg/pudelwohl/releases) and run the `.exe`.
 No installation required.
 
-#### Option 2: Clone and Build (.NET 8+)
+### Option 2: Clone and Build (.NET 8+)
 1. Clone this repository.
 ```sh
    git clone https://github.com/the-corg/pudelwohl.git
