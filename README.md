@@ -157,8 +157,9 @@ public sealed class IdGenerator
 
 ## Installation and Running
 ### Option 1: Download and Run (Windows 7+)
-Download the latest release from the [GitHub Releases page](https://github.com/the-corg/pudelwohl/releases) and run the `.exe`.
-No installation required.
+1. Download the latest release from the [GitHub Releases page](https://github.com/the-corg/pudelwohl/releases).
+2. Extract the zipped folder.
+3. Run the `.exe` file.
 
 ### Option 2: Clone and Build (.NET 8+)
 1. Clone this repository.
