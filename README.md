@@ -57,7 +57,7 @@ To prevent excessive disk writes while ensuring data persistence, I distributed 
 
 WPF’s flexibility opened up avenues for experiments. For example, on two of the tabs, I'm showing collections as a set of "cards" in an `ItemControl` with a `WrapPanel`. To make adding items more intuitive, rather than using a boring Add button somewhere in the corner, I challenged myself to display the button dynamically as the last "card" of the collection itself. This required using `DataTemplateSelector` and dealing with data templates in more depth than I expected. I achieved this by inserting a placeholder item into a `CompositeCollection` based on the original collection, and transforming it into the button at runtime. This was a fun and rewarding challenge.
 
-Another customization involved dynamically coloring ListView items to indicate room occupancy (whether a room was free, partly occupied, or fully occupied). Initially, this was straightforward with the `MultiTrigger` functionality inside the `ListViewItem`'s `ControlTemplate`. However, I have learned my lesson that the potential complications of introducing non-standard features should never be underestimated. In this case, the need to use MultiTriggers quickly escalated as I needed to ensure that the occupancy color remained visible even when a room was selected. This experience reinforced the importance of anticipating UI edge cases early.
+Another customization involved dynamically coloring ListView items to indicate room occupancy (whether a room was free, partly occupied, or fully occupied). Initially, this was straightforward with the `DataTrigger` functionality inside the `ListViewItem`'s `ControlTemplate`. However, I have learned my lesson that the potential complications of introducing non-standard features should never be underestimated. In this case, the need to use triggers quickly escalated, resulting in many `MultiTriggers` and `MultiDataTriggers` as I needed to ensure that the occupancy color remained visible even when a room was selected. This experience reinforced the importance of anticipating UI edge cases early.
 
 One of the trickiest challenges was creating a tooltip for combo boxes that shows the full text of the selected item, but only appears when the text is too long for the combo box's content presenter to display. Achieving this required deep debugging and unconventional binding techniques, but it reinforced my belief that with the right approach, nothing is impossible in WPF (or at least something is possible, like those pesky tooltips).
 
@@ -135,7 +135,7 @@ public sealed class IdGenerator
     // IDs for each class by its name
     private readonly Dictionary<string, int> IdForClass = [];
 
-    private readonly Lock _lockObject = new();
+    private static readonly object _lockObject = new();
     // Increment (thread-safe) and return the next ID for class T
     public int GetNextId<T>()
         where T : IHasId
