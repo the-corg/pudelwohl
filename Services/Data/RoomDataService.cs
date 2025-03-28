@@ -25,8 +25,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private readonly IRoomDataProvider _roomDataProvider;
         private readonly IBookingDataProvider _bookingDataProvider;
 
-        private readonly SemaphoreSlim _saveLock = new(1, 1);
-
         public RoomDataService(IRoomDataProvider roomDataProvider, IBookingDataProvider bookingDataProvider)
         {
             _roomDataProvider = roomDataProvider;
@@ -39,8 +37,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public ObservableCollection<Booking> Bookings { get; } = new();
         public ListCollectionView BookingsForGuest { get; }
         public ListCollectionView BookingsForRoom { get; }
-
-        protected override CancellationTokenSource DebounceCts { get; set; } = new();
 
         // Used in RoomsViewModel for Binding with the DatePicker above the rooms ListView
         public DateOnly OccupancyDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
@@ -105,22 +101,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             UpdateBookingData();
         }
 
-        public override async Task SaveDataAsync()
+        protected override async Task SaveCollectionsAsync()
         {
-            // Prevent multiple saves from running at the same time
-            await _saveLock.WaitAsync();
-            try
-            {
-                // Cancel any pending debounced save
-                DebounceCts.Cancel();
-
-                await _bookingDataProvider.SaveAsync(Bookings);
-                // No need to save Rooms because they never change
-            }
-            finally
-            {
-                _saveLock.Release();
-            }
+            await _bookingDataProvider.SaveAsync(Bookings);
+            // No need to save Rooms because they never change
         }
 
     }

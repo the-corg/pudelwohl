@@ -23,9 +23,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private readonly IServiceDataProvider _serviceDataProvider;
         private readonly IServiceBookingDataProvider _serviceBookingDataProvider;
 
-        private readonly SemaphoreSlim _saveLock = new(1, 1);
-
-        public ServiceDataService(IServiceDataProvider serviceDataProvider, 
+        public ServiceDataService(IServiceDataProvider serviceDataProvider,
             IServiceBookingDataProvider serviceBookingDataProvider, IMessageService messageService)
         {
             _serviceDataProvider = serviceDataProvider;
@@ -41,8 +39,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public ListCollectionView ServiceBookingsForService { get; }
         public IMessageService MessageService { get; }
 
-        protected override CancellationTokenSource DebounceCts { get; set; } = new();
-
         public async Task LoadAsync()
         {
             var services = await _serviceDataProvider.LoadAsync();
@@ -55,22 +51,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             LoadCollection(ServiceBookings, serviceBookings);
         }
 
-        public override async Task SaveDataAsync()
+        protected override async Task SaveCollectionsAsync()
         {
-            // Prevent multiple saves from running at the same time
-            await _saveLock.WaitAsync();
-            try
-            {
-                // Cancel any pending debounced save
-                DebounceCts.Cancel();
-
-                await _serviceDataProvider.SaveAsync(Services.Select(x => x.GetService()));
-                await _serviceBookingDataProvider.SaveAsync(ServiceBookings);
-            }
-            finally
-            {
-                _saveLock.Release();
-            }
+            await _serviceDataProvider.SaveAsync(Services.Select(x => x.GetService()));
+            await _serviceBookingDataProvider.SaveAsync(ServiceBookings);
         }
 
     }

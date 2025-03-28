@@ -7,17 +7,36 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         // Time delay in ms before data is saved (Debounced save)
         private readonly int _debounceTime = 3000;
 
-        protected abstract CancellationTokenSource DebounceCts { get; set; }
+        private readonly SemaphoreSlim _saveLock = new(1, 1);
+        private CancellationTokenSource _debounceCts = new();
 
-        public abstract Task SaveDataAsync();
+        protected abstract Task SaveCollectionsAsync();
+
+        public async Task SaveDataAsync()
+        {
+            // Prevent multiple saves from running at the same time
+            await _saveLock.WaitAsync();
+            try
+            {
+                // Cancel any pending debounced save
+                _debounceCts.Cancel();
+
+                // Each of the child classes overrides this method to save its collections
+                await SaveCollectionsAsync();
+            }
+            finally
+            {
+                _saveLock.Release();
+            }
+        }
 
         // Save data if no new save calls arrive within _debounceTime
         public void DebouncedSave()
         {
             // Cancel any pending debounced save
-            DebounceCts.Cancel();
-            DebounceCts = new();
-            var token = DebounceCts.Token;
+            _debounceCts.Cancel();
+            _debounceCts = new();
+            var token = _debounceCts.Token;
 
             Task.Run(async () =>
             {

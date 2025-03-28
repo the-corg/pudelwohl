@@ -47,11 +47,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         }
         public bool IsGenderMaleButtonChecked
         {
-            get => _model.Gender == Model.Gender.Male;
+            get => _model.Gender == Gender.Male;
             set
             {
-                if (value) 
-                    _model.Gender = Model.Gender.Male;
+                if (!value || _model.Gender == Gender.Male)
+                    return;
+
+                _model.Gender = Gender.Male;
                 OnPropertyChanged();
                 _guestDataService.DebouncedSave();
             }
@@ -59,11 +61,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public bool IsGenderFemaleButtonChecked
         {
-            get => _model.Gender == Model.Gender.Female;
+            get => _model.Gender == Gender.Female;
             set
             {
-                if (value) 
-                    _model.Gender = Model.Gender.Female;
+                if (!value || _model.Gender == Gender.Female)
+                    return;
+
+                _model.Gender = Gender.Female;
                 OnPropertyChanged();
                 _guestDataService.DebouncedSave();
             }
@@ -71,11 +75,13 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
         public bool IsGenderOtherButtonChecked
         {
-            get => _model.Gender == Model.Gender.Other;
+            get => _model.Gender == Gender.Other;
             set
             {
-                if (value) 
-                    _model.Gender = Model.Gender.Other;
+                if (!value || _model.Gender == Gender.Other)
+                    return;
+
+                _model.Gender = Gender.Other;
                 OnPropertyChanged();
                 _guestDataService.DebouncedSave();
             }
@@ -124,7 +130,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             get
             {
-                if (_model.EarFloppiness == Model.EarFloppiness.Unknown) 
+                if (_model.EarFloppiness == Model.EarFloppiness.Unknown)
                     return null;
                 // Replace _ from the Enum with spaces for the ComboBox
                 return _model.EarFloppiness.ToString().Replace('_', ' ');

@@ -29,6 +29,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         public ServicesViewModel ServicesViewModel { get; }
         public MealOptionsViewModel MealOptionsViewModel { get; }
 
+        // These services are sent to IValueConverters
         public IGuestDataService GuestDataService => _guestDataService;
         public IRoomDataService RoomDataService => _roomDataService;
         public IServiceDataService ServiceDataService => _serviceDataService;

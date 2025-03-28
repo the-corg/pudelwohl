@@ -38,8 +38,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private DateOnly _menuDate = DateOnly.FromDateTime(DateTime.Now);
         private DailyMenu? _dailyMenuForSelectedDate;
 
-        private readonly SemaphoreSlim _saveLock = new(1, 1);
-
         public MealDataService(IMealOptionDataProvider mealOptionDataProvider, IDailyMenuDataProvider dailyMenuDataProvider,
             IGuestMenuDataProvider guestMenuDataProvider, IMessageService messageService)
         {
@@ -73,8 +71,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public Dictionary<DateOnly, DailyMenu> DailyMenus { get; } = new();
         public Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; } = new();
-
-        protected override CancellationTokenSource DebounceCts { get; set; } = new();
 
         // Used in MealOptionsViewModel for Binding with the DatePicker above the daily menu
         public DateOnly MenuDate
@@ -111,9 +107,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             {
                 for (int i = 0; i < 12; i++)
                 {
-                    if ((menu.Menu[i] == mealOptionId) && 
+                    if ((menu.Menu[i] == mealOptionId) &&
                         ((deleteBreakfast && i < 3) || (deleteLunch && i >= 3 && i < 6) ||
-                        (deleteSnack && i >= 6 && i < 9) || (deleteDinner && i >= 9))) 
+                        (deleteSnack && i >= 6 && i < 9) || (deleteDinner && i >= 9)))
                         menu.Menu[i] = 0;
                 }
             }
@@ -142,7 +138,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         {
             var mealOptions = await _mealOptionDataProvider.LoadAsync();
             if (mealOptions is null)
-                return; 
+                return;
             IdGenerator.Instance.CalculateMaxId(mealOptions);
             LoadCollection(MealOptions, mealOptions, mealOption => new MealOptionViewModel(mealOption));
 
@@ -166,23 +162,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             UpdateMenus();
         }
 
-        public override async Task SaveDataAsync()
+        protected override async Task SaveCollectionsAsync()
         {
-            // Prevent multiple saves from running at the same time
-            await _saveLock.WaitAsync();
-            try
-            {
-                // Cancel any pending debounced save
-                DebounceCts.Cancel();
-
-                await _mealOptionDataProvider.SaveAsync(MealOptions.Select(x => x.GetMealOption()));
-                await _dailyMenuDataProvider.SaveAsync(DailyMenus.Values);
-                await _guestMenuDataProvider.SaveAsync(GuestMenus.Values);
-            }
-            finally
-            {
-                _saveLock.Release();
-            }
+            await _mealOptionDataProvider.SaveAsync(MealOptions.Select(x => x.GetMealOption()));
+            await _dailyMenuDataProvider.SaveAsync(DailyMenus.Values);
+            await _guestMenuDataProvider.SaveAsync(GuestMenus.Values);
         }
 
     }
