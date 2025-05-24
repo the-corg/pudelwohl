@@ -7,13 +7,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\IconFile.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\icon.png" />
+    <None Remove="Assets\IconWindow.ico" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\IconFile.ico" />
     <Content Include="DataProviders\DemoDataFiles\Bookings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -45,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\icon.png" />
+    <Resource Include="Assets\IconWindow.ico" />
   </ItemGroup>
 
 </Project>

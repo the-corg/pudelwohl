@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         SizeChanged="Window_SizeChanged"
         WindowStyle="SingleBorderWindow" 
-        Title="MainWindow" Icon="Assets/icon.png"
+        Title="MainWindow" Icon="Assets\IconWindow.ico"
         Height="640" Width="1024">
     <!-- Note: WindowStyle="NoStyle" leads to the window covering the taskbar when maximized -->
     
