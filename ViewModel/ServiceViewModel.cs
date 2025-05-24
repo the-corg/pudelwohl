@@ -7,11 +7,20 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for a single service
+    /// </summary>
     public class ServiceViewModel : ViewModelBase
     {
+        #region Private fields
+
         private readonly Service _model;
         private readonly IServiceDataService _serviceDataService;
         private readonly IMessageService _messageService;
+        #endregion
+
+
+        #region Constructor
 
         public ServiceViewModel(Service model, IServiceDataService serviceDataService)
         {
@@ -20,9 +29,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _messageService = serviceDataService.MessageService;
             CalculateTimeSlots();
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// ID of the service
+        /// </summary>
         public int Id => _model.Id;
 
+        /// <summary>
+        /// Name of the service
+        /// </summary>
         public string? Name
         {
             get => _model.Name;
@@ -38,6 +57,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Description for the service
+        /// </summary>
         public string? Description
         {
             get => _model.Description;
@@ -51,6 +73,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _serviceDataService.DebouncedSave();
             }
         }
+
+        /// <summary>
+        /// Duration of the service as a formatted string (e.g., "1 hour 30 minutes")
+        /// </summary>
         public string? Duration
         {
             get
@@ -176,8 +202,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Duration of the service in minutes
+        /// </summary>
         public int DurationMinutes => _model.DurationMinutes;
 
+        /// <summary>
+        /// The starting time of the service
+        /// </summary>
         public string? StartTime
         {
             get => _model.StartTime;
@@ -208,6 +240,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 CalculateTimeSlots();
             }
         }
+
+        /// <summary>
+        /// The ending time of the service
+        /// </summary>
         public string? EndTime
         {
             get => _model.EndTime;
@@ -238,8 +274,20 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The collection of the time slots for this particular service
+        /// (differs based on the services duration and start/end times)
+        /// </summary>
         public ObservableCollection<TimeSlot> TimeSlots { get; } = new();
 
+        #endregion
+
+
+        #region Private helper method
+
+        /// <summary>
+        /// Calculates the time slots for the service based on its start time, end time, and duration
+        /// </summary>
         private void CalculateTimeSlots()
         {
             TimeSlots.Clear();
@@ -278,14 +326,26 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
 
         }
+        #endregion
+
+
+        #region Public methods
+
+        /// <summary>
+        /// Getter for the underlying Service object (model)
+        /// </summary>
+        /// <returns>The underlying Service object (model)</returns>
         public Service GetService()
         {
             return _model;
         }
+
+
         public override string ToString()
         {
             return _model.Name + " (#" + _model.Id + ")";
         }
+        #endregion
 
     }
 }

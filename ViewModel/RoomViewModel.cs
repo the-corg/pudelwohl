@@ -3,8 +3,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for a single room
+    /// </summary>
     public class RoomViewModel : ViewModelBase
     {
+        #region Private fields and the constructor
+
         private readonly Room _model;
         private readonly IRoomDataService _roomDataService;
 
@@ -13,13 +18,39 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _model = model;
             _roomDataService = roomDataService;
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// Id of the room
+        /// </summary>
         public int Id => _model.Id;
+
+        /// <summary>
+        /// Name of the room
+        /// </summary>
         public string? Name => _model.Name;
+
+        /// <summary>
+        /// Type of the room
+        /// </summary>
         public string Type => _model.Type;
+
+        /// <summary>
+        /// Description of the room
+        /// </summary>
         public string? Description => _model.Description;
+
+        /// <summary>
+        /// The maximum number of guests the room can have similtaneously
+        /// </summary>
         public int MaxGuests => _model.MaxGuests;
 
+        /// <summary>
+        /// Shows whether the room is full on the date selected by the user
+        /// </summary>
         public bool IsFull
         {
             get
@@ -40,6 +71,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return (occupants >= MaxGuests);
             }
         }
+
+        /// <summary>
+        /// Shows whether the room is free on the date selected by the user
+        /// </summary>
         public bool IsFree
         {
             get
@@ -59,7 +94,18 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return true;
             }
         }
+        #endregion
 
+
+        #region Public method
+        /// <summary>
+        /// Calculates the maximum number of occupants the room has
+        /// between the provided dates, with an option to ignore one booking
+        /// </summary>
+        /// <param name="checkInDate">The start date of the calculation period</param>
+        /// <param name="checkOutDate">The end date of the calculation period</param>
+        /// <param name="bookingToIgnore">If provided, this booking will be ignored</param>
+        /// <returns>The maximum number of occupants the room has between the provided dates</returns>
         public int MaxOccupantsWithinDates(DateOnly checkInDate, DateOnly checkOutDate, Booking? bookingToIgnore = null)
         {
             int maxOccupants = 0;
@@ -83,6 +129,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
             return maxOccupants;
         }
+        #endregion
 
     }
 }

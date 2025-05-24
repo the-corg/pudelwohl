@@ -4,8 +4,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Meal Option Details dialog (for editing and adding meal options)
+    /// </summary>
     public class MealOptionDetailsViewModel : ViewModelBase
     {
+        #region Private fields
+
         private readonly string _headerText;
         private readonly IMealDataService _mealDataService;
 
@@ -15,6 +20,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private bool _isLunch;
         private bool _isSnack;
         private bool _isDinner;
+        #endregion
+
+
+        #region Constructor
 
         public MealOptionDetailsViewModel(IMealDataService mealDataService, string headerText, MealOptionViewModel? mealOption)
         {
@@ -33,11 +42,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             ConfirmCommand = new DelegateCommand(execute => Confirm(), canExecute => CanConfirm());
         }
+        #endregion
 
-        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
 
+        #region Public properties
+
+        /// <summary>
+        /// Delegate for closing the dialog window on Confirm
+        /// </summary>
+        public Action? CloseOnConfirmAction { get; set; }
+
+        /// <summary>
+        /// Header text for the dialog
+        /// </summary>
         public string HeaderText => _headerText;
 
+        /// <summary>
+        /// Name of the meal option
+        /// </summary>
         public string MealOptionName
         {
             get => _mealOptionName;
@@ -50,6 +72,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the meal option can be selected for breakfast
+        /// </summary>
         public bool IsBreakfast
         {
             get => _isBreakfast;
@@ -62,6 +87,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the meal option can be selected for lunch
+        /// </summary>
         public bool IsLunch
         {
             get => _isLunch;
@@ -74,6 +102,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the meal option can be selected for snack
+        /// </summary>
         public bool IsSnack
         {
             get => _isSnack;
@@ -86,6 +117,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the meal option can be selected for dinner
+        /// </summary>
         public bool IsDinner
         {
             get => _isDinner;
@@ -98,8 +132,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Command to confirm the meal option
+        /// </summary>
         public DelegateCommand ConfirmCommand { get; }
 
+        /// <summary>
+        /// Text that explains the reason why the Confirm button is disabled
+        /// </summary>
         public string? ButtonDisabledReason
         {
             get
@@ -113,6 +153,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return result.Length > 0 ? result[..^2] : null;
             }
         }
+        #endregion
+
+
+        #region Private methods (for the Confirm command)
 
         // Make the Confirm button inactive if the name is empty
         private bool CanConfirm() => (!string.IsNullOrEmpty(MealOptionName)) && (IsBreakfast || IsLunch || IsSnack || IsDinner);
@@ -147,7 +191,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             // Close the dialog
             CloseOnConfirmAction?.Invoke();
         }
-
+        #endregion
 
     }
 }

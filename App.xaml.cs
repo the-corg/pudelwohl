@@ -7,8 +7,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
 {
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
     public partial class App : Application
     {
+        #region Private fields and the constructor
+
         private readonly ServiceProvider _serviceProvider;
 
         public App()
@@ -17,6 +22,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
         }
+        #endregion
+
+        #region Configure services for dependency injection
 
         private void ConfigureServices(ServiceCollection services)
         {
@@ -51,6 +59,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             services.AddSingleton<IServiceBookingDialogService, ServiceBookingDialogService>();
             services.AddSingleton<IMealOptionDialogService, MealOptionDialogService>();
         }
+        #endregion
+
+        #region OnStartup
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -59,5 +70,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
             var mainWindow = _serviceProvider.GetService<MainWindow>();
             mainWindow?.Show();
         }
+        #endregion
     }
 }

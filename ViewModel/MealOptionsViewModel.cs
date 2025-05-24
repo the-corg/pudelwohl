@@ -6,13 +6,22 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Cuisine tab
+    /// </summary>
     public class MealOptionsViewModel : ViewModelBase
     {
+        #region Private fields
+
         private MealOptionViewModel? _selectedMealOption;
         private readonly IMealDataService _mealDataService;
         private readonly IMealOptionDialogService _mealOptionDialogService;
         private readonly IMessageService _messageService;
         private readonly List<MealSelectionViewModel> _selectors = new();
+        #endregion
+
+
+        #region Constructor
 
         public MealOptionsViewModel(IMealDataService mealDataService, 
             IMealOptionDialogService mealOptionDialogService, IMessageService messageService)
@@ -36,7 +45,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _selectors.Add(DinnerViewModel);
             _mealDataService.DailyMenuUpdated = UpdateSelectors;
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// Date for the menu, selected by the user
+        /// </summary>
         public DateOnly MenuDate
         {
             get => _mealDataService.MenuDate;
@@ -51,9 +67,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The sorted collection of meal options
+        /// </summary>
         public ListCollectionView MealOptionCollectionView { get; }
+
+        /// <summary>
+        /// The original collection of meal options
+        /// </summary>
         public ObservableCollection<MealOptionViewModel> MealOptions { get; }
 
+        /// <summary>
+        /// Currently selected meal option
+        /// </summary>
         public MealOptionViewModel? SelectedMealOption
         {
             get => _selectedMealOption;
@@ -69,16 +95,45 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// View model for breakfast selection
+        /// </summary>
         public MealSelectionViewModel BreakfastViewModel { get; }
+
+        /// <summary>
+        /// View model for lunch selection
+        /// </summary>
         public MealSelectionViewModel LunchViewModel { get; }
+
+        /// <summary>
+        /// View model for snack selection
+        /// </summary>
         public MealSelectionViewModel SnackViewModel { get; }
+
+        /// <summary>
+        /// View model for dinner selection
+        /// </summary>
         public MealSelectionViewModel DinnerViewModel { get; }
 
+        /// <summary>
+        /// Command for adding a meal option
+        /// </summary>
         public DelegateCommand AddCommand { get; }
+
+        /// <summary>
+        /// Command for editing a meal option
+        /// </summary>
         public DelegateCommand EditCommand { get; }
+
+        /// <summary>
+        /// Command for removing a meal option
+        /// </summary>
         public DelegateCommand RemoveCommand { get; }
 
+        #endregion
 
+
+        #region Private helper methods
         private void Add()
         {
             _mealOptionDialogService.ShowMealOptionDialog("New Meal Option");
@@ -129,6 +184,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             foreach (var selector in _selectors)
                 selector.UpdateOptions();
         }
+        #endregion
 
     }
 }

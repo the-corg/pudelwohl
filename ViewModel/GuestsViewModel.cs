@@ -8,8 +8,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Guests tab
+    /// </summary>
     public class GuestsViewModel : ViewModelBase
     {
+        #region Private fields
+
         private GuestViewModel? _selectedGuest;
         private Booking? _selectedBooking;
         private ServiceBooking? _selectedServiceBooking;
@@ -32,7 +37,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IBookingDialogService _bookingDialogService;
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
+        #endregion
 
+
+        #region Constructor
         public GuestsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
             IServiceDataService serviceDataService, IBookingDialogService bookingDialogService,
             IServiceBookingDialogService serviceBookingDialogService, IMealDataService mealDataService,
@@ -81,14 +89,44 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             mealDataService.GuestMenuUpdated = UpdateGuestMenuOptions;
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// Sorted collection of bookings, filtered based on the selected guest
+        /// </summary>
         public ListCollectionView BookingsCollectionView { get; }
+
+        /// <summary>
+        /// Sorted collection of service bookings, filtered based on the selected guest
+        /// </summary>
         public ListCollectionView ServiceBookingsCollectionView { get; }
+
+        /// <summary>
+        /// Collection of all guests
+        /// </summary>
         public ObservableCollection<GuestViewModel> Guests { get; }
+
+        /// <summary>
+        /// Collection of all bookings
+        /// </summary>
         public ObservableCollection<Booking> Bookings { get; }
+
+        /// <summary>
+        /// Collection of all service bookings
+        /// </summary>
         public ObservableCollection<ServiceBooking> ServiceBookings { get; }
+
+        /// <summary>
+        /// Dictionary of guest menus, where the key is (date, GuestId)
+        /// </summary>
         public Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; }
 
+        /// <summary>
+        /// Currently selected guest
+        /// </summary>
         public GuestViewModel? SelectedGuest
         {
             get => _selectedGuest;
@@ -108,6 +146,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Currently selected booking
+        /// </summary>
         public Booking? SelectedBooking
         {
             get => _selectedBooking;
@@ -123,6 +164,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Currently selected service booking
+        /// </summary>
         public ServiceBooking? SelectedServiceBooking
         {
             get => _selectedServiceBooking;
@@ -137,10 +181,16 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        // Used for hiding the guest details when no guest is selected
+        /// <summary>
+        /// Shows whether a guest is currently selected
+        /// (used for hiding the guest details when no guest is selected)
+        /// </summary>
         public bool IsGuestSelected => SelectedGuest is not null;
 
 
+        /// <summary>
+        /// Date selected for the guest menu
+        /// </summary>
         public DateOnly SelectedMenuDate
         {
             get => _selectedMenuDate;
@@ -155,11 +205,34 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+
+        /// <summary>
+        /// String representations of the three breakfast options (selected on the Cuisine tab)
+        /// available for selection for the guest menu on the selected date
+        /// </summary>
         public string?[] BreakfastOptions => _breakfastOptions;
+
+        /// <summary>
+        /// String representations of the three lunch options (selected on the Cuisine tab)
+        /// available for selection for the guest menu on the selected date
+        /// </summary>
         public string?[] LunchOptions => _lunchOptions;
+
+        /// <summary>
+        /// String representations of the three snack options (selected on the Cuisine tab)
+        /// available for selection for the guest menu on the selected date
+        /// </summary>
         public string?[] SnackOptions => _snackOptions;
+
+        /// <summary>
+        /// String representations of the three dinner options (selected on the Cuisine tab)
+        /// available for selection for the guest menu on the selected date
+        /// </summary>
         public string?[] DinnerOptions => _dinnerOptions;
 
+        /// <summary>
+        /// The breakfast option selected for the current guest on the selected date
+        /// </summary>
         public string? SelectedBreakfastOption
         {
             get => _selectedBreakfastOption;
@@ -178,6 +251,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The lunch option selected for the current guest on the selected date
+        /// </summary>
         public string? SelectedLunchOption
         {
             get => _selectedLunchOption;
@@ -196,6 +272,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The snack option selected for the current guest on the selected date
+        /// </summary>
         public string? SelectedSnackOption
         {
             get => _selectedSnackOption;
@@ -214,6 +293,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The dinner option selected for the current guest on the selected date
+        /// </summary>
         public string? SelectedDinnerOption
         {
             get => _selectedDinnerOption;
@@ -232,6 +314,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the archive is currently hidden
+        /// </summary>
         public bool IsArchiveHidden
         {
             get => _guestDataService.IsArchiveHidden;
@@ -256,6 +341,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The text on the archive button (Archive / Unarchive)
+        /// </summary>
         public string ArchiveButtonText
         {
             get => _archiveButtonText;
@@ -269,6 +357,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// The text on the view archive button (View Archive / View Current Guests)
+        /// </summary>
         public string ViewArchiveButtonText
         {
             get => _viewArchiveButtonText;
@@ -282,7 +373,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        // Selectable values for the ComboBox
+        /// <summary>
+        /// The values selectable for Ear Floppiness
+        /// (converted from the EarFloppines enum)
+        /// </summary>
         public string[] EarFloppinessValues
         {
             get
@@ -292,16 +386,60 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return array;
             }
         }
+        #endregion
 
+
+        #region Commands
+
+        /// <summary>
+        /// Command for adding a guest
+        /// </summary>
         public DelegateCommand AddCommand { get; }
+
+        /// <summary>
+        /// Command for removing a guest
+        /// </summary>
         public DelegateCommand RemoveCommand { get; }
+
+        /// <summary>
+        /// Command for archiving a guest
+        /// </summary>
         public DelegateCommand ArchiveCommand { get; }
+
+        /// <summary>
+        /// Command for viewing the archive
+        /// </summary>
         public DelegateCommand ViewArchiveCommand { get; }
+
+        /// <summary>
+        /// Command for adding a booking
+        /// </summary>
         public DelegateCommand AddBookingCommand { get; }
+
+        /// <summary>
+        /// Command for editing a booking
+        /// </summary>
         public DelegateCommand EditBookingCommand { get; }
+
+        /// <summary>
+        /// Command for removing a booking
+        /// </summary>
         public DelegateCommand RemoveBookingCommand { get; }
+
+        /// <summary>
+        /// Command for adding a service booking
+        /// </summary>
         public DelegateCommand AddServiceBookingCommand { get; }
+
+        /// <summary>
+        /// Command for removing a service booking
+        /// </summary>
         public DelegateCommand RemoveServiceBookingCommand { get; }
+
+        #endregion
+
+
+        #region Private methods
 
         private async Task Add()
         {
@@ -432,7 +570,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _serviceBookingDialogService.ShowServiceBookingDialog(false, true, true, SelectedGuest.Id, -1, null);
         }
 
-        public void UpdateGuestMenuOptions()
+        private void UpdateGuestMenuOptions()
         {
             if (SelectedGuest is null)
                 return;
@@ -491,5 +629,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             OnPropertyChanged(nameof(SnackOptions));
             OnPropertyChanged(nameof(DinnerOptions));
         }
+        #endregion
+
     }
 }

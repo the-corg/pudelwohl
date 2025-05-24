@@ -5,8 +5,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Booking Details dialog
+    /// </summary>
     public class BookingDetailsViewModel : ViewModelBase
     {
+        #region Private fields
+
         private readonly string _headerText;
         private DateOnly? _checkInDate;
         private DateOnly? _checkOutDate;
@@ -18,6 +23,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IGuestDataService _guestDataService;
         private readonly IRoomDataService _roomDataService;
         private readonly IMessageService _messageService;
+        #endregion
+
+
+        #region Constructor
 
         public BookingDetailsViewModel(IGuestDataService guestDataService, IRoomDataService roomDataService, 
             IMessageService messageService, string headerText, bool isGuestSelectable, bool isRoomSelectable, 
@@ -51,11 +60,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             InitializeNames();
             ConfirmCommand = new DelegateCommand(async execute => await Confirm(), canExecute => CanConfirm());
         }
+        #endregion
 
-        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
 
+        #region Public properties
+
+        /// <summary>
+        /// Delegate for closing the dialog window on Confirm
+        /// </summary>
+        public Action? CloseOnConfirmAction { get; set; }
+
+        /// <summary>
+        /// Header text for the dialog
+        /// </summary>
         public string HeaderText => _headerText;
 
+        /// <summary>
+        /// Check-in date of the booking
+        /// </summary>
         public DateOnly? CheckInDate
         {
             get => _checkInDate;
@@ -71,6 +93,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Check-out date of the booking
+        /// </summary>
         public DateOnly? CheckOutDate
         {
             get => _checkOutDate;
@@ -86,7 +111,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the guest is selectable
+        /// (if false, it's already pre-selected)
+        /// </summary>
         public bool IsGuestSelectable { get; }
+
+        /// <summary>
+        /// Name of the guest
+        /// </summary>
         public string? GuestName
         {
             get => _guestName;
@@ -101,7 +134,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the room is selectable
+        /// (if false, it's already pre-selected)
+        /// </summary>
         public bool IsRoomSelectable { get; }
+
+        /// <summary>
+        /// Name of the room
+        /// </summary>
         public string? RoomName
         {
             get => _roomName;
@@ -116,11 +157,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Names of available guests
+        /// </summary>
         public List<string> GuestNames { get; } = new();
+
+        /// <summary>
+        /// Names of available rooms
+        /// </summary>
         public List<string> RoomNames { get; } = new();
 
+        /// <summary>
+        /// Command to confirm the booking
+        /// </summary>
         public DelegateCommand ConfirmCommand { get; }
 
+        /// <summary>
+        /// Text that explains the reason why the Confirm button is disabled
+        /// </summary>
         public string? ButtonDisabledReason
         {
             get
@@ -145,6 +199,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return result.Length > 0 ? result[..^2] : null;
             }
         }
+        #endregion
+
+
+        #region Private methods
 
         // Make the Confirm button inactive if one of the dates or the room are missing,
         // or the check-out date is earlier than today, or the check-out date is earlier than the check-in date
@@ -248,5 +306,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _roomName = _roomDataService.Rooms.FirstOrDefault(x => x.Id == _initialRoomId)?.Name;
             }
         }
+        #endregion
+
     }
 }

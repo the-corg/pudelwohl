@@ -3,8 +3,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the meal selection options for a single meal on the Cuisine tab
+    /// </summary>
     public class MealSelectionViewModel : ViewModelBase
     {
+        #region Private fields and the constructor
+
         private readonly IMealDataService _mealDataService;
         private readonly int _menuIndexOffset;
         private MealOptionViewModel?[] _selectedOption = new MealOptionViewModel?[3];
@@ -16,10 +21,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             MealOptions = mealOptions;
             _menuIndexOffset = menuIndexOffset;
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// Name of the meal (Breakfast, Lunch, Snack, or Dinner)
+        /// </summary>
         public string MealName { get; }
+
+        /// <summary>
+        /// Collection of available meal options for the current meal
+        /// </summary>
         public ListCollectionView MealOptions { get; }
 
+        /// <summary>
+        /// First selected meal option 
+        /// </summary>
         public MealOptionViewModel? SelectedOption1
         {
             get => _selectedOption[0];
@@ -35,6 +54,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Second selected meal option
+        /// </summary>
         public MealOptionViewModel? SelectedOption2
         {
             get => _selectedOption[1];
@@ -50,6 +73,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Third selected meal option
+        /// </summary>
         public MealOptionViewModel? SelectedOption3
         {
             get => _selectedOption[2];
@@ -65,7 +92,14 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 OnPropertyChanged();
             }
         }
+        #endregion
 
+
+        #region Public method
+
+        /// <summary>
+        /// Updates the selected meal options, reloading them from the DailyMenu object for the selected date
+        /// </summary>
         public void UpdateOptions()
         {
             for (int i = 0; i < 3; i++)
@@ -79,6 +113,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             OnPropertyChanged(nameof(SelectedOption2));
             OnPropertyChanged(nameof(SelectedOption3));
         }
+        #endregion
+
+
+        #region Private helper method
 
         private void ChangeMenu(int optionNumber, int id)
         {
@@ -89,6 +127,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
             _mealDataService.UpdateMenus();
         }
+        #endregion
 
     }
 }

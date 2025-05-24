@@ -6,8 +6,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Service Booking Details dialog
+    /// </summary>
     public class ServiceBookingDetailsViewModel : ViewModelBase
     {
+        #region Private fields
+
         private readonly string _headerText;
         private DateOnly? _date;
         private readonly int _initialGuestId;
@@ -19,6 +24,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         private readonly IGuestDataService _guestDataService;
         private readonly IServiceDataService _serviceDataService;
         private readonly IMessageService _messageService;
+        #endregion
+
+
+        #region Constructor
 
         public ServiceBookingDetailsViewModel(IGuestDataService guestDataService, IServiceDataService serviceDataService,
             IMessageService messageService, bool isGuestSelectable, bool isServiceSelectable, bool isTimeSlotSelectable,
@@ -40,11 +49,24 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             InitializeNames();
             ConfirmCommand = new DelegateCommand(async execute => await Confirm(), canExecute => CanConfirm());
         }
+        #endregion
 
-        public Action? CloseOnConfirmAction { get; set; } // Delegate for closing the window
 
+        #region Public properties
+
+        /// <summary>
+        /// Delegate for closing the dialog window on Confirm
+        /// </summary>
+        public Action? CloseOnConfirmAction { get; set; }
+
+        /// <summary>
+        /// Header text for the dialog
+        /// </summary>
         public string HeaderText => _headerText;
 
+        /// <summary>
+        /// Date of the service booking
+        /// </summary>
         public DateOnly? Date
         {
             get => _date;
@@ -60,7 +82,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the guest is selectable
+        /// (if false, it's already pre-selected)
+        /// </summary>
         public bool IsGuestSelectable { get; }
+
+        /// <summary>
+        /// Name of the guest
+        /// </summary>
         public string? GuestName
         {
             get => _guestName;
@@ -75,7 +105,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the service is selectable
+        /// (if false, it's already pre-selected)
+        /// </summary>
         public bool IsServiceSelectable { get; }
+
+        /// <summary>
+        /// Name of the service
+        /// </summary>
         public string? ServiceName
         {
             get => _serviceName;
@@ -91,7 +129,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the time slot is selectable
+        /// (if false, it's already pre-selected)
+        /// </summary>
         public bool IsTimeSlotSelectable { get; }
+
+        /// <summary>
+        /// String representation of the time slot
+        /// </summary>
         public string? TimeSlot
         {
             get => _timeSlot;
@@ -106,12 +152,29 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Names of available guests
+        /// </summary>
         public List<string> GuestNames { get; } = new();
+
+        /// <summary>
+        /// Names of available services
+        /// </summary>
         public List<string> ServiceNames { get; } = new();
+
+        /// <summary>
+        /// String representations of available time slots
+        /// </summary>
         public ObservableCollection<string> TimeSlots { get; } = new();
 
+        /// <summary>
+        /// Command to confirm the service booking
+        /// </summary>
         public DelegateCommand ConfirmCommand { get; }
 
+        /// <summary>
+        /// Text that explains the reason why the Confirm button is disabled
+        /// </summary>
         public string? ButtonDisabledReason
         {
             get
@@ -133,6 +196,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 return result.Length > 0 ? result[..^2] : null;
             }
         }
+        #endregion
+
+
+        #region Private helper methods
 
         // Make the Confirm button inactive if some info is missing or the date is in the past
         private bool CanConfirm() => !(Date is null || GuestName is null ||
@@ -245,5 +312,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 }
             }
         }
+        #endregion
+
     }
 }

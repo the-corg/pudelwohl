@@ -2,6 +2,9 @@
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers
 {
+    /// <summary>
+    /// Provides a simple ICommand implementation; used for commands in view models
+    /// </summary>
     public class DelegateCommand : ICommand
     {
         private readonly Action<object?> _execute;

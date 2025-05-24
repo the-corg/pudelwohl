@@ -2,7 +2,7 @@
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services
 {
-    public class BaseDialogService
+    public abstract class BaseDialogService
     {
         private Window? _mainWindow;
         private Window? MainWindow => _mainWindow ??= Application.Current.MainWindow; // Lazy initialization

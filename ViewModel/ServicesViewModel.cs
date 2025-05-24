@@ -8,13 +8,22 @@ using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for the Services tab
+    /// </summary>
     public class ServicesViewModel : ViewModelBase
     {
+        #region Private fields
+
         private ServiceViewModel? _selectedService;
         private TimeSlot? _selectedTimeSlot;
         private readonly IServiceDataService _serviceDataService;
         private readonly IServiceBookingDialogService _serviceBookingDialogService;
         private readonly IMessageService _messageService;
+        #endregion
+
+
+        #region Constructor
 
         public ServicesViewModel(IServiceDataService serviceDataService,
             IServiceBookingDialogService serviceBookingDialogService, IMessageService messageService)
@@ -45,11 +54,31 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             serviceDataService.ServiceBookings.CollectionChanged += (s, e) => OnPropertyChanged(nameof(GuestForSelectedTimeSlot));
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// Collection of all existing services
+        /// </summary>
         public ObservableCollection<ServiceViewModel> Services { get; }
+
+        /// <summary>
+        /// Sorted and filtered collection of service bookings
+        /// </summary>
         public ListCollectionView ServiceBookingsCollectionView { get; }
+
+        /// <summary>
+        /// Composite collection that consists of:
+        /// 1. Sorted and filtered collection of service bookings
+        /// 2. One special item that should be replaced with the Add button
+        /// </summary>
         public CompositeCollection ServiceBookingsCompositeCollection { get; }
 
+        /// <summary>
+        /// Currently selected service
+        /// </summary>
         public ServiceViewModel? SelectedService
         {
             get => _selectedService;
@@ -66,9 +95,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        // Used for hiding the service details when no service is selected
+        /// <summary>
+        /// Shows whether a service is currently selected
+        /// (used for hiding the service details when no service is selected)
+        /// </summary>
         public bool IsServiceSelected => SelectedService is not null;
 
+        /// <summary>
+        /// Currently selected time slot
+        /// </summary>
         public TimeSlot? SelectedTimeSlot
         {
             get => _selectedTimeSlot;
@@ -84,8 +119,15 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 BookServiceCommand.OnCanExecuteChanged();
             }
         }
+
+        /// <summary>
+        /// Shows whether a time slot is currently selected
+        /// </summary>
         public bool IsTimeSlotSelected => SelectedTimeSlot is not null;
 
+        /// <summary>
+        /// The guest who booked the currently selected time slot
+        /// </summary>
         public int? GuestForSelectedTimeSlot
         {
             get
@@ -101,10 +143,32 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Command for adding a service
+        /// </summary>
         public DelegateCommand AddCommand { get; }
+
+        /// <summary>
+        /// Command for removing a service
+        /// </summary>
         public DelegateCommand RemoveCommand { get; }
+
+        /// <summary>
+        /// Command for booking a service
+        /// (adds a booking for the currently selected time slot)
+        /// </summary>
         public DelegateCommand BookServiceCommand { get; }
+
+        /// <summary>
+        /// Command for booking a service from the list of service bookings
+        /// (adds a service booking without a pre-selected time slot)
+        /// </summary>
         public DelegateCommand AddServiceBookingCommand { get; }
+
+        #endregion
+
+
+        #region Private methods (for commands)
 
         private async Task Add()
         {
@@ -164,6 +228,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
 
             _serviceBookingDialogService.ShowServiceBookingDialog(true, false, true, -1, SelectedService.Id, null);
         }
+        #endregion
 
     }
 }

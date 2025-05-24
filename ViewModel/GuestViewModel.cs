@@ -3,8 +3,13 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel
 {
+    /// <summary>
+    /// View model for a single guest
+    /// </summary>
     public class GuestViewModel : ViewModelBase
     {
+        #region Private fields and the constructor
+
         private readonly Guest _model;
         private readonly IGuestDataService _guestDataService;
 
@@ -13,9 +18,19 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             _model = model;
             _guestDataService = guestDataService;
         }
+        #endregion
 
+
+        #region Public properties
+
+        /// <summary>
+        /// ID of the guest
+        /// </summary>
         public int Id => _model.Id;
 
+        /// <summary>
+        /// Name of the guest
+        /// </summary>
         public string? Name
         {
             get => _model.Name;
@@ -31,6 +46,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Breed of the guest (note that the guest is a dog)
+        /// </summary>
         public string? Breed
         {
             get => _model.Breed;
@@ -45,6 +63,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _guestDataService.UpdateOnGuestDataChange();
             }
         }
+
+        /// <summary>
+        /// Shows whether the Male gender radio button is currently active
+        /// </summary>
         public bool IsGenderMaleButtonChecked
         {
             get => _model.Gender == Gender.Male;
@@ -59,6 +81,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the Female gender radio button is currently active
+        /// </summary>
         public bool IsGenderFemaleButtonChecked
         {
             get => _model.Gender == Gender.Female;
@@ -73,6 +98,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the Other gender radio button is currently active
+        /// </summary>
         public bool IsGenderOtherButtonChecked
         {
             get => _model.Gender == Gender.Other;
@@ -87,6 +115,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Coat color of the guest
+        /// </summary>
         public string? CoatColor
         {
             get => _model.CoatColor;
@@ -100,6 +131,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _guestDataService.DebouncedSave();
             }
         }
+
+        /// <summary>
+        /// Date of birth of the guest
+        /// </summary>
         public DateOnly? DateOfBirth
         {
             get => _model.DateOfBirth;
@@ -113,6 +148,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _guestDataService.DebouncedSave();
             }
         }
+
+        /// <summary>
+        /// Favorite toy of the guest
+        /// </summary>
         public string? FavoriteToy
         {
             get => _model.FavoriteToy;
@@ -126,6 +165,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 _guestDataService.DebouncedSave();
             }
         }
+
+        /// <summary>
+        /// String representation of the ear floppiness of the guest
+        /// (converted from the EarFloppiness enum)
+        /// </summary>
         public string? EarFloppiness
         {
             get
@@ -156,6 +200,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
                 }
             }
         }
+
+        /// <summary>
+        /// Special requests of the guest
+        /// </summary>
         public string? SpecialRequests
         {
             get => _model.SpecialRequests;
@@ -170,6 +218,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
+        /// <summary>
+        /// Shows whether the guest is currently archived
+        /// </summary>
         public bool IsArchived
         {
             get => _model.IsArchived;
@@ -184,9 +235,21 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
             }
         }
 
-        // ListView binds to this to show only archived/not archived guests
+        /// <summary>
+        /// Shows whether the guest should be currently visible
+        /// (the list of guests uses this to show only archived/not archived guests)
+        /// </summary>
         public bool IsVisible => _guestDataService.IsArchiveHidden ? !IsArchived : IsArchived;
 
+        #endregion
+
+
+        #region Public methods
+
+        /// <summary>
+        /// Getter for the underlying Guest object (model)
+        /// </summary>
+        /// <returns>The underlying Guest object (model)</returns>
         public Guest GetGuest()
         {
             return _model;
@@ -196,6 +259,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         {
             return _model.Name + " (#" + _model.Id + ")";
         }
+        #endregion
 
     }
 }
