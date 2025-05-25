@@ -31,7 +31,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
         {
             var newList = new List<Booking>();
 
-            using (var reader = File.OpenText("DataProviders/DemoDataFiles/Bookings.csv"))
+            using (var reader = File.OpenText("DemoDataFiles/Bookings.csv"))
             {
                 var fileText = await reader.ReadToEndAsync();
                 var lines = fileText.Split(Environment.NewLine);

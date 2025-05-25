@@ -31,7 +31,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataPro
         {
             var newList = new List<GuestMenu>();
 
-            using (var reader = File.OpenText("DataProviders/DemoDataFiles/Dogs and Menu Options.csv"))
+            using (var reader = File.OpenText("DemoDataFiles/Dogs and Menu Options.csv"))
             {
                 var fileText = await reader.ReadToEndAsync();
                 var lines = fileText.Split(Environment.NewLine);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pudelwohl Hotel and Resort Management Suite Ultimate Wuff Wuff", "Pudelwohl Hotel and Resort Management Suite Ultimate Wuff Wuff.csproj", "{9EAC6FA1-D6E3-4919-B7A5-A31FD9D82219}"
 EndProject
