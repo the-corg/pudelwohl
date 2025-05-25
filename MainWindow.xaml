@@ -6,19 +6,26 @@
         xmlns:view="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.View"
         xmlns:viewmodel="clr-namespace:Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewModel"
         mc:Ignorable="d"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown"
         WindowStartupLocation="CenterScreen"
-        SizeChanged="Window_SizeChanged"
-        WindowStyle="SingleBorderWindow" 
+        StateChanged="Window_StateChanged"
+        SnapsToDevicePixels="True"
         Title="MainWindow" Icon="Assets\IconWindow.ico"
+        MinHeight="320" MinWidth="512"
         Height="640" Width="1024">
-    <!-- Note: WindowStyle="NoStyle" leads to the window covering the taskbar when maximized -->
-    
 
-    <!-- Remove the default window title bar -->
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" />
+        <!-- Nonzero GlassFrameThickness provides a dropshadow for the window -->
+        <WindowChrome GlassFrameThickness="0 0.001 0 0" CornerRadius="0" 
+                      ResizeBorderThickness="7" CaptionHeight="32" />
     </WindowChrome.WindowChrome>
+
+    <!-- Commands for Title Bar buttons -->
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CommandBinding_CloseExecuted"/>
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" Executed="CommandBinding_MaximizeExecuted"/>
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" Executed="CommandBinding_RestoreExecuted"/>
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" Executed="CommandBinding_MinimizeExecuted"/>
+    </Window.CommandBindings>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,9 +36,14 @@
         
         <!-- Custom title bar -->
         <DockPanel HorizontalAlignment="Stretch" Background="{StaticResource DogBrown}">
-            <Button x:Name="btnClose" Style="{StaticResource HeaderButton}" Content="❌" DockPanel.Dock="Right" Click="btnClose_Click" />
-            <Button x:Name="btnMaximize" Style="{StaticResource HeaderButton}" Content="🗖" DockPanel.Dock="Right" Click="btnMaximize_Click"/>
-            <Button x:Name="btnMinimize" Style="{StaticResource HeaderButton}" Content="🗕" DockPanel.Dock="Right" Click="btnMinimize_Click"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource HeaderButton}" Command="{x:Static SystemCommands.CloseWindowCommand}"
+                    WindowChrome.IsHitTestVisibleInChrome="True" Content="❌"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource HeaderButton}" Command="{x:Static SystemCommands.MaximizeWindowCommand}"
+                    WindowChrome.IsHitTestVisibleInChrome="True" Content="🗖" Visibility="Visible" x:Name="MaximizeButton"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource HeaderButton}" Command="{x:Static SystemCommands.RestoreWindowCommand}"
+                    WindowChrome.IsHitTestVisibleInChrome="True" Content="🗗" Visibility="Collapsed" x:Name="RestoreButton"/>
+            <Button DockPanel.Dock="Right" Style="{StaticResource HeaderButton}" Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                    WindowChrome.IsHitTestVisibleInChrome="True" Content="🗕"/>
             <TextBlock Text="Pudelwohl Hotel and Resort Management Suite Ultimate Wuff Wuff" Foreground="White" FontSize="22" DockPanel.Dock="Left" Margin="10 0 0 0"/>
         </DockPanel>
 

@@ -29,6 +29,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
         }
         #endregion
 
+
         #region Handling startup and closing
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -52,32 +53,45 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff
         }
         #endregion
 
+
         #region Handling window state changes
 
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Window_StateChanged(object sender, EventArgs e)
         {
-            DragMove();
-        }
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            // Increase the window border thickness for the maximized state,
-            // otherwise the window would extend beyond the screen edges for some reason
-            BorderThickness = WindowState == WindowState.Maximized ? new Thickness(8) : new Thickness(0);
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void btnMaximize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            if (WindowState == WindowState.Maximized)
+            {
+                // Increase the window border thickness for the maximized state,
+                // otherwise the window would extend beyond the screen edges
+                BorderThickness = new Thickness(8);
+                MaximizeButton.Visibility = Visibility.Collapsed;
+                RestoreButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BorderThickness = new Thickness(0);
+                RestoreButton.Visibility = Visibility.Collapsed;
+                MaximizeButton.Visibility = Visibility.Visible;
+            }
         }
 
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void CommandBinding_MinimizeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void CommandBinding_MaximizeExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+        }
+
+        private void CommandBinding_RestoreExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            WindowState = WindowState.Normal;
+        }
+
+        private void CommandBinding_CloseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
         }
         #endregion
     }
