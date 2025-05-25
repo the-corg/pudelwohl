@@ -7,9 +7,16 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Helpers;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Converters
 {
+    /// <summary>
+    /// Converter that determines if combobox text has been clipped
+    /// </summary>
     public class TextClippingConverter : IValueConverter
     {
-        // Makes ToolTip visible if the selected item does not fit completely in the combobox's ContentPresenter
+        /// <summary>
+        /// Makes ToolTip visible if the selected item does not fit completely in the combobox's ContentPresenter
+        /// </summary>
+        /// <param name="value">ToggleButton object</param>
+        /// <returns>Visibility.Visible, if the combobox text is too long for the combobox's ContentPresenter<br/>Visibility.Collapsed otherwise</returns>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is null)

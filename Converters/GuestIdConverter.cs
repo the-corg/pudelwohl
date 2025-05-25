@@ -5,10 +5,17 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Da
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Converters
 {
+    /// <summary>
+    /// Converter that finds guests by their ID
+    /// </summary>
     class GuestIdConverter : IMultiValueConverter
     {
-        // Returns the requested attribute for a Guest based on the Guest's id
-        // (the attribute is passed via @parameter as string) 
+        /// <summary>
+        /// Returns the requested attribute for a Guest based on the Guest's id
+        /// </summary>
+        /// <param name="values">[0] is the ID of the guest to find<br/>[1] is IGuestDataService that holds the collection of all guests</param>
+        /// <param name="parameter">The attribute to find as a string ("Name" or "Breed")</param>
+        /// <returns>Either the requested attribute of the guest, or an error message, if there's no guest with this ID</returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] is null) return "nobody";

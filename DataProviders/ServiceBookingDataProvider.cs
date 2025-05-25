@@ -3,14 +3,30 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders
 {
+    /// <summary>
+    /// Loads and saves the data for service bookings
+    /// </summary>
     public interface IServiceBookingDataProvider
     {
+        /// <summary>
+        /// Loads the data from storage
+        /// </summary>
+        /// <returns>A collection of items of type <typeparamref name="ServiceBooking"/></returns>
         Task<IEnumerable<ServiceBooking>?> LoadAsync();
+
+        /// <summary>
+        /// Saves the data to storage
+        /// </summary>
+        /// <param name="serviceBookings">Collection of data to save</param>
         Task SaveAsync(IEnumerable<ServiceBooking> serviceBookings);
     }
 
     public class ServiceBookingDataProvider : BaseDataProvider<ServiceBooking>, IServiceBookingDataProvider
     {
+        /// <summary>
+        /// Loads the initial data from a .csv file
+        /// </summary>
+        /// <returns>A collection of items of type <typeparamref name="ServiceBooking"/> that was loaded from a .csv file</returns>
         protected override async Task<IEnumerable<ServiceBooking>?> LoadInitialDataFromCsvAsync()
         {
             var newList = new List<ServiceBooking>();

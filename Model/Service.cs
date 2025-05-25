@@ -2,6 +2,9 @@
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
 {
+    /// <summary>
+    /// Model class for a service
+    /// </summary>
     public class Service : IHasId
     {
         public int Id { get; init; } = IdGenerator.Instance.GetNextId<Service>();

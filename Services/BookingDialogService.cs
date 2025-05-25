@@ -15,8 +15,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         /// Also creates and sets up its view model.
         /// </summary>
         /// <param name="headerText">Text for the dialog header</param>
-        /// <param name="isGuestSelectable">True if the guest should be selectable, false otherwise (guestId is fixed then)</param>
-        /// <param name="isRoomSelectable">True if the room should be selectable, false otherwise (roomId is fixed then)</param>
+        /// <param name="isGuestSelectable">True if the guest should be selectable, false otherwise (<paramref name="guestId"/> is fixed then)</param>
+        /// <param name="isRoomSelectable">True if the room should be selectable, false otherwise (<paramref name="roomId"/> is fixed then)</param>
         /// <param name="guestId">ID of the guest selected by default</param>
         /// <param name="roomId">ID of the room selected by default</param>
         /// <param name="booking">Booking to be edited (omit for adding a new one)</param>

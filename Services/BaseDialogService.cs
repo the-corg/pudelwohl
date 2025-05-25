@@ -13,8 +13,8 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         private Window? MainWindow => _mainWindow ??= Application.Current.MainWindow; // Lazy initialization
 
         /// <summary>
-        /// Dims the main window and shows the dialog.<br/>
-        /// Afterwards restores the main window opacity
+        /// Dims the main window and shows <paramref name="dialog"/>.<br/>
+        /// Afterwards restores the main window's opacity
         /// and returns the result of type bool that shows
         /// whether the activity was confirmed or canceled.
         /// </summary>

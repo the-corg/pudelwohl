@@ -2,6 +2,9 @@
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
 {
+    /// <summary>
+    /// Model class for a guest
+    /// </summary>
     public class Guest : IHasId
     {
         public int Id { get; init; } = IdGenerator.Instance.GetNextId<Guest>();
@@ -16,6 +19,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
         public bool IsArchived { get; set; }
     }
 
+    /// <summary>
+    /// Contains all possible values of a guest's gender
+    /// </summary>
     public enum Gender
     {
         Unknown = 0,
@@ -24,6 +30,9 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model
         Other
     }
 
+    /// <summary>
+    /// Contains all possible values of a guest's ear floppiness
+    /// </summary>
     public enum EarFloppiness
     {
         Unknown = 0,

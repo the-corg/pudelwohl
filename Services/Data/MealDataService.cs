@@ -8,35 +8,133 @@ using System.Windows.Data;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Services.Data
 {
+    /// <summary>
+    /// Manages all data related to meals
+    /// </summary>
     public interface IMealDataService
     {
+        /// <summary>
+        /// The collection of meal options
+        /// </summary>
         ObservableCollection<MealOptionViewModel> MealOptions { get; }
+
+        /// <summary>
+        /// Sorted view for the collection of meal options
+        /// </summary>
         ListCollectionView SortedMealOptions { get; }
+
+        /// <summary>
+        /// Sorted and filtered view for the collections of meal options,
+        /// filtering out anything except breakfast meal options
+        /// </summary>
         ListCollectionView MealOptionsForBreakfast { get; }
+
+        /// <summary>
+        /// Sorted and filtered view for the collections of meal options,
+        /// filtering out anything except lunch meal options
+        /// </summary>
         ListCollectionView MealOptionsForLunch { get; }
+
+        /// <summary>
+        /// Sorted and filtered view for the collections of meal options,
+        /// filtering out anything except snack meal options
+        /// </summary>
         ListCollectionView MealOptionsForSnack { get; }
+
+        /// <summary>
+        /// Sorted and filtered view for the collections of meal options,
+        /// filtering out anything except dinner meal options
+        /// </summary>
         ListCollectionView MealOptionsForDinner { get; }
+
+        /// <summary>
+        /// The dictionary of daily menus with dates as keys
+        /// </summary>
         Dictionary<DateOnly, DailyMenu> DailyMenus { get; }
+
+        /// <summary>
+        /// The dictionary of menus selected for a guest
+        /// with the key consisting of the date and the guest's ID
+        /// </summary>
         Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; }
+
+        /// <summary>
+        /// Currently selected date for the menu on the Cuisine tab
+        /// (used in MealOptionsViewModel for Binding with the DatePicker above the daily menu)
+        /// </summary>
         DateOnly MenuDate { get; set; }
+
+        /// <summary>
+        /// The daily menu for the selected date on the Cuisine tab
+        /// </summary>
         DailyMenu? DailyMenuForSelectedDate { get; }
+
+        /// <summary>
+        /// The delegate to be invoked when data for a daily menu has been updated
+        /// </summary>
         Action? DailyMenuUpdated { get; set; }
+
+        /// <summary>
+        /// The delegate to be invoked when data for a guest menu has been updated
+        /// </summary>
         Action? GuestMenuUpdated { get; set; }
+
+        /// <summary>
+        /// Returns a meal option with the ID equal to <paramref name="id"/>
+        /// </summary>
+        /// <param name="id">ID of the meal option</param>
+        /// <returns>The meal option with the ID equal to <paramref name="id"/>, or <c>null</c>, if not found</returns>
         MealOptionViewModel? GetMealOptionById(int id);
+
+        /// <summary>
+        /// Removes a meal option from DailyMenus and GuestMenus,
+        /// independently for each type of meal
+        /// </summary>
+        /// <param name="mealOptionId">ID of the meal option</param>
+        /// <param name="deleteBreakfast">True, if it should be removed from breakfast menus<br/>False, otherwise</param>
+        /// <param name="deleteLunch">True, if it should be removed from lunch menus<br/>False, otherwise</param>
+        /// <param name="deleteSnack">True, if it should be removed from snack menus<br/>False, otherwise</param>
+        /// <param name="deleteDinner">True, if it should be removed from dinner menus<br/>False, otherwise</param>
         void RemoveMealOptionFromMenus(int mealOptionId, bool deleteBreakfast, bool deleteLunch, bool deleteSnack, bool deleteDinner);
+
+        /// <summary>
+        /// To be called after some menu data has changed (refreshes collections and saves the data)
+        /// </summary>
         void UpdateMenus();
+
+        /// <summary>
+        /// Loads all the data managed by the data service from the corresponding data providers
+        /// </summary>
         Task LoadAsync();
+
+        /// <summary>
+        /// Saves all the data managed by the data service asynchronously
+        /// (as soon as possible)
+        /// </summary>
         Task SaveDataAsync();
+
+        /// <summary>
+        /// Saves all the data managed by the data service asynchronously,
+        /// but only if no new save calls arrive within <c>_debounceTime</c>.
+        /// </summary>
         void DebouncedSave();
     }
     public class MealDataService : BaseDataService, IMealDataService
     {
+
+        #region Private fields
+
         private readonly IMealOptionDataProvider _mealOptionDataProvider;
         private readonly IDailyMenuDataProvider _dailyMenuDataProvider;
         private readonly IGuestMenuDataProvider _guestMenuDataProvider;
 
         private DateOnly _menuDate = DateOnly.FromDateTime(DateTime.Now);
         private DailyMenu? _dailyMenuForSelectedDate;
+
+        #endregion
+
+
+        #region Constructor
 
         public MealDataService(IMealOptionDataProvider mealOptionDataProvider, IDailyMenuDataProvider dailyMenuDataProvider,
             IGuestMenuDataProvider guestMenuDataProvider, IMessageService messageService)
@@ -60,6 +158,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             MealOptionsForDinner.Filter = option => ((MealOptionViewModel)option).IsDinner;
             MealOptionsForDinner.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         }
+        #endregion
+
+
+        #region Public properties (see interface)
 
         public ObservableCollection<MealOptionViewModel> MealOptions { get; } = new();
         public ListCollectionView SortedMealOptions { get; }
@@ -72,7 +174,6 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
         public Dictionary<DateOnly, DailyMenu> DailyMenus { get; } = new();
         public Dictionary<(DateOnly, int), GuestMenu> GuestMenus { get; } = new();
 
-        // Used in MealOptionsViewModel for Binding with the DatePicker above the daily menu
         public DateOnly MenuDate
         {
             get => _menuDate;
@@ -95,6 +196,11 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
 
         public Action? DailyMenuUpdated { get; set; }
         public Action? GuestMenuUpdated { get; set; }
+
+        #endregion
+
+
+        #region Public methods (see interface)
 
         public MealOptionViewModel? GetMealOptionById(int id)
         {
@@ -161,6 +267,10 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             MealOptions.CollectionChanged += (s, e) => UpdateMenus();
             UpdateMenus();
         }
+        #endregion
+
+
+        #region Protected method used by the base class for saving the data
 
         protected override async Task SaveCollectionsAsync()
         {
@@ -168,6 +278,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Service
             await _dailyMenuDataProvider.SaveAsync(DailyMenus.Values);
             await _guestMenuDataProvider.SaveAsync(GuestMenus.Values);
         }
+        #endregion
 
     }
 }

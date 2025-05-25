@@ -3,14 +3,30 @@ using Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.Model;
 
 namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.DataProviders
 {
+    /// <summary>
+    /// Loads and saves the data for daily menus
+    /// </summary>
     public interface IDailyMenuDataProvider
     {
+        /// <summary>
+        /// Loads the data from storage
+        /// </summary>
+        /// <returns>A collection of items of type <typeparamref name="DailyMenu"/></returns>
         Task<IEnumerable<DailyMenu>?> LoadAsync();
+
+        /// <summary>
+        /// Saves the data to storage
+        /// </summary>
+        /// <param name="dailyMenus">Collection of data to save</param>
         Task SaveAsync(IEnumerable<DailyMenu> dailyMenus);
     }
 
     public class DailyMenuDataProvider : BaseDataProvider<DailyMenu>, IDailyMenuDataProvider
     {
+        /// <summary>
+        /// Loads the initial data from a .csv file
+        /// </summary>
+        /// <returns>A collection of items of type <typeparamref name="DailyMenu"/> that was loaded from a .csv file</returns>
         protected override async Task<IEnumerable<DailyMenu>?> LoadInitialDataFromCsvAsync()
         {
             var newList = new List<DailyMenu>();

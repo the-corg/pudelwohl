@@ -100,7 +100,7 @@ namespace Pudelwohl_Hotel_and_Resort_Management_Suite_Ultimate_Wuff_Wuff.ViewMod
         #region Public method
         /// <summary>
         /// Calculates the maximum number of occupants the room has
-        /// between the provided dates, with an option to ignore one booking
+        /// between <paramref name="checkInDate"/> and <paramref name="checkOutDate"/>, with an option to ignore one particular booking
         /// </summary>
         /// <param name="checkInDate">The start date of the calculation period</param>
         /// <param name="checkOutDate">The end date of the calculation period</param>
